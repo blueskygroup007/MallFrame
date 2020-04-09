@@ -1,8 +1,10 @@
-package com.bluesky.mallframe;
+package com.bluesky.mallframe.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.bluesky.mallframe.R;
 
 public class MainActivity extends AppCompatActivity {
 

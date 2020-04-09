@@ -36,7 +36,10 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view,savedInstanceState);
         initData();
+        initEvent();
     }
+
+    protected abstract void initEvent();
 
     protected abstract void initData();
 
