@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bluesky.mallframe.utils.OkHttp3Util;
+
 import org.jetbrains.annotations.NotNull;
 import org.xutils.common.util.LogUtil;
 
@@ -60,7 +62,19 @@ public class OkhttpTestActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void doTest2() {
+        String url = "http://www.baidu.com";
 
+        OkHttp3Util.doGet(url, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+            }
+        });
     }
 
     private void doTest1() {
