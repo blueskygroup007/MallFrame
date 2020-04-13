@@ -6,6 +6,8 @@ import android.content.Context;
 import org.xutils.BuildConfig;
 import org.xutils.x;
 
+import cn.bmob.v3.Bmob;
+
 /**
  * @author BlueSky
  * @date 2020/3/30
@@ -20,8 +22,11 @@ public class App extends Application {
         mContext = getApplicationContext();
 
         //初始化xutils
-        x.Ext.init(this);
-        x.Ext.setDebug(BuildConfig.DEBUG);
+/*        x.Ext.init(this);
+        x.Ext.setDebug(BuildConfig.DEBUG);*/
+
+        //初始化Bmob
+        Bmob.initialize(this, AppConstant.BMOB_APP_ID);
     }
 
     public static Context getContext() {

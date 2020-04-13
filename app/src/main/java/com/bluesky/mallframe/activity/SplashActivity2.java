@@ -1,22 +1,19 @@
-package com.bluesky.mallframe.ui.activity;
+package com.bluesky.mallframe.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
 
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bluesky.mallframe.OkhttpTestActivity;
 import com.bluesky.mallframe.R;
+import com.bluesky.mallframe.utils.LogUtils;
 
-import org.xutils.common.util.LogUtil;
 
 public class SplashActivity2 extends AppCompatActivity {
 
@@ -27,7 +24,7 @@ public class SplashActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash2);
         Log.d(TAG, "SDK版本=" + android.os.Build.VERSION.SDK_INT);
-        LogUtil.d("SDK版本=" + android.os.Build.VERSION.SDK_INT);
+        LogUtils.d("SDK版本=" + android.os.Build.VERSION.SDK_INT);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             /*AnimatedVectorDrawable anim = (AnimatedVectorDrawable) getResource().getDrawable(R.drawable.anim);
@@ -63,7 +60,10 @@ public class SplashActivity2 extends AppCompatActivity {
 
 
         //进入http测试页面
-        startActivity(new Intent(this, OkhttpTestActivity.class));
+//        startActivity(new Intent(this, OkhttpTestActivity.class));
+
+        //进入登录页面
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     /**

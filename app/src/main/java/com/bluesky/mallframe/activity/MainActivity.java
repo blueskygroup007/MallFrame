@@ -1,4 +1,4 @@
-package com.bluesky.mallframe.ui.activity;
+package com.bluesky.mallframe.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -30,4 +30,17 @@
     </style>
     <!--AS创建全屏Activity时创建的主题-->
 
+    <!--自定义Dialog的动画-->
+    <style name="pop_anim_style">
+        <item name="android:windowEnterAnimation">@anim/pop_in</item>
+        <item name="android:windowExitAnimation">@anim/pop_out</item>
+
+    </style>
+
+    <!--自定义Dialog的主题-->
+    <style name="dialog_custom" parent="android:Theme.Holo.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
 </resources>
