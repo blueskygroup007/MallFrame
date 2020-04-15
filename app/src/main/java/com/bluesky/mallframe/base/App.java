@@ -3,8 +3,6 @@ package com.bluesky.mallframe.base;
 import android.app.Application;
 import android.content.Context;
 
-import org.xutils.BuildConfig;
-import org.xutils.x;
 
 import cn.bmob.v3.Bmob;
 

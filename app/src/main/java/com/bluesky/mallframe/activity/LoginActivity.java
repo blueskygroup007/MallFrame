@@ -38,7 +38,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     protected void initEvent() {
-
+        mBtnLogin.setOnClickListener(this);
+        mBtnRegister.setOnClickListener(this);
+        mEtForget.setOnClickListener(this);
     }
 
     @Override
@@ -89,16 +91,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    CustomDialog dialog = new CustomDialog(this, 100, 100,
-            R.layout.dialog_loading,
-            R.style.dialog_custom,
-            Gravity.CENTER);
-
     private void login() {
         /*BasePopupView popupView = new XPopup.Builder(this)
                 .asLoading("正在加载中")
                 .show();*/
-
+        final CustomDialog dialog = new CustomDialog(this, 100, 100,
+                R.layout.dialog_loading,
+                R.style.dialog_custom,
+                Gravity.CENTER);
 
         dialog.setCancelable(false);
         final String username = mEtUsername.getText().toString().trim();

@@ -1,8 +1,7 @@
 package com.bluesky.mallframe.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,10 +29,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //设置返回键可用
         getSupportActionBar().setHomeButtonEnabled(true);
+        //TODO 返回键没效果
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void initEvent() {
+        mBtnGetvcode.setOnClickListener(this);
+        mBtnRegister.setOnClickListener(this);
 
     }
 
@@ -61,6 +72,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_reg_get_vcode:
 
+                break;
+            case R.id.btn_reg_register:
+
+                break;
+            default:
+                break;
+        }
     }
 }
