@@ -1,5 +1,8 @@
 package com.bluesky.mallframe.bean;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
@@ -15,7 +18,7 @@ public class User extends BmobUser {
     //昵称
     private String nickname;
     //注册时间
-    private BmobDate registerdate;
+    private String registerdate;
     //签名
     private String desc;
     //年龄
@@ -24,6 +27,28 @@ public class User extends BmobUser {
     private Boolean gender;
     //头像
     private BmobFile avatar;
+
+    public User() {
+        this.username = "新用户";
+        this.nickname = "未命名";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        this.registerdate = simpleDateFormat.format(date);
+        this.desc = "这个人很懒!什么也没留下!";
+        this.age = 0;
+        this.gender = true;
+        this.avatar = null;
+    }
+
+    public User(String username, String nickname, String registerdate, String desc, Integer age, Boolean gender, BmobFile avatar) {
+        this.username = username;
+        this.nickname = nickname;
+        this.registerdate = registerdate;
+        this.desc = desc;
+        this.age = age;
+        this.gender = gender;
+        this.avatar = avatar;
+    }
 
     @Override
     public String getUsername() {
@@ -43,11 +68,11 @@ public class User extends BmobUser {
         this.nickname = nickname;
     }
 
-    public BmobDate getRegisterdate() {
+    public String getRegisterdate() {
         return registerdate;
     }
 
-    public void setRegisterdate(BmobDate registerdate) {
+    public void setRegisterdate(String registerdate) {
         this.registerdate = registerdate;
     }
 
