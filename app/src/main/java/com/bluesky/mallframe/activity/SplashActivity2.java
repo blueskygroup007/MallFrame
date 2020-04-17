@@ -64,6 +64,7 @@ public class SplashActivity2 extends AppCompatActivity {
 
         //进入登录页面
         startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     /**

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
@@ -14,15 +16,29 @@
         android:contentDescription="@string/page_title_image"
         android:src="@mipmap/ic_launcher_round" />
 
-
-    <EditText
-        android:id="@+id/et_reg_phone"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:hint="@string/hint_et_reg_phone"
-        android:inputType="phone" />
+        android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/et_reg_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:hint="@string/hint_et_reg_phone"
+            android:inputType="phone" />
+
+        <TextView
+            android:id="@+id/tv_reg_phone_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            tools:text="手机号码无效" />
+    </LinearLayout>
+    <!--android:minWidth="90dp"-->
+    <!--android:text="@string/text_tv_reg_phone_state_space"-->
 
     <LinearLayout
         android:layout_width="match_parent"

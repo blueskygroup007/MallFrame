@@ -20,4 +20,7 @@
     <string name="tv_reg_privacy_agreement">《倒班本用户隐私协议》</string>
     <string name="page_title_image">页面标题图片</string>
     <string name="text_btn_get_vcode">获取验证码</string>
+    <string name="text_tv_phone_state_correct">正确的手机号码</string>
+    <string name="text_tv_phone_state_incorrect">错误的手机号码</string>
+    <string name="text_tv_reg_phone_state_space">"&#160;&#160;&#160;&#160;&#160;&#160;"</string>
 </resources>

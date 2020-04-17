@@ -1,5 +1,6 @@
 package com.bluesky.mallframe.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,12 +9,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.RegexUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
+import com.bluesky.mallframe.utils.LogUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText mEtPhone;
+    private TextView mTvPhoneState;
     private EditText mEtVcode;
     private Button mBtnGetvcode;
     private EditText mEtPassword;
@@ -45,7 +49,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     protected void initEvent() {
         mBtnGetvcode.setOnClickListener(this);
         mBtnRegister.setOnClickListener(this);
-
+        mEtPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (view.getId() == R.id.et_reg_phone && !b) {
+                    LogUtils.d("手机号输入框失去焦点了!");
+//                    String phone=mEtPhone.getText().toString().trim();
+                    if (RegexUtils.isMobileSimple(mEtPhone.getText())) {
+                        mTvPhoneState.setTextColor(Color.BLUE);
+                        mTvPhoneState.setText(R.string.text_tv_phone_state_correct);
+                    }else{
+                        mTvPhoneState.setTextColor(Color.RED);
+                        mTvPhoneState.setText(R.string.text_tv_phone_state_incorrect);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -56,6 +75,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initView() {
         mEtPhone = findViewById(R.id.et_reg_phone);
+        mTvPhoneState = findViewById(R.id.tv_reg_phone_state);
         mEtVcode = findViewById(R.id.et_reg_vcode);
         mBtnGetvcode = findViewById(R.id.btn_reg_get_vcode);
         mEtPassword = findViewById(R.id.et_reg_password);
