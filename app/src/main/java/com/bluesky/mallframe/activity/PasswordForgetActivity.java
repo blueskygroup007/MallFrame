@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import com.bluesky.mallframe.R;
 
+/**
+ * 忘记密码的重置操作页面
+ */
 public class PasswordForgetActivity extends AppCompatActivity {
 
     @Override

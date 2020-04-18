@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 
 /**
@@ -13,8 +12,6 @@ import cn.bmob.v3.datatype.BmobFile;
  * Description:
  */
 public class User extends BmobUser {
-    //用户名
-    private String username;
     //昵称
     private String nickname;
     //注册时间
@@ -29,7 +26,6 @@ public class User extends BmobUser {
     private BmobFile avatar;
 
     public User() {
-        this.username = "新用户";
         this.nickname = "未命名";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
@@ -40,24 +36,13 @@ public class User extends BmobUser {
         this.avatar = null;
     }
 
-    public User(String username, String nickname, String registerdate, String desc, Integer age, Boolean gender, BmobFile avatar) {
-        this.username = username;
+    public User(String nickname, String registerdate, String desc, Integer age, Boolean gender, BmobFile avatar) {
         this.nickname = nickname;
         this.registerdate = registerdate;
         this.desc = desc;
         this.age = age;
         this.gender = gender;
         this.avatar = avatar;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getNickname() {
@@ -111,7 +96,6 @@ public class User extends BmobUser {
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", registerdate=" + registerdate +
                 ", desc='" + desc + '\'' +

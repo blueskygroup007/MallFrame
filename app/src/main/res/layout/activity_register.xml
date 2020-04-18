@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:autofillHints=""
             android:hint="@string/hint_et_reg_vcode"
-            android:inputType="textPassword" />
+            android:inputType="text" />
 
         <Button
             android:id="@+id/btn_reg_get_vcode"
