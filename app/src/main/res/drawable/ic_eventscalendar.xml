@@ -1,3 +1,4 @@
+<!--TODO app 图标放在mipmap目录还是drawable目录的问题,mipmap需要多套,但该图标是个矢量图-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="200dp"
     android:height="200dp"
