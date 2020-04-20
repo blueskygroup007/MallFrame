@@ -11,14 +11,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.bean.User;
 import com.bluesky.mallframe.dialog.CustomDialog;
-import com.bluesky.mallframe.utils.LogUtils;
 import com.bluesky.mallframe.utils.PreferenceUtils;
 
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.SaveListener;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -90,6 +92,47 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    /**
+     * 另一种登陆方式(通过username,phone,email三者之一)
+     *
+     * @param dialog
+     * @param username
+     * @param pwd
+     */
+    private void bmobLoginByAccount(CustomDialog dialog, String username, String pwd) {
+        BmobUser.loginByAccount(username, pwd, new LogInListener<User>() {
+            @Override
+            public void done(User user, BmobException e) {
+                dialog.dismiss();
+                if (e == null) {
+                    //登陆成功后,再做记住密码操作
+                    if (mCheckBoxRemember.isChecked()) {
+                        //Todo 密码改成MD5加密保存
+                        PreferenceUtils.put("username", username);
+                        PreferenceUtils.put("password", pwd);
+                    }
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    //因为后台没有开启邮箱验证,所以,如果启用,会报错9015
+                    /*if (user.getEmailVerified()) {
+                        Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "请前往验证邮箱!", Toast.LENGTH_SHORT).show();
+                    }*/
+                } else {
+                    PreferenceUtils.put("username", "");
+                    PreferenceUtils.put("password", "");
+                    LogUtils.e("username=" + username + "  pwd=" + pwd + "\n" + "ERROR_CODE=" + e.getErrorCode() + "ERROR=" + e.toString());
+                    Toast.makeText(LoginActivity.this, "登陆失败!" + "  错误代码是:" + e.toString(), Toast.LENGTH_SHORT).show();
+                    LogUtils.e("USER=" + user.getUsername() + "\n" + " ERROR=" + e.getMessage());
+                }
+            }
+
+        });
+    }
 
     private void login() {
         /*BasePopupView popupView = new XPopup.Builder(this)
@@ -107,10 +150,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
         dialog.show();
+        //todo bmobLogin()方法有时会报错,但bmobLoginByAccount就不报错
+        //bmobLogin(dialog, username, pwd);
+        bmobLoginByAccount(dialog, username, pwd);
+    }
 
+    private void bmobLogin(CustomDialog dialog, String username, String pwd) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(pwd);
+        LogUtils.d("username=" + username + "  pwd=" + pwd + "\n");
+
         user.login(new SaveListener<User>() {
             @Override
             public void done(User user, BmobException e) {
@@ -138,6 +188,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 } else {
                     PreferenceUtils.put("username", "");
                     PreferenceUtils.put("password", "");
+                    LogUtils.e("username=" + username + "  pwd=" + pwd + "\n" + "ERROR_CODE=" + e.getErrorCode() + "ERROR=" + e.toString());
                     Toast.makeText(LoginActivity.this, "登陆失败!" + "  错误代码是:" + e.toString(), Toast.LENGTH_SHORT).show();
                     LogUtils.e("USER=" + user.getUsername() + "\n" + " ERROR=" + e.getMessage());
                 }

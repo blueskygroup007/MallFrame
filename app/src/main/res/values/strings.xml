@@ -23,4 +23,8 @@
     <string name="text_tv_phone_state_correct">正确的手机号码</string>
     <string name="text_tv_phone_state_incorrect">错误的手机号码</string>
     <string name="text_tv_reg_phone_state_space">"&#160;&#160;&#160;&#160;&#160;&#160;"</string>
+    <string name="main_rb_text">首页</string>
+    <string name="calendar_rb_text">日历</string>
+    <string name="personal_rb_text">我的</string>
+    <string name="tag_global">global</string>
 </resources>

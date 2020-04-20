@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
-import com.bluesky.mallframe.utils.LogUtils;
 
 
 public class SplashActivity2 extends AppCompatActivity {

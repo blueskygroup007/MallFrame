@@ -43,4 +43,22 @@
         <item name="android:windowNoTitle">true</item>
 
     </style>
+
+    <!--主界面标签按钮样式-->
+    <style name="RadioButtonStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <!--颜色又是一个选择器-->
+        <item name="android:textColor">@drawable/main_radio_button_selector</item>
+        <item name="android:textSize">20sp</item>
+
+        <!--<item name="android:scaleType">centerInside</item>-->
+
+        <!--这个选项不是将图片资源放在上方,而是listview的属性-->
+        <!--<item name="android:drawSelectorOnTop">true</item>-->
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+
+    </style>
 </resources>

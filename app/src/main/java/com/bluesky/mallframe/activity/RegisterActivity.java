@@ -12,11 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.bean.User;
-import com.bluesky.mallframe.utils.LogUtils;
 
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
