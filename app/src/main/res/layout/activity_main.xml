@@ -18,21 +18,21 @@
     <RadioGroup
         android:id="@+id/rg_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/material_bottom_nav_bar_height"
 
         android:background="@drawable/home_bottom_parent_bg"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rb_home"
-            style="@style/RadioButtonStyle"
+            style="@style/MaterialBottomNavBottonStyle"
             android:drawableTop="@drawable/selector_home_button"
             android:text="@string/main_rb_text" />
 
 
         <RadioButton
             android:id="@+id/rb_calendar"
-            style="@style/RadioButtonStyle"
+            style="@style/MaterialBottomNavBottonStyle"
             android:drawableTop="@drawable/selector_calendar_button"
 
             android:text="@string/calendar_rb_text" />
@@ -40,7 +40,7 @@
 
         <RadioButton
             android:id="@+id/rb_personal"
-            style="@style/RadioButtonStyle"
+            style="@style/MaterialBottomNavBottonStyle"
             android:drawableTop="@drawable/selector_personal_button"
 
             android:text="@string/personal_rb_text" />
