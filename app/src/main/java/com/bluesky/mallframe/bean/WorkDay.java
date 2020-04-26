@@ -14,4 +14,6 @@ public class WorkDay extends BmobObject {
     private WorkGroup workgroup;
     //上什么班
     private WorkDayKind workdaykind;
+    //扩展参数
+    private String flag;
 }

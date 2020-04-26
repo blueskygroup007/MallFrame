@@ -15,4 +15,6 @@ class WorkGroup extends BmobObject {
     private Integer number;
     //倒班基准
     private BmobDate basedate;
+    //扩展参数
+    private String flag;
 }

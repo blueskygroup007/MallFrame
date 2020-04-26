@@ -16,4 +16,6 @@ public class WorkDayKind extends BmobObject {
     private String starttime;
     //下班时间
     private String endtime;
+    //扩展参数
+    private String flag;
 }
