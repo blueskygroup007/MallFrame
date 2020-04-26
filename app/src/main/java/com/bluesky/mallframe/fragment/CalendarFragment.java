@@ -29,7 +29,7 @@ public class CalendarFragment extends BaseFragment {
     }
 
     @Override
-    protected void initView(View view, Bundle savedInstanceState) {
+    protected void initView(View view) {
         mTvTitle = view.findViewById(R.id.tv_fragment_calendar_title);
 
     }

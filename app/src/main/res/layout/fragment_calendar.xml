@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:background="@color/material_color_white">
 
-    <TextView
-        android:textSize="20sp"
-        android:id="@+id/tv_fragment_calendar_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="CalendarFragment" />
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_card"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="@dimen/material_content_edge_margin_horizontal"
+        android:background="@drawable/bg_button_round_blank"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_fragment_calendar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            tools:text="CalendarFragment" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_margin="@dimen/material_content_edge_margin_horizontal"
+        android:src="@drawable/ic_calendar"
+        android:elevation="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_card" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

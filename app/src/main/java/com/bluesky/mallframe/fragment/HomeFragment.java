@@ -1,9 +1,6 @@
 package com.bluesky.mallframe.fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -30,7 +27,7 @@ public class HomeFragment extends BaseFragment {
     private WheelView<String> mWvWeek;
     private DatePickerView mDpvDate;
 
-    private List<String> mListWeek = Arrays.asList("星期一", "星期一", "星期一", "星期一", "星期一", "星期一", "星期一");
+    private List<String> mListWeek = Arrays.asList("星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日");
 
 
     @Override
@@ -52,7 +49,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    protected void initView(View view, Bundle savedInstanceState) {
+    protected void initView(View view) {
         mTvTitle = view.findViewById(R.id.tv_fragment_home_title);
         mWvWeek = view.findViewById(R.id.wv_week);
         mDpvDate = view.findViewById(R.id.dpv_date);

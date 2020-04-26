@@ -29,7 +29,10 @@
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
-            android:authorities="${applicationId}.BmobContentProvider" />
+            android:authorities="com.bluesky.mallframe.BmobContentProvider"
+
+        />
+        <!--android:authorities="${applicationId}.BmobContentProvider"-->
     </application> <!-- 获取sd卡读写的权限，用于文件上传和下载 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 允许读取手机状态 用于创建BmobInstallation -->

@@ -49,6 +49,7 @@
 
     <com.zyyoona7.picker.DatePickerView
         android:id="@+id/dpv_date"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

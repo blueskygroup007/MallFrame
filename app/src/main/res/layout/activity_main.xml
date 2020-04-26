@@ -12,9 +12,7 @@
         android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingHorizontal="@dimen/material_dialog_content_area_padding_horizontal"
-        android:paddingVertical="@dimen/material_dialog_content_area_padding_vertical" />
+        android:layout_weight="1" />
 
 
     <RadioGroup
