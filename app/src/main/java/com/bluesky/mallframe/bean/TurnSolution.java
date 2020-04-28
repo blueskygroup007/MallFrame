@@ -3,6 +3,8 @@ package com.bluesky.mallframe.bean;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * @author BlueSky
@@ -55,11 +57,11 @@ public class TurnSolution extends BmobObject {
         this.active = active;
     }
 
-    public WorkGroup getYourgroup() {
+    public WorkGroup  getYourgroup() {
         return yourgroup;
     }
 
-    public void setYourgroup(WorkGroup yourgroup) {
+    public void setYourgroup(WorkGroup  yourgroup) {
         this.yourgroup = yourgroup;
     }
 

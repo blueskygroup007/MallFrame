@@ -24,6 +24,9 @@ public class User extends BmobUser {
     private Boolean gender;
     //头像
     private BmobFile avatar;
+    //倒班表
+    private TurnSolution solution;
+
 
     public User() {
         this.nickname = "未命名";
@@ -34,15 +37,17 @@ public class User extends BmobUser {
         this.age = 0;
         this.gender = true;
         this.avatar = null;
+        this.solution=null;
     }
 
-    public User(String nickname, String registerdate, String desc, Integer age, Boolean gender, BmobFile avatar) {
+    public User(String nickname, String registerdate, String desc, Integer age, Boolean gender, BmobFile avatar,TurnSolution solution) {
         this.nickname = nickname;
         this.registerdate = registerdate;
         this.desc = desc;
         this.age = age;
         this.gender = gender;
         this.avatar = avatar;
+        this.solution=solution;
     }
 
     public String getNickname() {
@@ -93,15 +98,24 @@ public class User extends BmobUser {
         this.avatar = avatar;
     }
 
+    public TurnSolution getSolution() {
+        return solution;
+    }
+
+    public void setSolution(TurnSolution solution) {
+        this.solution = solution;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                ", nickname='" + nickname + '\'' +
-                ", registerdate=" + registerdate +
+                "nickname='" + nickname + '\'' +
+                ", registerdate='" + registerdate + '\'' +
                 ", desc='" + desc + '\'' +
                 ", age=" + age +
                 ", gender=" + gender +
                 ", avatar=" + avatar +
+                ", solution=" + solution +
                 '}';
     }
 }

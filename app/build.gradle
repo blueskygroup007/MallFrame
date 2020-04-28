@@ -49,6 +49,6 @@ dependencies {
     implementation 'com.github.zyyoona7:pickerview:1.0.9'
     implementation 'com.github.zyyoona7:wheelview:1.0.7'
 
-    /*todo 添加material库以支持Snackbar*/
-    implementation 'com.google.android.material:material:1.0.0'
+    /* 添加material库以支持RecyclerView,TabLayout，Snackbar，FloatingActionButton，BottomNavigationView*/
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 }

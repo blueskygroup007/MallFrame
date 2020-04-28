@@ -1,18 +1,16 @@
 package com.bluesky.mallframe.fragment;
 
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.blankj.utilcode.constant.TimeConstants;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.TimeUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseFragment;
 import com.bluesky.mallframe.bean.TurnSolution;
+import com.bluesky.mallframe.bean.User;
 import com.bluesky.mallframe.bean.WorkDay;
 import com.bluesky.mallframe.bean.WorkDayKind;
 import com.bluesky.mallframe.bean.WorkGroup;
@@ -27,9 +25,15 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * @author BlueSky
@@ -93,7 +97,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         }});
         solution.setName("唐钢二炼铁");
-        solution.setYourgroup(group1);
 
 
         WorkDay day1 = new WorkDay();
@@ -101,6 +104,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         day1.setWorkdaykind(kind1);
 
         WorkDay day2 = new WorkDay();
+
         day2.setWorkgroup(group3);
         day2.setWorkdaykind(kind2);
 
@@ -165,16 +169,44 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                solution.save(new SaveListener<String>() {
+                WorkGroup group1 = new WorkGroup();
+                group1.setNumber(1);
+                group1.setName("甲");
+                group1.setBasedate(new BmobDate(new Date()));
+
+                group1.save(new SaveListener<String>() {
                     @Override
                     public void done(String s, BmobException e) {
-                        if (e == null) {
-                            LogUtils.d("保存成功");
-                        } else {
-                            LogUtils.e("保存失败" + e.toString());
-                        }
+                        LogUtils.d("班组已经存好!");
+                        solution.setYourgroup(group1);
+
+                        solution.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e == null) {
+                                    LogUtils.d("保存成功");
+                                    User user = BmobUser.getCurrentUser(User.class);
+                                    user.setSolution(solution);
+                                    user.setDesc("更新了一次数据");
+                                    user.update(new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                LogUtils.d("用户数据更新成功");
+                                            } else {
+                                                LogUtils.d("保存失败" + e.toString());
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    LogUtils.e("保存失败" + e.toString());
+                                }
+                            }
+                        });
+
                     }
                 });
+
                 break;
             case R.id.btn_del:
 
@@ -183,6 +215,29 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                 break;
             case R.id.btn_query:
+                User user = BmobUser.getCurrentUser(User.class);
+                TurnSolution solution = user.getSolution();
+                LogUtils.d(solution.getObjectId().toString());
+
+
+                BmobQuery<TurnSolution> query = new BmobQuery<TurnSolution>();
+                query.include("yourgroup");
+                query.getObject(solution.getObjectId(), new QueryListener<TurnSolution>() {
+                    @Override
+                    public void done(TurnSolution solution, BmobException e) {
+                        if (e == null) {
+                            List<WorkDayKind> listWorkDayKinds = solution.getWorkdaykinds();
+                            List<WorkDay> listWorkDays = solution.getWorkdays();
+                            LogUtils.d(solution.toString());
+                            LogUtils.d(listWorkDayKinds.toString());
+                            LogUtils.d(listWorkDays.toString());
+                        } else {
+                            LogUtils.e("查询失败" + e.toString());
+
+                        }
+                    }
+                });
+
 
                 break;
 

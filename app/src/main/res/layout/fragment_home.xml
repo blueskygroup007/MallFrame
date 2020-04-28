@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <TextView
@@ -20,8 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:background="#e0f2f1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
 
         app:wv_curved="true"
         app:wv_curvedArcDirection="left"
@@ -41,11 +39,11 @@
         app:wv_selectedItemTextColor="@color/colorPrimary"
         app:wv_selectedRectColor="#aebfbe"
         app:wv_showDivider="true"
-        app:wv_textAlign="left"
+        app:wv_textAlign="center"
         app:wv_textBoundaryMargin="10dp"
 
         app:wv_textSize="20sp"
-        app:wv_visibleItems="6" />
+        app:wv_visibleItems="3" />
 
     <com.zyyoona7.picker.DatePickerView
         android:id="@+id/dpv_date"
