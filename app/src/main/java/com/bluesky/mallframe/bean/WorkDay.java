@@ -16,4 +16,46 @@ public class WorkDay extends BmobObject {
     private WorkDayKind workdaykind;
     //扩展参数
     private String flag;
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public WorkGroup getWorkgroup() {
+        return workgroup;
+    }
+
+    public void setWorkgroup(WorkGroup workgroup) {
+        this.workgroup = workgroup;
+    }
+
+    public WorkDayKind getWorkdaykind() {
+        return workdaykind;
+    }
+
+    public void setWorkdaykind(WorkDayKind workdaykind) {
+        this.workdaykind = workdaykind;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    @Override
+    public String toString() {
+        return "WorkDay{" +
+                "number=" + number +
+                ", workgroup=" + workgroup +
+                ", workdaykind=" + workdaykind +
+                ", flag='" + flag + '\'' +
+                '}';
+    }
 }

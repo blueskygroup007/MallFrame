@@ -25,4 +25,73 @@ public class TurnSolution extends BmobObject {
     private List<WorkDayKind> workdaykinds;
     //扩展参数
     private String flags;
+
+    @Override
+    public String toString() {
+        return "TurnSolution{" +
+                "name='" + name + '\'' +
+                ", active=" + active +
+                ", yourgroup=" + yourgroup +
+                ", workdays=" + workdays +
+                ", workgroups=" + workgroups +
+                ", workdaykinds=" + workdaykinds +
+                ", flags='" + flags + '\'' +
+                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public WorkGroup getYourgroup() {
+        return yourgroup;
+    }
+
+    public void setYourgroup(WorkGroup yourgroup) {
+        this.yourgroup = yourgroup;
+    }
+
+    public List<WorkDay> getWorkdays() {
+        return workdays;
+    }
+
+    public void setWorkdays(List<WorkDay> workdays) {
+        this.workdays = workdays;
+    }
+
+    public List<WorkGroup> getWorkgroups() {
+        return workgroups;
+    }
+
+    public void setWorkgroups(List<WorkGroup> workgroups) {
+        this.workgroups = workgroups;
+    }
+
+    public List<WorkDayKind> getWorkdaykinds() {
+        return workdaykinds;
+    }
+
+    public void setWorkdaykinds(List<WorkDayKind> workdaykinds) {
+        this.workdaykinds = workdaykinds;
+    }
+
+    public String getFlags() {
+        return flags;
+    }
+
+    public void setFlags(String flags) {
+        this.flags = flags;
+    }
 }
