@@ -16,8 +16,8 @@ public class TurnSolution extends BmobObject {
     private String name;
     //是否激活
     private Boolean active;
-    //你是哪个班组
-    private WorkGroup yourgroup;
+    //你是哪个班组(在list中的序号,第几个班组)
+    private Integer yourgroup;
     //一圈中，每天倒班方式
     private List<WorkDay> workdays;
     //一共有几个班，甲乙丙丁
@@ -57,11 +57,11 @@ public class TurnSolution extends BmobObject {
         this.active = active;
     }
 
-    public WorkGroup  getYourgroup() {
+    public Integer  getYourgroup() {
         return yourgroup;
     }
 
-    public void setYourgroup(WorkGroup  yourgroup) {
+    public void setYourgroup(Integer  yourgroup) {
         this.yourgroup = yourgroup;
     }
 

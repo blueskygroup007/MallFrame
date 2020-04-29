@@ -6,7 +6,7 @@ import cn.bmob.v3.datatype.BmobPointer;
 /**
  * @author BlueSky
  * @date 2020/4/26
- * Description:某个班今天是第一个班，例如：今天丙班上第一个白班，也就是一圈第一个班
+ * Description:一圈中的某天,哪个班组上哪个班，例如：今天丙班上第一个白班，也就是一圈第一个班
  */
 public class WorkDay extends BmobObject {
     //序号

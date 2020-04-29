@@ -1,7 +1,6 @@
 package com.bluesky.mallframe.bean;
 
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobDate;
 
 /**
  * @author BlueSky
@@ -13,8 +12,8 @@ public class WorkGroup extends BmobObject {
     private String name;
     //班组序号
     private Integer number;
-    //倒班基准
-    private BmobDate basedate;
+    //倒班基准(日期,不含时间)
+    private String basedate;
     //扩展参数
     private String flag;
 
@@ -44,11 +43,11 @@ public class WorkGroup extends BmobObject {
         this.number = number;
     }
 
-    public BmobDate getBasedate() {
+    public String getBasedate() {
         return basedate;
     }
 
-    public void setBasedate(BmobDate basedate) {
+    public void setBasedate(String basedate) {
         this.basedate = basedate;
     }
 

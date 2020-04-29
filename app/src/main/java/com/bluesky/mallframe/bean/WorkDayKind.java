@@ -12,9 +12,9 @@ public class WorkDayKind extends BmobObject {
     private Integer number;
     //名称
     private String name;
-    //上班时间
+    //上班时间(不含秒的日期)
     private String starttime;
-    //下班时间
+    //下班时间(不含秒的日期)
     private String endtime;
     //扩展参数
     private String flag;
