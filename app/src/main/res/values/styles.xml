@@ -1,11 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Toolbar" >
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!--Splash的全屏白色主题-->
@@ -68,7 +73,9 @@
 
         <!--<item name="android:paddingTop">@dimen/material_bottom_nav_bar_shifting_action_active_icon_padding_top</item>-->
         <!--<item name="android:paddingBottom">@dimen/material_bottom_nav_bar_action_label_padding_bottom</item>-->
-        <item name="android:textSize">@dimen/material_bottom_nav_bar_fixed_action_active_label_text_size</item>
+        <item name="android:textSize">
+            @dimen/material_bottom_nav_bar_fixed_action_active_label_text_size
+        </item>
         <item name="android:textColor">@drawable/main_radio_button_selector</item>
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>

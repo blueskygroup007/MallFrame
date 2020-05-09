@@ -1,10 +1,8 @@
-package com.bluesky.mallframe.bean;
+package com.bluesky.mallframe.data;
 
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobPointer;
-import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * @author BlueSky
@@ -12,6 +10,10 @@ import cn.bmob.v3.datatype.BmobRelation;
  * Description:倒班方案
  */
 public class TurnSolution extends BmobObject {
+
+
+    //方案归属于哪个用户
+    private User user;
     //方案名称
     private String name;
     //是否激活
@@ -31,7 +33,8 @@ public class TurnSolution extends BmobObject {
     @Override
     public String toString() {
         return "TurnSolution{" +
-                "name='" + name + '\'' +
+                "user=" + user +
+                ", name='" + name + '\'' +
                 ", active=" + active +
                 ", yourgroup=" + yourgroup +
                 ", workdays=" + workdays +
@@ -41,6 +44,13 @@ public class TurnSolution extends BmobObject {
                 '}';
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     public String getName() {
         return name;
     }
@@ -57,11 +67,11 @@ public class TurnSolution extends BmobObject {
         this.active = active;
     }
 
-    public Integer  getYourgroup() {
+    public Integer getYourgroup() {
         return yourgroup;
     }
 
-    public void setYourgroup(Integer  yourgroup) {
+    public void setYourgroup(Integer yourgroup) {
         this.yourgroup = yourgroup;
     }
 

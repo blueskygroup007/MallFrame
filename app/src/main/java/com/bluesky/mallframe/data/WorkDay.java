@@ -1,7 +1,6 @@
-package com.bluesky.mallframe.bean;
+package com.bluesky.mallframe.data;
 
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobPointer;
 
 /**
  * @author BlueSky

@@ -1,4 +1,4 @@
-package com.bluesky.mallframe.bean;
+package com.bluesky.mallframe.data;
 
 import cn.bmob.v3.BmobObject;
 

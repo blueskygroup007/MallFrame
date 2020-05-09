@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
-import com.bluesky.mallframe.bean.User;
+import com.bluesky.mallframe.data.User;
 import com.bluesky.mallframe.dialog.CustomDialog;
 import com.bluesky.mallframe.utils.PreferenceUtils;
 

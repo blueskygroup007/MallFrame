@@ -16,7 +16,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
-import com.bluesky.mallframe.bean.User;
+import com.bluesky.mallframe.data.User;
 
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;

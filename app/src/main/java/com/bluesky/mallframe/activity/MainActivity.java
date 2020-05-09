@@ -9,15 +9,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.base.BaseFragment;
-import com.bluesky.mallframe.bean.User;
+import com.bluesky.mallframe.data.User;
 import com.bluesky.mallframe.fragment.CalendarFragment;
 import com.bluesky.mallframe.fragment.HomeFragment;
 import com.bluesky.mallframe.fragment.PersonalFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends BaseActivity {
     public static final String PARAM = "USER";

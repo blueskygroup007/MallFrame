@@ -1,7 +1,12 @@
 package com.bluesky.mallframe.fragment;
 
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -9,11 +14,13 @@ import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseFragment;
-import com.bluesky.mallframe.bean.TurnSolution;
-import com.bluesky.mallframe.bean.User;
-import com.bluesky.mallframe.bean.WorkDay;
-import com.bluesky.mallframe.bean.WorkDayKind;
-import com.bluesky.mallframe.bean.WorkGroup;
+import com.bluesky.mallframe.data.TurnSolution;
+import com.bluesky.mallframe.data.User;
+import com.bluesky.mallframe.data.WorkDay;
+import com.bluesky.mallframe.data.WorkDayKind;
+import com.bluesky.mallframe.data.WorkGroup;
+import com.bluesky.mallframe.data.source.SolutionDataSource;
+import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.zyyoona7.picker.DatePickerView;
 import com.zyyoona7.picker.base.BaseDatePickerView;
 import com.zyyoona7.picker.listener.OnDateSelectedListener;
@@ -28,7 +35,9 @@ import java.util.Locale;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -41,15 +50,19 @@ import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
  * @date 2020/4/20
  * Description:
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private TextView mTvTitle;
-    private WheelView<String> mWvWeek;
-    private DatePickerView mDpvDate;
+    //    private WheelView<String> mWvWeek;
+//    private DatePickerView mDpvDate;
+    private ListView mLvSolutions;
+    private SolutionAdapter mAdapter;
+    private List<TurnSolution> mListSolutions = new ArrayList<>();
     private Button mBtnAdd, mBtnDelete, mBtnUpdate, mBtnQuery;
 
     private List<String> mListWeek = Arrays.asList("星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日");
 
     TurnSolution solution;
+    private SolutionDataSource mRemote = new SolutionRemoteDataSource();
 
 
     private void testData() {
@@ -125,7 +138,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             add(group3);
 
         }});
-        solution.setName("唐钢二炼铁");
 
 
         WorkDay day1 = new WorkDay();
@@ -147,24 +159,27 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             add(day3);
 
         }});
-
+        solution.setName("唐钢三炼铁");
+        solution.setUser(BmobUser.getCurrentUser(User.class));
         LogUtils.d(solution.toString());
     }
 
 
     @Override
     protected void initEvent() {
-        mDpvDate.setOnDateSelectedListener(new OnDateSelectedListener() {
+/*        mDpvDate.setOnDateSelectedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(BaseDatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
 //                Snackbar.make();
             }
-        });
+        });*/
 
         mBtnAdd.setOnClickListener(this);
         mBtnDelete.setOnClickListener(this);
         mBtnUpdate.setOnClickListener(this);
         mBtnQuery.setOnClickListener(this);
+        mLvSolutions.setOnItemClickListener(this);
+        mLvSolutions.setOnItemLongClickListener(this);
     }
 
     @Override
@@ -172,20 +187,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mTvTitle.setText("这是主页面fragment!");
         LogUtils.d("主页面的fragment的数据被初始化了");
 
-        mWvWeek.setData(mListWeek);
+        mAdapter = new SolutionAdapter();
+        mLvSolutions.setAdapter(mAdapter);
+
+//        mWvWeek.setData(mListWeek);
         testData();
+
     }
 
     @Override
     protected void initView(View view) {
         mTvTitle = view.findViewById(R.id.tv_fragment_home_title);
-        mWvWeek = view.findViewById(R.id.wv_week);
-        mDpvDate = view.findViewById(R.id.dpv_date);
+//        mWvWeek = view.findViewById(R.id.wv_week);
+//        mDpvDate = view.findViewById(R.id.dpv_date);
 
         mBtnAdd = view.findViewById(R.id.btn_add);
         mBtnDelete = view.findViewById(R.id.btn_del);
         mBtnUpdate = view.findViewById(R.id.btn_update);
         mBtnQuery = view.findViewById(R.id.btn_query);
+        mLvSolutions = view.findViewById(R.id.lv_solution);
 
     }
 
@@ -198,43 +218,29 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                solution.save(new SaveListener<String>() {
-                    @Override
-                    public void done(String s, BmobException e) {
-                        if (e == null) {
-                            LogUtils.d("班组保存成功");
 
-                        } else {
-                            LogUtils.e("保存失败" + e.toString());
-                        }
-                    }
-                });
+                for (int i = 0; i < 7; i++) {
+                    solution.setName(solution.getName() + i);
+                    addSolution();
+                }
 
                 break;
             case R.id.btn_del:
-
+                int position = mLvSolutions.getCheckedItemPosition();
+                LogUtils.d("准备删除的位置是" + position);
+                TurnSolution curSolution = mListSolutions.get(position);
+                mRemote.deleteSolution(curSolution.getObjectId());
                 break;
             case R.id.btn_update:
                 User user = BmobUser.getCurrentUser(User.class);
-                user.setSolution(solution);
+//                user.setSolution(solution);
                 user.setDesc("更新了2次数据");
                 user.update(new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            solution = user.getSolution();
                             solution.setYourgroup(1);
-                            solution.update(new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if (e == null) {
-                                        LogUtils.d("solution更新成功");
-                                    } else {
-                                        LogUtils.e("保存失败" + e.toString());
-
-                                    }
-                                }
-                            });
+                            mRemote.updateSolution(solution);
                             LogUtils.d("user更新成功");
                         } else {
                             LogUtils.d("保存失败" + e.toString());
@@ -244,32 +250,93 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                 break;
             case R.id.btn_query:
-                user = BmobUser.getCurrentUser(User.class);
-                TurnSolution solution = user.getSolution();
-
-                BmobQuery<TurnSolution> query = new BmobQuery<TurnSolution>();
-//                query.include("yourgroup");
-                query.getObject(solution.getObjectId(), new QueryListener<TurnSolution>() {
+                mRemote.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
                     @Override
-                    public void done(TurnSolution solution, BmobException e) {
-                        if (e == null) {
-                            List<WorkDayKind> listWorkDayKinds = solution.getWorkdaykinds();
-                            List<WorkDay> listWorkDays = solution.getWorkdays();
-                            LogUtils.d(solution.toString());
-                            LogUtils.d(listWorkDayKinds.toString());
-                            LogUtils.d(listWorkDays.toString());
-                        } else {
-                            LogUtils.e("查询失败" + e.toString());
+                    public void onSolutionsLoaded(List<TurnSolution> solutions) {
+                        LogUtils.d("查找所有solution:" + solutions.toString());
+                        mListSolutions.clear();
+                        mListSolutions.addAll(solutions);
+                        mAdapter.notifyDataSetChanged();
+                    }
 
-                        }
+                    @Override
+                    public void onDataNotAvailable() {
+                        LogUtils.d("查找所有solution失败!");
                     }
                 });
-
-
                 break;
 
             default:
                 break;
+        }
+    }
+
+    private void addSolution() {
+        solution.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    LogUtils.d("班组保存成功");
+
+                } else {
+                    LogUtils.e("保存失败" + e.toString());
+                }
+            }
+        });
+    }
+
+    /**
+     * ListView的Item点击处理事件
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        LogUtils.d("点击了第" + position + "个选项=" + mListSolutions.get(position).getName());
+        mLvSolutions.setSelection(position);
+    }
+
+    /**
+     * ListView的Item长按点击处理事件
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        //todo 显示删除按钮
+        return false;
+    }
+
+    class SolutionAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mListSolutions.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mListSolutions.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView tvSolution = new TextView(HomeFragment.this.mContext);
+            TurnSolution solution = mListSolutions.get(position);
+            tvSolution.setText(solution.getName());
+            return tvSolution;
         }
     }
 }
