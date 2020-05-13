@@ -3,15 +3,19 @@ package com.bluesky.mallframe.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
+import com.bluesky.mallframe.ui.BSNumberPicker;
 
 public class EditActivity extends BaseActivity {
     private Toolbar toolbar;
+
+    private BSNumberPicker mNumberPicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +44,15 @@ public class EditActivity extends BaseActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
 
             getSupportActionBar().setDisplayShowTitleEnabled(true);
+            //Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现
             getSupportActionBar().setTitle("编辑倒班");
 //            toolbar.setTitle("编辑倒班");
         } else {
             LogUtils.d("toolbar not found!");
         }
+
+        mNumberPicker = findViewById(R.id.np_day);
+
     }
 
     @Override

@@ -9,4 +9,11 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+    <!--加减器的自定义样式 -->
+    <declare-styleable name="BSNumberPicker">
+        <attr name="text_color" format="color" />
+        <attr name="text_size" format="dimension" />
+        <attr name="current_number" format="string" />
+    </declare-styleable>
+
 </resources>
