@@ -16,4 +16,18 @@
         <attr name="current_number" format="string" />
     </declare-styleable>
 
+    <!--自定义标题栏样式-->
+    <declare-styleable name="TopBar">
+        <attr name="titleText" format="string" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+
+        <attr name="leftBtnBackground" format="reference|color" />
+        <attr name="leftBtnText" format="string"/>
+        <attr name="rightBtnBackground" format="reference|color" />
+        <attr name="rightBtnText" format="string"/>
+
+
+    </declare-styleable>
+
 </resources>

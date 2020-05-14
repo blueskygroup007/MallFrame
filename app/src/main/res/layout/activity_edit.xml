@@ -8,7 +8,17 @@
     android:orientation="vertical"
     tools:context=".activity.EditActivity">
 
-    <include layout="@layout/toolbar" />
+    <!--<include layout="@layout/toolbar" />-->
+    <com.bluesky.mallframe.ui.TopBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftBtnBackground="@drawable/ic_chevron_left_black_24dp"
+        app:leftBtnText="左侧按钮"
+        app:rightBtnBackground="@drawable/ic_chevron_right_black_24dp"
+        app:rightBtnText="右侧按钮"
+        app:titleText="Title"
+        app:titleTextColor="@color/colorPrimary"
+        app:titleTextSize="18sp" />
 
     <ScrollView
         android:layout_width="match_parent"
