@@ -123,6 +123,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         Toast.makeText(LoginActivity.this, "请前往验证邮箱!", Toast.LENGTH_SHORT).show();
                     }*/
                 } else {
+
+                    //todo 没有网络的处理
+                    //ERROR_CODE=9015ERROR=errorCode:9015,errorMsg:java.net.UnknownHostException: Unable to resolve host "open2.bmob.cn": No address associated with hostname
                     PreferenceUtils.put("username", "");
                     PreferenceUtils.put("password", "");
                     LogUtils.e("username=" + username + "  pwd=" + pwd + "\n" + "ERROR_CODE=" + e.getErrorCode() + "ERROR=" + e.toString());

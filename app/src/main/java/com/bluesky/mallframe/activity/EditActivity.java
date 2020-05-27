@@ -3,7 +3,6 @@ package com.bluesky.mallframe.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -40,13 +39,10 @@ public class EditActivity extends BaseActivity {
         //显示返回按钮
         if (getSupportActionBar() != null) {
             LogUtils.d("toolbar found!");
-
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             //Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现
             getSupportActionBar().setTitle("编辑倒班");
-//            toolbar.setTitle("编辑倒班");
         } else {
             LogUtils.d("toolbar not found!");
         }

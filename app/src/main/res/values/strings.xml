@@ -27,4 +27,7 @@
     <string name="calendar_rb_text">日历</string>
     <string name="personal_rb_text">我的</string>
     <string name="tag_global">global</string>
+    <string name="hint_et_workgroup_name">给班组起个名字</string>
+    <string name="hint_tv_workgroup_base_date">请点击设置</string>
+    <string name="text_tv_group_setting_number">班组总数</string>
 </resources>

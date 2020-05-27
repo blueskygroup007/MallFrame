@@ -13,7 +13,7 @@
     <declare-styleable name="BSNumberPicker">
         <attr name="text_color" format="color" />
         <attr name="text_size" format="dimension" />
-        <attr name="current_number" format="string" />
+        <attr name="current_number" format="integer" />
     </declare-styleable>
 
     <!--自定义标题栏样式-->

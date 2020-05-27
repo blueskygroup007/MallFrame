@@ -8,17 +8,15 @@
     android:orientation="vertical"
     tools:context=".activity.EditActivity">
 
-    <!--<include layout="@layout/toolbar" />-->
-    <com.bluesky.mallframe.ui.TopBar
+    <include layout="@layout/toolbar" />
+<!--    <com.bluesky.mallframe.ui.TopBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         app:leftBtnBackground="@drawable/ic_chevron_left_black_24dp"
-        app:leftBtnText="左侧按钮"
         app:rightBtnBackground="@drawable/ic_chevron_right_black_24dp"
-        app:rightBtnText="右侧按钮"
         app:titleText="Title"
         app:titleTextColor="@color/colorPrimary"
-        app:titleTextSize="18sp" />
+        app:titleTextSize="18sp" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,6 +31,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -40,18 +39,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:textSize="@dimen/font_title"
-                    tools:text="起个名字"
-
-                    />
-
+                    android:text="起个名字:" />
 
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autofillHints=""
                     android:gravity="center_horizontal"
                     android:inputType="text"
-                    tools:text="我的倒班" />
+                    android:text="我的倒班" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -62,6 +59,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -69,25 +67,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:textSize="@dimen/font_title"
-                    tools:text="一圈几天"
-
+                    android:text="一圈几天:"
                     />
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="1dp"
                     android:layout_weight="1" />
 
+                <com.bluesky.mallframe.ui.BSNumberPicker
+                    android:id="@+id/np_day"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    app:current_number="4"
+                    app:text_color="@color/colorPrimary"
+                    app:text_size="8sp" />
 
             </LinearLayout>
 
-            <com.bluesky.mallframe.ui.BSNumberPicker
-                android:id="@+id/np_day"
-                android:layout_width="108dp"
-                android:layout_height="48dp"
-                app:current_number="4"
-                app:text_color="@color/colorPrimary"
-                app:text_size="18sp" />
+
         </LinearLayout>
 
 

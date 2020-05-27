@@ -19,8 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activity.GroupSettingActivity"
+            android:theme="@style/AppTheme.Toolbar" />
+
+        <activity android:name=".activity.Test2Activity" />
+        <activity android:name=".activity.TestActivity" />
+        <activity
             android:name=".activity.EditActivity"
-            android:theme="@style/AppTheme.Toolbar"></activity>
+            android:theme="@style/AppTheme.Toolbar" />
         <activity android:name=".activity.PasswordForgetActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.LoginActivity" />

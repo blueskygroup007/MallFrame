@@ -1,5 +1,6 @@
 package com.bluesky.mallframe.data;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -9,7 +10,7 @@ import cn.bmob.v3.BmobObject;
  * @date 2020/4/26
  * Description:倒班方案
  */
-public class TurnSolution extends BmobObject {
+public class TurnSolution extends BmobObject implements Serializable {
 
 
     //方案归属于哪个用户
@@ -51,6 +52,7 @@ public class TurnSolution extends BmobObject {
     public void setUser(User user) {
         this.user = user;
     }
+
     public String getName() {
         return name;
     }

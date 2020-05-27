@@ -45,9 +45,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     case R.id.rb_calendar:
                         position = 1;
-
                         break;
-
                     case R.id.rb_personal:
                         position = 2;
                         break;

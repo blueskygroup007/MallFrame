@@ -68,11 +68,11 @@ public class TopBar extends RelativeLayout {
         leftParams.addRule(ALIGN_PARENT_LEFT);
         rightParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         rightParams.addRule(ALIGN_PARENT_RIGHT);
-        addView(mLeftButton);
-        addView(mRightButton);
+        addView(mLeftButton, leftParams);
+        addView(mRightButton, rightParams);
         titleParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         titleParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        addView(mTvTitle);
+        addView(mTvTitle, titleParams);
 
     }
 }

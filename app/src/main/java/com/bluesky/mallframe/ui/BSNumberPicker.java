@@ -24,12 +24,13 @@ public class BSNumberPicker extends LinearLayout implements View.OnClickListener
 
     private int mTextColor = Color.BLACK;
     private float mTextSize = 12;
-    private String mNumber = "0";
+    private int mNumber = 1;
 
-    private LinearLayout mLayoutRoot;
+    //    private ConstraintLayout mLayoutRoot;
     private Button mBtnDec;
     private Button mBtnInc;
     private TextView mTvNumber;
+    private OnNumberChangeListener mListener = null;
 
     public BSNumberPicker(Context context) {
         super(context);
@@ -62,59 +63,55 @@ public class BSNumberPicker extends LinearLayout implements View.OnClickListener
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BSNumberPicker);
         mTextColor = a.getColor(R.styleable.BSNumberPicker_text_color, Color.BLACK);
         mTextSize = a.getDimension(R.styleable.BSNumberPicker_text_size, 12);
-        mNumber = a.getString(R.styleable.BSNumberPicker_current_number);
+        mNumber = a.getInteger(R.styleable.BSNumberPicker_current_number, 1);
         a.recycle();
     }
 
     private void initView(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.number_picker_bs, this, true);
+        LayoutInflater.from(context).inflate(R.layout.test_layout, this, true);
         mBtnDec = findViewById(R.id.btn_dec);
         mBtnInc = findViewById(R.id.btn_inc);
         mTvNumber = findViewById(R.id.tv_number);
-        mLayoutRoot = findViewById(R.id.ll_root);
+//        mLayoutRoot = findViewById(R.id.layout_root);
 
 //        mLayoutRoot.setBackgroundColor(Color.WHITE);
         mTvNumber.setTextColor(mTextColor);
         mTvNumber.setTextSize(mTextSize);
-        mTvNumber.setText(mNumber);
+        mTvNumber.setText(String.valueOf(mNumber));
     }
 
-    public void setDecListener(OnClickListener listener) {
-        mBtnDec.setOnClickListener(listener);
+    public void setNumber(int number) {
+        mTvNumber.setText(String.valueOf(number));
     }
 
-    public void setIncListener(OnClickListener listener) {
-        mBtnInc.setOnClickListener(listener);
-    }
-
-    public void setNumber(String number) {
-        if (!TextUtils.isEmpty(number)) {
-            mTvNumber.setText(number);
-        }
-    }
-
-    public String getNumber() {
-        return mTvNumber.getText().toString().trim();
+    public int getNumber() {
+        return Integer.parseInt(mTvNumber.getText().toString().trim());
     }
 
     @Override
     public void onClick(View v) {
-        int number;
-        String strNumber;
-        number = Integer.parseInt(mTvNumber.getText().toString());
-
+        int number = getNumber();
         switch (v.getId()) {
             case R.id.btn_dec:
-                strNumber = String.valueOf(--number);
-                mTvNumber.setText(strNumber);
+                mTvNumber.setText(String.valueOf(--number));
+                mListener.onNumberDec(number);
                 break;
             case R.id.btn_inc:
-                strNumber = String.valueOf(++number);
-                mTvNumber.setText(strNumber);
-
+                mTvNumber.setText(String.valueOf(++number));
+                mListener.onNumberInc(number);
                 break;
             default:
         }
+    }
+
+    public void setOnNumberChangeListener(OnNumberChangeListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface OnNumberChangeListener {
+        void onNumberInc(int number);
+
+        void onNumberDec(int number);
     }
 
 }

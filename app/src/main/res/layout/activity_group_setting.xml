@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--还是应该采用Toolbar.因为TopBar没完善-->
+    <include layout="@layout/toolbar" />
+    <!--    <com.bluesky.mallframe.ui.TopBar
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:leftBtnBackground="@drawable/ic_chevron_left_black_24dp"
+            app:titleText="Title"
+            app:titleTextColor="@color/colorPrimary"
+            app:titleTextSize="18sp" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/content_left_right_align_baseline"
+        android:layout_marginVertical="@dimen/content_left_right_align_baseline"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/text_tv_group_setting_number"
+            android:textSize="@dimen/font_title" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.bluesky.mallframe.ui.BSNumberPicker
+            android:id="@+id/np_day"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            app:current_number="4"
+            app:text_color="@color/colorPrimary"
+            app:text_size="8sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:paddingStart="@dimen/content_left_right_align_baseline"
+        android:textColor="@color/material_color_red_300"
+        android:textSize="@dimen/font_tip" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_margin" />
+
+
+</LinearLayout>
+
+
+
+

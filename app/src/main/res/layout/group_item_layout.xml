@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bs_number_picker"
+    android:elevation="12dp">
+
+
+    <TextView
+        android:id="@+id/tv_number"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_number"
+        android:ems="2"
+        android:gravity="center"
+        android:text="1#"
+        android:textSize="@dimen/font_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_group_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="班组名称"
+        app:layout_constraintBottom_toTopOf="@id/tv_group_base_date"
+        app:layout_constraintLeft_toRightOf="@+id/tv_number"
+        app:layout_constraintRight_toLeftOf="@id/et_group_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_group_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="end"
+        android:text="甲班"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_group_name"
+        app:layout_constraintBottom_toTopOf="@id/tv_base_date"
+        app:layout_constraintLeft_toRightOf="@id/tv_group_name"
+        app:layout_constraintRight_toLeftOf="@id/cb_yours"
+
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_group_base_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+
+        android:text="基准日期"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_number"
+        app:layout_constraintRight_toLeftOf="@id/tv_base_date"
+        app:layout_constraintTop_toBottomOf="@id/tv_group_name" />
+
+    <TextView
+        android:id="@+id/tv_base_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:gravity="end"
+        android:text="请点击设置"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_group_base_date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tv_group_base_date"
+        app:layout_constraintRight_toLeftOf="@id/cb_yours"
+        app:layout_constraintTop_toBottomOf="@id/et_group_name" />
+
+    <CheckBox
+        android:id="@+id/cb_yours"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
