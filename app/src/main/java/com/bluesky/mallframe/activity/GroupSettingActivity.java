@@ -48,6 +48,7 @@ import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 public class GroupSettingActivity extends BaseActivity {
 
     private static final String FLAG_DEFAULT_WORKGROUP = "default";
+    public static final String FLAG_INTENT_DATA = "DATA_WORK_GROUP";
     //控件
     private BSNumberPicker mNumberPicker;
     private RecyclerView mRecyclerView;
@@ -92,7 +93,7 @@ public class GroupSettingActivity extends BaseActivity {
         //获取Intent传递来的List数据
         //todo 不应该是solution,只需List<WorkGroup>
         Intent intent = getIntent();
-        mSolution = (TurnSolution) intent.getSerializableExtra("DATA_WORK_GROUP");
+        mSolution = (TurnSolution) intent.getSerializableExtra(FLAG_INTENT_DATA);
 
         mWorkgroups = mSolution.getWorkgroups();
         LogUtils.d(mWorkgroups);
@@ -121,9 +122,9 @@ public class GroupSettingActivity extends BaseActivity {
             LogUtils.d("toolbar not found!");
         }
 
-        mNumberPicker = findViewById(R.id.np_day);
-        mRecyclerView = findViewById(R.id.rv_list);
-        mTvMsg = findViewById(R.id.tv_message);
+        mNumberPicker = findViewById(R.id.np_group_count);
+        mRecyclerView = findViewById(R.id.rv_group_list);
+        mTvMsg = findViewById(R.id.tv_group_setting_message);
     }
 
     @Override
@@ -216,7 +217,7 @@ public class GroupSettingActivity extends BaseActivity {
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 mTvNumber = itemView.findViewById(R.id.tv_number);
-                mEtName = itemView.findViewById(R.id.et_group_name);
+                mEtName = itemView.findViewById(R.id.et_name);
                 mTvBaseDate = itemView.findViewById(R.id.tv_base_date);
                 mCbDefault = itemView.findViewById(R.id.cb_yours);
 
@@ -233,7 +234,6 @@ public class GroupSettingActivity extends BaseActivity {
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_item_card_style_layout, parent, false);
             ViewHolder holder = new ViewHolder(view);
-
             return holder;
         }
 
@@ -276,12 +276,13 @@ public class GroupSettingActivity extends BaseActivity {
                 }
             };
 
+            //todo 已经在回收方法里移除了.这里应该就不必要了.但是有这一句也不影响
             holder.mEtName.removeTextChangedListener(textWatcher);
 
             //3.先清除监听器,修改后再设置监听器(也未成功....)
             WorkGroup workGroup = mList.get(position);
             holder.mTvNumber.setText(String.valueOf(position + 1));
-            if (!(workGroup.getName() == null) && !(workGroup.getName().equals(""))) {
+            if (!(workGroup.getName() == null) && !("".equals(workGroup.getName()))) {
                 holder.mEtName.setText(workGroup.getName());
             } else {
                 holder.mEtName.setText("");

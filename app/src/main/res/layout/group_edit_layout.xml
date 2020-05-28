@@ -27,7 +27,7 @@
             android:layout_weight="1" />
 
         <com.bluesky.mallframe.ui.BSNumberPicker
-            android:id="@+id/np_day"
+            android:id="@+id/np_group_count"
             android:layout_width="80dp"
             android:layout_height="30dp"
 

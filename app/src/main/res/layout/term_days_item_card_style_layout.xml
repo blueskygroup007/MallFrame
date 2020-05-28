@@ -38,8 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="班组名称"
-            app:layout_constraintBottom_toTopOf="@id/tv_group_base_date"
+            android:text="班次名称"
+            app:layout_constraintBottom_toTopOf="@id/tv_work_time"
             app:layout_constraintLeft_toRightOf="@+id/tv_number"
             app:layout_constraintRight_toLeftOf="@id/et_name"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,51 +50,49 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:gravity="end"
+            android:hint="@string/hint_et_term_day_name"
             android:inputType="text"
-            android:hint="@string/hint_et_workgroup_name"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_name"
-            app:layout_constraintBottom_toTopOf="@id/tv_base_date"
             app:layout_constraintLeft_toRightOf="@id/tv_name"
+            app:layout_constraintRight_toRightOf="parent"
 
-            app:layout_constraintRight_toLeftOf="@id/cb_yours"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_group_base_date"
+            android:id="@+id/tv_work_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-
-            android:text="基准日期"
+            android:text="上下班时间"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/tv_number"
-            app:layout_constraintRight_toLeftOf="@id/tv_base_date"
+            app:layout_constraintRight_toLeftOf="@id/tv_setup_time"
             app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
         <TextView
-            android:id="@+id/tv_base_date"
+            android:id="@+id/tv_setup_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:gravity="end"
             android:hint="@string/hint_tv_workgroup_base_date"
-            app:layout_constraintBaseline_toBaselineOf="@id/tv_group_base_date"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_work_time"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/tv_group_base_date"
-            app:layout_constraintRight_toLeftOf="@id/cb_yours"
+            app:layout_constraintLeft_toRightOf="@id/tv_work_time"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_name" />
 
-        <CheckBox
-            android:id="@+id/cb_yours"
+        <!--        <CheckBox
+                    android:id="@+id/cb_yours"
 
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_selector_checkbox_yours"
-            android:text="默"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/tv_base_date"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_selector_checkbox_yours"
+                    android:text="默"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tv_setup_time_start"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

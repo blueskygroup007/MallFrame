@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.activity.EditActivity;
 import com.bluesky.mallframe.activity.GroupSettingActivity;
+import com.bluesky.mallframe.activity.TermDaysSettingActivity;
 import com.bluesky.mallframe.activity.Test2Activity;
 import com.bluesky.mallframe.activity.TestActivity;
 import com.bluesky.mallframe.base.BaseFragment;
@@ -82,13 +83,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.btn_three:
+                //班组设置
                 //todo 这里耗时太长了.应该先显示activity,在activity里面去取数据库,回调时,更新list
                 mRemote = new SolutionRemoteDataSource();
                 mRemote.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
                     @Override
                     public void onSolutionsLoaded(List<TurnSolution> solutions) {
 
-                        intent.putExtra("DATA_WORK_GROUP", solutions.get(0));
+                        intent.putExtra(GroupSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
                         intent.setClass(mContext, GroupSettingActivity.class);
                         startActivity(intent);
                     }
@@ -102,15 +104,13 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
                 break;
             case R.id.btn_four:
-
+                //周期设置
                 mRemote.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
                     @Override
                     public void onSolutionsLoaded(List<TurnSolution> solutions) {
-                        ArrayList<TurnSolution> arrayList = new ArrayList<>();
-                        arrayList.addAll(solutions);
-                        //todo arraylist中的TurnSolution不序列化也可???
-                        intent.putExtra("DATA_WORK_GROUP", arrayList);
-                        intent.setClass(mContext, GroupSettingActivity.class);
+
+                        intent.putExtra(TermDaysSettingActivity.FLAG_INTENT_DATA,solutions.get(0) );
+                        intent.setClass(mContext, TermDaysSettingActivity.class);
                         startActivity(intent);
                     }
 

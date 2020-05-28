@@ -47,7 +47,7 @@ public class EditActivity extends BaseActivity {
             LogUtils.d("toolbar not found!");
         }
 
-        mNumberPicker = findViewById(R.id.np_day);
+        mNumberPicker = findViewById(R.id.np_group_count);
 
     }
 

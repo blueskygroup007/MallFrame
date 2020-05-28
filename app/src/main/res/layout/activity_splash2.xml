@@ -12,10 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:onClick="onTestThreeBall"
-        android:text="测试三球"
+        android:onClick="onLogin"
+        android:text="进入登录页面"
 
         />
+
     <Button
         android:id="@+id/btn_test_cat"
         android:layout_width="wrap_content"
@@ -25,12 +26,7 @@
         android:text="测试cat"
 
         />
-    <ImageView
-        android:id="@+id/iv_three_ball"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/svg_three_ball"
-        />
+
 
     <ImageView
         android:id="@+id/iv_logo"

@@ -37,10 +37,13 @@ public class SplashActivity2 extends AppCompatActivity {
             anim.start();
         } else {
             Log.d(TAG, "SDK版本不足以显示svg动画。。。");
-
         }
+    }
 
-
+    public void onLogin(View view) {
+        //进入登录页面
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     /**
@@ -49,22 +52,17 @@ public class SplashActivity2 extends AppCompatActivity {
      * @param view
      */
     public void onTestThreeBall(View view) {
+
+        /*todo 知识点:矢量动画可以做得比较复杂,例如模拟三球围绕旋转,但也许会有问题.*/
         /*AnimatedVectorDrawable anim = (AnimatedVectorDrawable) getResource().getDrawable(R.drawable.anim);
          *将getResource去掉，以消除警告
          *has unresolved theme attributes! Consider using Resources.getDrawable(int, Theme) or Context.getDrawable(int)
          */
-        AnimatedVectorDrawable anim = (AnimatedVectorDrawable) getDrawable(R.drawable.anim_three_ball);
+
+        /*AnimatedVectorDrawable anim = (AnimatedVectorDrawable) getDrawable(R.drawable.anim_three_ball);
         ImageView img = findViewById(R.id.iv_three_ball);
         img.setImageDrawable(anim);
-        anim.start();
-
-
-        //进入http测试页面
-//        startActivity(new Intent(this, OkhttpTestActivity.class));
-
-        //进入登录页面
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        anim.start();*/
     }
 
     /**

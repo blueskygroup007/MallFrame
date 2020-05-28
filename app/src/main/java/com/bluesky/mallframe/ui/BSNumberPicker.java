@@ -3,7 +3,6 @@ package com.bluesky.mallframe.ui;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +67,7 @@ public class BSNumberPicker extends LinearLayout implements View.OnClickListener
     }
 
     private void initView(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.test_layout, this, true);
+        LayoutInflater.from(context).inflate(R.layout.layout_bs_number_picker, this, true);
         mBtnDec = findViewById(R.id.btn_dec);
         mBtnInc = findViewById(R.id.btn_inc);
         mTvNumber = findViewById(R.id.tv_number);
