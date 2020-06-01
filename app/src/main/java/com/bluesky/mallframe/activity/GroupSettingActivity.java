@@ -154,6 +154,9 @@ public class GroupSettingActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 是否保存的对话框
+     */
     private void showNormalDialog() {
         /* @setIcon 设置对话框图标
          * @setTitle 设置对话框标题
@@ -196,6 +199,9 @@ public class GroupSettingActivity extends BaseActivity {
     }
 
 
+    /**
+     * RecyclerView的自定义适配器
+     */
     private class RvGroupAdapter extends RecyclerView.Adapter<RvGroupAdapter.ViewHolder> {
         private List<WorkGroup> mBackupList = new ArrayList<>();
         private List<WorkGroup> mList;
@@ -205,7 +211,8 @@ public class GroupSettingActivity extends BaseActivity {
         }
 
         public boolean isChanged() {
-            return isListEqual(mList, mBackupList);
+            LogUtils.d(mList.toString() + "-----" + mBackupList.toString());
+            return !isListEqual(mList, mBackupList);
         }
 
         private class ViewHolder extends RecyclerView.ViewHolder {
@@ -242,6 +249,8 @@ public class GroupSettingActivity extends BaseActivity {
             super.onViewRecycled(holder);
             /*在这里清除监听器(成功!)*/
             holder.mEtName.removeTextChangedListener((TextWatcher) holder.mEtName.getTag());
+            /*继续清除checkbox的监听器*/
+            holder.mCbDefault.setOnCheckedChangeListener(null);
         }
 
         /**
@@ -288,7 +297,7 @@ public class GroupSettingActivity extends BaseActivity {
                 holder.mEtName.setText("");
             }
             holder.mTvBaseDate.setText(workGroup.getBasedate());
-            holder.mCbDefault.setChecked(false);
+            holder.mCbDefault.setChecked(FLAG_DEFAULT_WORKGROUP.equals(workGroup.getFlag()));
 
             /*给基准日期设置弹窗监听*/
             holder.mTvBaseDate.setOnClickListener(new View.OnClickListener() {
@@ -335,7 +344,10 @@ public class GroupSettingActivity extends BaseActivity {
             LogUtils.d("传入Calendar=" + calendar);
 
             //弹日期选择窗
-            DatePickerDialog dialog = new DatePickerDialog(GroupSettingActivity.this, DatePickerDialog.THEME_TRADITIONAL, new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog dialog = new DatePickerDialog(
+                    GroupSettingActivity.this,
+                    DatePickerDialog.THEME_TRADITIONAL,
+                    new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     //日期设定回调
@@ -369,7 +381,6 @@ public class GroupSettingActivity extends BaseActivity {
          * 方法1:使用List.contains()方法互相比较
          *
          * */
-
         return CollectionUtils.isEqualCollection(list, backupList);
     }
 
@@ -410,15 +421,15 @@ public class GroupSettingActivity extends BaseActivity {
     }
 
 
-    public static final String MSG_BLANK_IS_EMPTY = "不能存在空项!";
-    public static final String MSG_BLANK_IS_REPEAT = "班组名重复!";
-    public static final String MSG_DUFAULT_IS_UNCHECKED = "默认班组没有设置!";
-    public static final String MSG_NO_CHANGE = "没有改动";
+    public static final String MSG_BLANK_IS_EMPTY = "存在空项!";
+    public static final String MSG_BLANK_IS_REPEAT = "项目重复!";
+    public static final String MSG_DUFAULT_IS_UNCHECKED = "默认未设置!";
+    public static final String MSG_NO_CHANGE = "无改动";
     public static final String MSG_OK = "修改正确!";
 
 
     /**
-     * 检查页面所有设置
+     * 检查页面所有设置,(填写错误,未勾选,无改动等等)
      *
      * @param srcList
      * @return
@@ -452,7 +463,9 @@ public class GroupSettingActivity extends BaseActivity {
         }
 
         /*无改动*/
-
+        if (!mAdapter.isChanged()) {
+            return MSG_NO_CHANGE;
+        }
         return MSG_OK;
     }
 

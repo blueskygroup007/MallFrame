@@ -89,6 +89,10 @@ public class BSNumberPicker extends LinearLayout implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        /*如果没有设置监听器,直接返回,必须有*/
+        if (mListener == null) {
+            return;
+        }
         int number = getNumber();
         switch (v.getId()) {
             case R.id.btn_dec:

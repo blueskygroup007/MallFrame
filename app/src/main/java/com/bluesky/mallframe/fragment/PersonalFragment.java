@@ -17,7 +17,6 @@ import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ import java.util.List;
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
     private TextView mTvTitle;
     private Button mBtnEdit, mBtnOne, mBtnTwo, mBtnThree, mBtnFour;
-    private SolutionDataSource mRemote;
+    private SolutionDataSource mRemote = new SolutionRemoteDataSource();
 
     @Override
     protected void initEvent() {
@@ -85,7 +84,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             case R.id.btn_three:
                 //班组设置
                 //todo 这里耗时太长了.应该先显示activity,在activity里面去取数据库,回调时,更新list
-                mRemote = new SolutionRemoteDataSource();
                 mRemote.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
                     @Override
                     public void onSolutionsLoaded(List<TurnSolution> solutions) {
@@ -109,7 +107,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     @Override
                     public void onSolutionsLoaded(List<TurnSolution> solutions) {
 
-                        intent.putExtra(TermDaysSettingActivity.FLAG_INTENT_DATA,solutions.get(0) );
+                        intent.putExtra(TermDaysSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
                         intent.setClass(mContext, TermDaysSettingActivity.class);
                         startActivity(intent);
                     }

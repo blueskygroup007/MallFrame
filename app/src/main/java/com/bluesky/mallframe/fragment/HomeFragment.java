@@ -31,8 +31,8 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-import static com.bluesky.mallframe.base.AppConstant.FORMAT_NO_SECS_DATE;
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
+import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
 
 /**
  * @author BlueSky
@@ -84,31 +84,31 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         group3.setBasedate(onlyDate);
 
         //新建几个班型,白班,中班,夜班
+        /*第一组*/
         Calendar calendarWdk = Calendar.getInstance(Locale.getDefault());
         Date dateWdk = calendarWdk.getTime();
-        String startTimeWdk = FORMAT_NO_SECS_DATE.format(dateWdk);
-
+        String startTimeWdk = FORMAT_ONLY_TIME_NO_SECS.format(dateWdk);
         calendarWdk.add(Calendar.HOUR_OF_DAY, 8);
         dateWdk = calendarWdk.getTime();
-        String endTimeWd = FORMAT_NO_SECS_DATE.format(dateWdk);
+        String endTimeWd = FORMAT_ONLY_TIME_NO_SECS.format(dateWdk);
         WorkDayKind kind1 = new WorkDayKind();
         kind1.setName("白班");
         kind1.setStarttime(startTimeWdk);
         kind1.setEndtime(endTimeWd);
-
+        /*第二组*/
+        startTimeWdk = FORMAT_ONLY_TIME_NO_SECS.format(dateWdk);
         calendarWdk.add(Calendar.HOUR_OF_DAY, 8);
         dateWdk = calendarWdk.getTime();
-        endTimeWd = FORMAT_NO_SECS_DATE.format(dateWdk);
-
+        endTimeWd = FORMAT_ONLY_TIME_NO_SECS.format(dateWdk);
         WorkDayKind kind2 = new WorkDayKind();
         kind2.setName("中班");
         kind2.setStarttime(startTimeWdk);
         kind2.setEndtime(endTimeWd);
-
+        /*第三组*/
+        startTimeWdk = FORMAT_ONLY_TIME_NO_SECS.format(dateWdk);
         calendarWdk.add(Calendar.HOUR_OF_DAY, 8);
         dateWdk = calendarWdk.getTime();
-        endTimeWd = FORMAT_NO_SECS_DATE.format(dateWdk);
-
+        endTimeWd = FORMAT_ONLY_TIME_NO_SECS.format(dateWdk);
         WorkDayKind kind3 = new WorkDayKind();
         kind3.setName("夜班");
         kind3.setStarttime(startTimeWdk);
@@ -207,12 +207,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-
-                for (int i = 0; i < 7; i++) {
-                    solution.setName(solution.getName() + i);
-                    addSolution();
-                }
-
+                solution.setName(solution.getName());
+                addSolution();
                 break;
             case R.id.btn_del:
                 int position = mLvSolutions.getCheckedItemPosition();
