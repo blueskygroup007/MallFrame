@@ -70,11 +70,35 @@
     <!--倒班设置中，标题文本的样式-->
     <style name="CaptionSolutionEdit">
 
-        
-    </style>
-
-    <style name="MyNumberPickerStyle" >
-
 
     </style>
+
+    <!--todo 知识点:学习这种style的设置方法.-->
+    <!--在布局文件中,是没有editTextStyle这个属性的.但是在style中就可以写-->
+    <style name="Theme.TimePicker" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:editTextStyle">@style/Widget.AppCompat.EditText.Gray</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
+    <style name="Widget.AppCompat.EditText.Gray">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <!--拷贝出来的TimePicker的style-->
+    <style name="Widget.Material.TimePicker">
+        <item name="timePickerMode">@integer/time_picker_mode_material</item>
+        <item name="legacyLayout">@layout/time_picker_legacy_material</item>
+        <!-- Attributes for new-style TimePicker. -->
+        <item name="internalLayout">@layout/time_picker_material</item>
+        <item name="headerTextColor">@color/primary_text_secondary_when_activated_material</item>
+        <item name="headerBackground">#ff555555</item>
+        <item name="numbersTextColor">?attr/textColorPrimaryActivated</item>
+        <item name="numbersInnerTextColor">?attr/textColorSecondaryActivated</item>
+        <item name="numbersSelectorColor">?attr/colorControlActivated</item>
+        <item name="numbersBackgroundColor">#ff555555</item>
+        <item name="amPmTextColor">?attr/textColorSecondary</item>
+    </style>
+
 </resources>

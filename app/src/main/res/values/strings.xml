@@ -32,4 +32,6 @@
     <string name="text_tv_group_setting_number">班组总数</string>
     <string name="text_tv_term_days_setting_number">每轮班有几天</string>
     <string name="hint_et_term_day_name">给班次起个名字</string>
+    <string name="text_tv_term_days_setting_hour">每班几小时</string>
+    <string name="text_btn_ok">OK</string>
 </resources>

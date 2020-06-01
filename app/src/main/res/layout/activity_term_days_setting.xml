@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.TermDaysSettingActivity">
+
     <include layout="@layout/toolbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,14 +38,46 @@
             app:text_size="4sp" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/content_left_right_align_baseline"
+        android:layout_marginVertical="@dimen/content_left_right_align_baseline"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/text_tv_term_days_setting_hour"
+            android:textSize="@dimen/font_title" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.bluesky.mallframe.ui.BSNumberPicker
+            android:id="@+id/np_term_days_hour_count"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            app:current_number="8"
+            app:text_color="@color/colorPrimary"
+            app:text_size="4sp" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_term_days_setting_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:paddingStart="@dimen/content_left_right_align_baseline"
         android:textColor="@color/material_color_red_300"
-        android:textSize="@dimen/font_tip" />
+        android:textSize="@dimen/font_tip"
+        android:textStyle="bold" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_term_days_list"
         android:layout_width="match_parent"

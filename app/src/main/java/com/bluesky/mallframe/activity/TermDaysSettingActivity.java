@@ -4,28 +4,39 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.LayoutInflaterCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.CollectionUtils;
+import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
@@ -36,20 +47,26 @@ import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 import com.google.common.base.Strings;
 
+import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import static android.app.AlertDialog.THEME_TRADITIONAL;
+import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
+import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
 
 public class TermDaysSettingActivity extends BaseActivity {
 
     public static final String FLAG_INTENT_DATA = "DATA_TERM_DAY";
 
     //控件
-    private BSNumberPicker mNumberPicker;
+    private BSNumberPicker mNumberPicker, mHourNumberPicker;
     private RecyclerView mRecyclerView;
     private TextView mTvMsg;
 
@@ -113,8 +130,9 @@ public class TermDaysSettingActivity extends BaseActivity {
         }
 
         mNumberPicker = findViewById(R.id.np_term_days_count);
+        mHourNumberPicker = findViewById(R.id.np_term_days_hour_count);
         mRecyclerView = findViewById(R.id.rv_term_days_list);
-        mTvMsg = findViewById(R.id.tv_group_setting_message);
+        mTvMsg = findViewById(R.id.tv_term_days_setting_message);
     }
 
     @Override
@@ -138,9 +156,11 @@ public class TermDaysSettingActivity extends BaseActivity {
     public void onBackPressed() {
         if (mAdapter.isEmpty()) {
             mTvMsg.setText("提示:" + MSG_BLANK_IS_EMPTY);
+            return;
         }
         if (mAdapter.isRepeat()) {
             mTvMsg.setText("提示:" + MSG_BLANK_IS_REPEAT);
+            return;
         }
         /*没有改动,直接退出*/
         if (!mAdapter.isChanged()) {
@@ -150,6 +170,7 @@ public class TermDaysSettingActivity extends BaseActivity {
             /*修改正确,弹出是否保存对话框*/
             mTvMsg.setText("提示:" + MSG_OK);
             showNormalDialog();
+            return;
         }
     }
 
@@ -286,13 +307,117 @@ public class TermDaysSettingActivity extends BaseActivity {
             holder.mTvSetupTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    chooseTimeDialog2(mList, position);
+//                    chooseTimeDialog2(mList, position);
+                    showTwoTimeDialog();
                 }
             });
             /*班次名称修改的监听事件*/
             holder.mEtName.addTextChangedListener(watcher);
             holder.mEtName.setTag(watcher);
         }
+
+        private void showTwoTimeDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(TermDaysSettingActivity.this);
+            View view = LayoutInflater.from(TermDaysSettingActivity.this).inflate(R.layout.two_datepicker, null);
+            TimePicker pickerStart = view.findViewById(R.id.tp_start);
+            TimePicker pickerEnd = view.findViewById(R.id.tp_end);
+            pickerStart.setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
+            pickerEnd.setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
+            pickerStart.setIs24HourView(true);
+            pickerEnd.setIs24HourView(true);
+            builder.setView(view);
+
+
+            builder.setPositiveButton(R.string.text_btn_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.show();
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_button_round_blank);
+//            changeTimePickerColor();
+        }
+
+        /**
+         * 指定分割线divider颜色，设定Picker大小
+         */
+        public void changeTimePickerColor() {
+            Resources systemResources = Resources.getSystem();
+            int hourNumberPickerId = systemResources.getIdentifier("hour", "id", "android");
+            int minuteNumberPickerId = systemResources.getIdentifier("minute", "id", "android");
+
+            NumberPicker hourNumberPicker = findViewById(hourNumberPickerId);
+            NumberPicker minuteNumberPicker = findViewById(minuteNumberPickerId);
+
+            setNumberPickerDivider(hourNumberPicker, Color.YELLOW);
+            setNumberPickerDivider(minuteNumberPicker, Color.GREEN);
+/*            setNumberpickerTextColour(hourNumberPicker, Color.RED);
+            setNumberpickerTextColour(minuteNumberPicker, Color.BLUE);*/
+
+//        setPickerSize(hourNumberPicker, 30, this);
+        }
+
+        /**
+         * 指定分割线颜色
+         *
+         * @param numberPicker
+         * @param color
+         */
+        private void setNumberPickerDivider(NumberPicker numberPicker, int color) {
+
+            try {
+                Field dividerFields = NumberPicker.class.getDeclaredField("mSelectionDivider");
+
+                dividerFields.setAccessible(true);
+
+                dividerFields.set(numberPicker, new ColorDrawable(color));
+
+            } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+                LogUtils.w("setNumberPickerTxtClr", e);
+            }
+        }
+
+
+        /**
+         * 另一种指定文字颜色的方法
+         *
+         * @param number_picker
+         * @param color
+         */
+        private void setNumberpickerTextColour(NumberPicker number_picker, int color) {
+            final int count = number_picker.getChildCount();
+
+            for (int i = 0; i < count; i++) {
+                View child = number_picker.getChildAt(i);
+
+                try {
+                    Field wheelpaint_field = number_picker.getClass().getDeclaredField("mSelectorWheelPaint");
+                    wheelpaint_field.setAccessible(true);
+                    ((Paint) wheelpaint_field.get(number_picker)).setColor(color);
+                    ((EditText) child).setTextColor(color);
+                    number_picker.invalidate();
+                } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+                    LogUtils.i("setNumberPickerTxtClr", "set_numberpicker_text_colour: " + e);
+                }
+            }
+        }
+
+
+        /**
+         * 指定NumberPicker大小
+         *
+         * @param np
+         * @param widthDpValue NumberPicker和NumberPicker的宽度值
+         * @param context
+         */
+        private void setPickerSize(NumberPicker np, int widthDpValue) {
+            int widthPxValue = ConvertUtils.dp2px(widthDpValue);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(widthPxValue, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, 0);
+            np.setLayoutParams(params);
+        }
+
 
         private void chooseTimeDialog(List<WorkDayKind> list, int position) {
             String startTime = list.get(position).getStarttime();
@@ -313,13 +438,22 @@ public class TermDaysSettingActivity extends BaseActivity {
         private void chooseTimeDialog2(List<WorkDayKind> list, int position) {
             String startTime = list.get(position).getStarttime();
             String endTime = list.get(position).getEndtime();
+            Date curDate = stringToDate(startTime);
             Calendar calendar = Calendar.getInstance();
-            TimePickerDialog.Builder builder = new TimePickerDialog.Builder(TermDaysSettingActivity.this, THEME_TRADITIONAL);
-            BSNumberPicker numberPicker = new BSNumberPicker(TermDaysSettingActivity.this);
-            builder.setView(numberPicker);
-            android.app.AlertDialog dialog = builder.create();
-            //Todo 如何创建一个时间选择器,并带有一个时长调节控件
-            builder.show();
+            calendar.setTime(curDate);
+            TimePickerDialog dialog = new TimePickerDialog(TermDaysSettingActivity.this, THEME_TRADITIONAL, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    Calendar calendar1 = Calendar.getInstance();
+                    calendar1.set(1900, 0, 1, hourOfDay, minute);
+                    String modifyStingTimeStart = FORMAT_ONLY_TIME_NO_SECS.format(calendar1.getTime());
+                    calendar1.add(Calendar.HOUR_OF_DAY, Integer.parseInt(mList.get(position).getFlag()));
+                    String modifyStingTimeEnd = FORMAT_ONLY_TIME_NO_SECS.format(calendar1.getTime());
+
+                }
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+
+            dialog.show();
         }
 
         @Override
@@ -341,6 +475,20 @@ public class TermDaysSettingActivity extends BaseActivity {
         }
     }
 
+    private Date stringToDate(String date) {
+        if (date == null || date.isEmpty()) {
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            return calendar.getTime();
+        } else {
+            try {
+                return FORMAT_ONLY_TIME_NO_SECS.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     class CostumTimePickerDialog extends TimePickerDialog {
 
         public CostumTimePickerDialog(Context context, int themeResId, OnTimeSetListener listener, int hourOfDay, int minute, boolean is24HourView) {
@@ -350,17 +498,22 @@ public class TermDaysSettingActivity extends BaseActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            BSNumberPicker numberPicker = new BSNumberPicker(TermDaysSettingActivity.this);
+/*            BSNumberPicker numberPicker = new BSNumberPicker(TermDaysSettingActivity.this);
 
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 
-            params.gravity = Gravity.BOTTOM;
-            params.topMargin = -100;
+            params.gravity = Gravity.TOP;
+            params.leftMargin = 100;
+            params.rightMargin = 100;
+//            params.topMargin = -100;
             //获取按钮位置
             Button button = getButton(DialogInterface.BUTTON_POSITIVE);
             ViewGroup.LayoutParams layoutParams = button.getLayoutParams();
+
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            lp.height = getResources().getDisplayMetrics().heightPixels + 200;
 //            getWindow().getDecorView().getLayoutParams();
-            addContentView(numberPicker, params);
+            addContentView(numberPicker, params);*/
         }
 
 
