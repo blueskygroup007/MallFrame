@@ -238,7 +238,7 @@ public class TermDaysSettingActivity extends BaseActivity {
          * @return
          */
         public boolean isChanged() {
-            return CollectionUtils.isEqualCollection(mList, mBackupList);
+            return !CollectionUtils.isEqualCollection(mList, mBackupList);
         }
 
 
@@ -409,7 +409,6 @@ public class TermDaysSettingActivity extends BaseActivity {
          *
          * @param np
          * @param widthDpValue NumberPicker和NumberPicker的宽度值
-         * @param context
          */
         private void setPickerSize(NumberPicker np, int widthDpValue) {
             int widthPxValue = ConvertUtils.dp2px(widthDpValue);

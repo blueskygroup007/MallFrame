@@ -8,8 +8,11 @@
         android:id="@+id/tp_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.TimePicker"
-        android:timePickerMode="spinner"
+        android:headerBackground="@color/green"
+        android:numbersBackgroundColor="@color/red"
+        android:numbersTextColor="@color/orange"
+
+        android:timePickerMode="clock"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/tp_end"

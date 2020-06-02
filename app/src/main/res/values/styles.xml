@@ -84,6 +84,11 @@
     </style>
 
     <!--拷贝出来的TimePicker的style-->
+    <!--    这些属性,有的是针对Colck模式下的属性.对Spinner无效,例如spinner没有header,没有表盘
+        有些属性编译时提示是private的,如legacyLayout
+        有些属性,设置了没效果,如timePickerStyle
+
+        原因??TimePicker的代码中写死了布局?-->
     <style name="MyTimePicker" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:timePickerMode">spinner</item>
         <item name="android:headerBackground">@color/material_color_green_400</item>
