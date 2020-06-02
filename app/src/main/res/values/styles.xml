@@ -74,11 +74,8 @@
     </style>
 
     <!--todo 知识点:学习这种style的设置方法.-->
-    <!--在布局文件中,是没有editTextStyle这个属性的.但是在style中就可以写-->
-    <style name="Theme.TimePicker" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:editTextStyle">@style/Widget.AppCompat.EditText.Gray</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:layout_margin">0dp</item>
     </style>
 
     <style name="Widget.AppCompat.EditText.Gray">
@@ -87,18 +84,18 @@
     </style>
 
     <!--拷贝出来的TimePicker的style-->
-    <style name="Widget.Material.TimePicker">
-        <item name="timePickerMode">@integer/time_picker_mode_material</item>
-        <item name="legacyLayout">@layout/time_picker_legacy_material</item>
-        <!-- Attributes for new-style TimePicker. -->
-        <item name="internalLayout">@layout/time_picker_material</item>
-        <item name="headerTextColor">@color/primary_text_secondary_when_activated_material</item>
-        <item name="headerBackground">#ff555555</item>
-        <item name="numbersTextColor">?attr/textColorPrimaryActivated</item>
-        <item name="numbersInnerTextColor">?attr/textColorSecondaryActivated</item>
-        <item name="numbersSelectorColor">?attr/colorControlActivated</item>
-        <item name="numbersBackgroundColor">#ff555555</item>
-        <item name="amPmTextColor">?attr/textColorSecondary</item>
+    <style name="MyTimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+        <item name="android:headerBackground">@color/material_color_green_400</item>
+        <item name="android:numbersTextColor">@color/blue</item>
+        <item name="android:numbersSelectorColor">@color/cyan</item>
+        <item name="android:numbersBackgroundColor">@color/orange</item>
     </style>
+    <!--<item name="android:headerTextColor">@drawable/time_picker_header_text_color</item>-->
 
+    <style name="ColorThemeTimePicker" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:textColorPrimary">@color/orange</item>
+        <item name="android:textSize">@dimen/font_title</item>
+
+    </style>
 </resources>
