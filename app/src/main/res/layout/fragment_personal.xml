@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,119 +7,126 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="@dimen/material_content_edge_margin_horizontal"
-            android:background="@drawable/bg_button_round"
-            android:elevation="5dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_fragment_personal_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                tools:text="PersonalFragment" />
-
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="@dimen/material_content_edge_margin_horizontal"
-            app:cardBackgroundColor="@color/colorPrimaryDark"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="23dp"
-            app:contentPadding="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="感谢大家浏览我的博客,有什么问题请留言"
-                android:textColor="#ffffff" />
-
-        </androidx.cardview.widget.CardView>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="150dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="@dimen/material_content_edge_margin_horizontal"
-                app:cardBackgroundColor="@color/material_color_pink_300"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:contentPadding="20dp">
+                android:background="@drawable/bg_button_round"
+                android:elevation="5dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_personal_edit"
+                <TextView
+                    android:id="@+id/tv_fragment_personal_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="编辑倒班" />
+                    android:textSize="20sp"
+                    tools:text="头像,账号,签名,顶栏图" />
 
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="@dimen/material_content_edge_margin_horizontal"
-                app:cardBackgroundColor="#FF424242"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="10dp"
+                app:cardBackgroundColor="@color/colorPrimaryDark"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="23dp"
                 app:contentPadding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="有什么问题请留言"
+                    android:text="感谢大家浏览我的博客,有什么问题请留言"
                     android:textColor="#ffffff" />
 
             </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="@dimen/material_content_edge_margin_horizontal"
+                    app:cardBackgroundColor="@color/material_color_pink_300"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
+                    app:contentPadding="20dp">
+
+                    <Button
+                        android:id="@+id/btn_personal_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="编辑倒班" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="@dimen/material_content_edge_margin_horizontal"
+                    app:cardBackgroundColor="#FF424242"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="10dp"
+                    app:contentPadding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="有什么问题请留言"
+                        android:textColor="#ffffff" />
+
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="按钮一" />
+
+                <Button
+                    android:id="@+id/btn_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="按钮二" />
+
+                <Button
+                    android:id="@+id/btn_three"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="按钮三" />
+
+                <Button
+                    android:id="@+id/btn_four"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="按钮四" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="按钮一" />
-
-            <Button
-                android:id="@+id/btn_two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="按钮二" />
-
-            <Button
-                android:id="@+id/btn_three"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="按钮三" />
-
-            <Button
-                android:id="@+id/btn_four"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="按钮四" />
-        </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

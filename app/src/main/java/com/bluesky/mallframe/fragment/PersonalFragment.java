@@ -1,9 +1,16 @@
 package com.bluesky.mallframe.fragment;
 
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
@@ -47,6 +54,28 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void initView(View view) {
+        //设置toolbar
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        /*todo 知识点:在fragment中使用toolbar
+         *  不再需要onCreateOptionsMenu和onOptionsItemSelected
+         * 步骤一,告诉fragment,我有菜单
+         * */
+        setHasOptionsMenu(true);
+        /*步骤二,填充菜单*/
+        toolbar.inflateMenu(R.menu.menu_fragment_personal);
+        /*步骤三,设置监听*/
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.menu.menu_fragment_personal:
+                        Toast.makeText(mContext, "你电击了设置按钮!", Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
         mTvTitle = view.findViewById(R.id.tv_fragment_personal_title);
         mBtnEdit = view.findViewById(R.id.btn_personal_edit);
 
@@ -98,8 +127,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
                     }
                 });
-
-
                 break;
             case R.id.btn_four:
                 //周期设置

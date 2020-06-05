@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseFragment;
@@ -30,6 +32,10 @@ public class CalendarFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        setHasOptionsMenu(true);
+        toolbar.inflateMenu(R.menu.menu_fragment_calendar);
+
         mTvTitle = view.findViewById(R.id.tv_fragment_calendar_title);
 
     }

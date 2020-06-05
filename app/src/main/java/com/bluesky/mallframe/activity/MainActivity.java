@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioGroup;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.base.BaseFragment;
@@ -71,7 +73,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-//        mTvInfo = findViewById(R.id.tv_activity_info);
+/*        //设置toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //显示返回按钮
+        if (getSupportActionBar() != null) {
+            LogUtils.d("toolbar found!");
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setTitle("倒班本首页");
+        } else {
+            LogUtils.d("toolbar not found!");
+        }*/
         mRgMain = findViewById(R.id.rg_main);
     }
 

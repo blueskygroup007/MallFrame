@@ -9,9 +9,7 @@
     android:contentInsetStart="0dp"
     android:contentInsetLeft="0dp"
     android:elevation="4dp"
-    app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
-
-
+    app:navigationIcon="@drawable/ic_launcher_foreground"
     app:titleTextAppearance="@style/TextAppearance.AppCompat.Title">
     <!--android:theme="@style/Widget.AppCompat.Toolbar"-->
     <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->

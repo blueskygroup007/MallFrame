@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseFragment;
@@ -186,6 +188,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void initView(View view) {
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        setHasOptionsMenu(true);
+        toolbar.inflateMenu(R.menu.menu_fragment_home);
+
+
         mTvTitle = view.findViewById(R.id.tv_fragment_home_title);
 //        mWvWeek = view.findViewById(R.id.wv_week);
 //        mDpvDate = view.findViewById(R.id.dpv_date);

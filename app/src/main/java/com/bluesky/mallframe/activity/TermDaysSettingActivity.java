@@ -11,16 +11,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -28,10 +23,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.LayoutInflaterCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,7 +51,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import static android.app.AlertDialog.THEME_TRADITIONAL;
-import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
 
 public class TermDaysSettingActivity extends BaseActivity {
@@ -66,7 +58,7 @@ public class TermDaysSettingActivity extends BaseActivity {
     public static final String FLAG_INTENT_DATA = "DATA_TERM_DAY";
 
     //控件
-    private BSNumberPicker mNumberPicker, mHourNumberPicker;
+    private BSNumberPicker mNumberPicker;
     private RecyclerView mRecyclerView;
     private TextView mTvMsg;
 
@@ -130,7 +122,6 @@ public class TermDaysSettingActivity extends BaseActivity {
         }
 
         mNumberPicker = findViewById(R.id.np_term_days_count);
-        mHourNumberPicker = findViewById(R.id.np_term_days_hour_count);
         mRecyclerView = findViewById(R.id.rv_term_days_list);
         mTvMsg = findViewById(R.id.tv_term_days_setting_message);
     }
@@ -308,7 +299,7 @@ public class TermDaysSettingActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 //                    chooseTimeDialog2(mList, position);
-                    showTwoTimeDialog();
+                    showTwoTimeDialog(position);
                 }
             });
             /*班次名称修改的监听事件*/
@@ -316,7 +307,7 @@ public class TermDaysSettingActivity extends BaseActivity {
             holder.mEtName.setTag(watcher);
         }
 
-        private void showTwoTimeDialog() {
+        private void showTwoTimeDialog(int position) {
             AlertDialog.Builder builder = new AlertDialog.Builder(TermDaysSettingActivity.this);
             View view = LayoutInflater.from(TermDaysSettingActivity.this).inflate(R.layout.two_datepicker, null);
             TimePicker pickerStart = view.findViewById(R.id.tp_start);
@@ -326,11 +317,27 @@ public class TermDaysSettingActivity extends BaseActivity {
             pickerStart.setIs24HourView(true);
             pickerEnd.setIs24HourView(true);
             builder.setView(view);
-
-
-            builder.setPositiveButton(R.string.text_btn_ok, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.text_btn_two_picker_cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setPositiveButton(R.string.text_btn_two_picker_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, pickerStart.getCurrentHour());
+                    calendar.set(Calendar.MINUTE, pickerStart.getCurrentMinute());
+                    String startTime = FORMAT_ONLY_TIME_NO_SECS.format(calendar.getTime());
+                    calendar.set(Calendar.HOUR_OF_DAY, pickerEnd.getCurrentHour());
+                    calendar.set(Calendar.MINUTE, pickerEnd.getCurrentMinute());
+                    String endTime = FORMAT_ONLY_TIME_NO_SECS.format(calendar.getTime());
+                    mList.get(position).setStarttime(startTime);
+                    mList.get(position).setEndtime(endTime);
+                    mAdapter.notifyDataSetChanged();
+                    LogUtils.d(String.format("开始时间=%s----结束时间=%s", startTime, endTime));
                     dialog.dismiss();
                 }
             });
