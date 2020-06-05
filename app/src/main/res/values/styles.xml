@@ -70,20 +70,21 @@
     <!--倒班设置中，标题文本的样式-->
     <style name="CaptionSolutionEdit">
 
-
     </style>
 
+
+    <!--三个TimePicker的主题样式**************************************************-->
     <!--todo 知识点:学习这种style的设置方法.-->
     <style name="Theme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:editTextStyle">@style/Widget.AppCompat.EditText.Gray</item>
     </style>
 
     <style name="Widget.AppCompat.EditText.Gray">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/font_title</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <!--拷贝出来的TimePicker的style-->
+    <!--从Material资源中拷贝出来的TimePicker的style-->
     <!--    这些属性,有的是针对Colck模式下的属性.对Spinner无效,例如spinner没有header,没有表盘
         有些属性编译时提示是private的,如legacyLayout
         有些属性,设置了没效果,如timePickerStyle
@@ -96,11 +97,17 @@
         <item name="android:numbersSelectorColor">@color/cyan</item>
         <item name="android:numbersBackgroundColor">@color/orange</item>
     </style>
-    <!--<item name="android:headerTextColor">@drawable/time_picker_header_text_color</item>-->
 
-    <style name="ColorThemeTimePicker" parent="@android:style/Widget.Material.TimePicker">
-        <item name="android:textColorPrimary">@color/orange</item>
+    <!--这个风格的时分之间的冒号,比light的更显眼一些-->
+    <style name="RedThemeTimePicker" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:textColorPrimary">@color/material_color_purple_accent_400</item>
         <item name="android:textSize">@dimen/font_title</item>
-
     </style>
+
+    <style name="GreenThemeTimePicker" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:textColorPrimary">@color/material_color_blue_accent_400</item>
+        <item name="android:textSize">@dimen/font_title</item>
+    </style>
+    <!--三个TimePicker的主题样式**************************************************-->
+
 </resources>

@@ -34,4 +34,6 @@
     <string name="hint_et_term_day_name">给班次起个名字</string>
     <string name="text_tv_term_days_setting_hour">每班几小时</string>
     <string name="text_btn_ok">OK</string>
+    <string name="text_work_time_start">上班时间</string>
+    <string name="text_work_time_end">下班时间</string>
 </resources>
