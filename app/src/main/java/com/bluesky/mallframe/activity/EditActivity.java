@@ -36,6 +36,7 @@ public class EditActivity extends BaseActivity {
         //设置toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         //显示返回按钮
         if (getSupportActionBar() != null) {
             LogUtils.d("toolbar found!");
@@ -43,6 +44,7 @@ public class EditActivity extends BaseActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             //Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现
             getSupportActionBar().setTitle("编辑倒班");
+            getSupportActionBar().setIcon(R.drawable.ic_launcher_foreground);
         } else {
             LogUtils.d("toolbar not found!");
         }

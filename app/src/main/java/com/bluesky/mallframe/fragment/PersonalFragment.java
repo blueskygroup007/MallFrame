@@ -16,6 +16,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.activity.EditActivity;
 import com.bluesky.mallframe.activity.GroupSettingActivity;
+import com.bluesky.mallframe.activity.MySolutionsActivity;
 import com.bluesky.mallframe.activity.TermDaysSettingActivity;
 import com.bluesky.mallframe.activity.Test2Activity;
 import com.bluesky.mallframe.activity.TestActivity;
@@ -36,8 +37,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private Button mBtnEdit, mBtnOne, mBtnTwo, mBtnThree, mBtnFour;
     private SolutionDataSource mRemote = new SolutionRemoteDataSource();
 
+    private Button mBtnMySolutions;
+
     @Override
     protected void initEvent() {
+        mBtnMySolutions.setOnClickListener(this);
         mBtnEdit.setOnClickListener(this);
 
         mBtnOne.setOnClickListener(this);
@@ -83,6 +87,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mBtnTwo = view.findViewById(R.id.btn_two);
         mBtnThree = view.findViewById(R.id.btn_three);
         mBtnFour = view.findViewById(R.id.btn_four);
+
+        mBtnMySolutions = view.findViewById(R.id.btn_personal_my_solution);
     }
 
     @Override
@@ -94,6 +100,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
+            case R.id.btn_personal_my_solution:
+                intent.setClass(mContext, MySolutionsActivity.class);
+                startActivity(intent);
+                break;
             case R.id.btn_personal_edit:
                 intent.setClass(mContext, EditActivity.class);
                 startActivity(intent);

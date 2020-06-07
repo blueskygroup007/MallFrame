@@ -20,8 +20,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="@dimen/material_content_edge_margin_horizontal"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/card_margin"
                 android:background="@drawable/bg_button_round"
                 android:elevation="5dp"
                 android:gravity="center"
@@ -38,19 +38,48 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="@dimen/material_content_edge_margin_horizontal"
+                android:layout_height="200dp"
+                android:layout_margin="@dimen/card_margin"
                 app:cardBackgroundColor="@color/colorPrimaryDark"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="23dp"
                 app:contentPadding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="感谢大家浏览我的博客,有什么问题请留言"
-                    android:textColor="#ffffff" />
+                <GridLayout
+                    android:id="@+id/gl_functions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnCount="3"
+                    android:rowCount="2">
+
+                    <Button
+                        android:id="@+id/btn_personal_my_solution"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:text="我的倒班" />
+
+                    <Button
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:text="统计数据"
+
+                        />
+
+                    <Button
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:text="休假数据"
+
+                        />
+
+                    <Button
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:text="设置"
+
+                        />
+                </GridLayout>
+
 
             </androidx.cardview.widget.CardView>
 

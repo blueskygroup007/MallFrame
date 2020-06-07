@@ -9,8 +9,11 @@
     android:contentInsetStart="0dp"
     android:contentInsetLeft="0dp"
     android:elevation="4dp"
-    app:navigationIcon="@drawable/ic_launcher_foreground"
+
     app:titleTextAppearance="@style/TextAppearance.AppCompat.Title">
+
+    <!--app:navigationIcon="@drawable/star"-->
+    <!--app:logo="@drawable/ic_launcher_foreground"-->
     <!--android:theme="@style/Widget.AppCompat.Toolbar"-->
     <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
 

@@ -19,19 +19,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activity.MySolutionsActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".activity.TermDaysSettingActivity"
-            android:theme="@style/AppTheme.Toolbar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!-- windowSoftInputMode属性,让activity启动时不弹出软键盘 -->
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- windowSoftInputMode属性,让activity启动时不弹出软键盘 -->
         <activity
             android:name=".activity.GroupSettingActivity"
-            android:theme="@style/AppTheme.Toolbar"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".activity.Test2Activity" />
         <activity android:name=".activity.TestActivity" />
         <activity
             android:name=".activity.EditActivity"
-            android:theme="@style/AppTheme.Toolbar" />
+            android:theme="@style/AppTheme" />
         <activity android:name=".activity.PasswordForgetActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.LoginActivity" />

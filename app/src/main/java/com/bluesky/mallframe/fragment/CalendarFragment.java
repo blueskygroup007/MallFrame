@@ -32,7 +32,9 @@ public class CalendarFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbar_calendar);
+        toolbar.setTitle("倒班日历");
+        toolbar.setLogo(R.drawable.star);
         setHasOptionsMenu(true);
         toolbar.inflateMenu(R.menu.menu_fragment_calendar);
 
