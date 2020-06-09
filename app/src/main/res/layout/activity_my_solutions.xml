@@ -10,8 +10,8 @@
 
     <include layout="@layout/toolbar" />
 
-    <ListView
-        android:id="@+id/lv_solutions"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_solutions"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

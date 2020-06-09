@@ -9,7 +9,7 @@ import cn.bmob.v3.BmobObject;
  * @date 2020/4/26
  * Description:班组
  */
-public class WorkGroup extends BmobObject {
+public class WorkGroup extends BmobObject implements Cloneable {
     //班组名称
     private String name = "";
     //班组序号
@@ -19,6 +19,25 @@ public class WorkGroup extends BmobObject {
     //扩展参数
     private String flag = "";
 
+    public static final String FLAG_DEFAULT_WORKGROUP = "DEFAULT";
+
+    /*
+     * todo 知识点:深拷贝方法之一:重写clone
+     *  具体:实现Cloneable接口,重写clone方法,try catch异常
+     *  注意一:如果全部是基本类型,那么只需要调用super的clone方法.
+     *  注意二:如果还有对象类型,就必须继续重写该对象的clone.
+     *  使用:显式调用WorkGroup.clone(),而不是List.Addall()
+     * */
+    @Override
+    public WorkGroup clone() {
+        WorkGroup workGroup = null;
+        try {
+            workGroup = (WorkGroup) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return workGroup;
+    }
 
     @Override
     public String toString() {

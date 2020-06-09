@@ -110,12 +110,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.btn_one:
-                intent.setClass(mContext, TestActivity.class);
+                intent.setClass(mContext, GroupSettingActivity.class);
                 startActivity(intent);
 
                 break;
             case R.id.btn_two:
-                intent.setClass(mContext, Test2Activity.class);
+                intent.setClass(mContext, TermDaysSettingActivity.class);
                 startActivity(intent);
 
                 break;

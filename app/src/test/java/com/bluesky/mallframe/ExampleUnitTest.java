@@ -1,6 +1,7 @@
 package com.bluesky.mallframe;
 
 import com.blankj.utilcode.constant.TimeConstants;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.TimeUtils;
 
 import org.junit.Test;
@@ -8,7 +9,10 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -38,7 +42,31 @@ public class ExampleUnitTest {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         String strDate = sdf.format(date);
-        System.out.println("最终时间="+strDate);
+        System.out.println("最终时间=" + strDate);
 
+    }
+
+    @Test
+    public void stringEqualTest() {
+        final String FLAG_DEFAULT_WORKGROUP = "default";
+        String flag = "default";
+        System.out.print(FLAG_DEFAULT_WORKGROUP.equals(flag));
+    }
+
+    @Test
+    public void listTest() {
+        List<String> source = new ArrayList<>();
+        source.add("aaa");
+        source.add("bbb");
+        source.add("ccc");
+        List<String> a = new ArrayList<>();
+        a.addAll(source);
+        List<String> b = source;
+        System.out.println(CollectionUtils.isEqualCollection(a, b));
+        System.out.println(a + "---" + b);
+
+        b.set(0, "zzz");
+        System.out.println(CollectionUtils.isEqualCollection(a, b));
+        System.out.println(a + "---" + b);
     }
 }

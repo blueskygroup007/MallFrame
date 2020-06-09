@@ -32,6 +32,7 @@ import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -43,11 +44,11 @@ import java.util.Locale;
 import java.util.Set;
 
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
+import static com.bluesky.mallframe.data.WorkGroup.FLAG_DEFAULT_WORKGROUP;
 
 
 public class GroupSettingActivity extends BaseActivity {
 
-    private static final String FLAG_DEFAULT_WORKGROUP = "default";
     public static final String FLAG_INTENT_DATA = "DATA_WORK_GROUP";
     //控件
     private BSNumberPicker mNumberPicker;
@@ -178,6 +179,7 @@ public class GroupSettingActivity extends BaseActivity {
                         mSolution.setWorkgroups(mWorkgroups);
                         mRemote.updateSolution(mSolution);
                         dialog.dismiss();
+                        finish();
                     }
                 });
         normalDialog.setNegativeButton("不保存",
@@ -233,7 +235,13 @@ public class GroupSettingActivity extends BaseActivity {
 
         public RvGroupAdapter(List<WorkGroup> list) {
             mList = list;
-            mBackupList.addAll(list);
+            for (WorkGroup workGroup :
+                    list) {
+                mBackupList.add(workGroup.clone());
+            }
+
+            LogUtils.d("两个list的内容=" + mList + "---" + mBackupList);
+            LogUtils.d("两个list的hashcode=" + mList.hashCode() + "---" + mBackupList.hashCode());
         }
 
         @NonNull
@@ -298,7 +306,7 @@ public class GroupSettingActivity extends BaseActivity {
             }
             holder.mTvBaseDate.setText(workGroup.getBasedate());
             holder.mCbDefault.setChecked(FLAG_DEFAULT_WORKGROUP.equals(workGroup.getFlag()));
-
+            LogUtils.d(FLAG_DEFAULT_WORKGROUP.equals(workGroup.getFlag()));
             /*给基准日期设置弹窗监听*/
             holder.mTvBaseDate.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -310,7 +318,13 @@ public class GroupSettingActivity extends BaseActivity {
             holder.mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mList.get(position).setFlag(FLAG_DEFAULT_WORKGROUP);
+                    if (isChecked) {
+                        mList.get(position).setFlag(FLAG_DEFAULT_WORKGROUP);
+                    } else {
+                        mList.get(position).setFlag("");
+
+                    }
+                    LogUtils.d(mList.get(position).getFlag() + "----" + mBackupList.get(position).getFlag());
                 }
             });
             holder.mEtName.addTextChangedListener(textWatcher);
@@ -348,21 +362,21 @@ public class GroupSettingActivity extends BaseActivity {
                     GroupSettingActivity.this,
                     DatePickerDialog.THEME_TRADITIONAL,
                     new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    //日期设定回调
-                    /*不使用Date,因为year存在1900年起始问题*/
-                    LogUtils.d("返回的日期是:%d年%d月%d日", year, month, dayOfMonth);
-                    Calendar calendar1 = Calendar.getInstance();
-                    calendar1.set(year, month, dayOfMonth);
-                    String modifyStringDate = FORMAT_ONLY_DATE.format(calendar1.getTime());
-                    LogUtils.d("返回的Calendar=" + modifyStringDate);
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            //日期设定回调
+                            /*不使用Date,因为year存在1900年起始问题*/
+                            LogUtils.d("返回的日期是:%d年%d月%d日", year, month, dayOfMonth);
+                            Calendar calendar1 = Calendar.getInstance();
+                            calendar1.set(year, month, dayOfMonth);
+                            String modifyStringDate = FORMAT_ONLY_DATE.format(calendar1.getTime());
+                            LogUtils.d("返回的Calendar=" + modifyStringDate);
 
-                    //todo 选定日期后的处理
-                    list.get(position).setBasedate(modifyStringDate);
-                    notifyDataSetChanged();
-                }
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                            //todo 选定日期后的处理
+                            list.get(position).setBasedate(modifyStringDate);
+                            notifyDataSetChanged();
+                        }
+                    }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             dialog.show();
         }
 

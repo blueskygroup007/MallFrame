@@ -9,14 +9,14 @@
     tools:context=".activity.EditActivity">
 
     <include layout="@layout/toolbar" />
-<!--    <com.bluesky.mallframe.ui.TopBar
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        app:leftBtnBackground="@drawable/ic_chevron_left_black_24dp"
-        app:rightBtnBackground="@drawable/ic_chevron_right_black_24dp"
-        app:titleText="Title"
-        app:titleTextColor="@color/colorPrimary"
-        app:titleTextSize="18sp" />-->
+    <!--    <com.bluesky.mallframe.ui.TopBar
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:leftBtnBackground="@drawable/ic_chevron_left_black_24dp"
+            app:rightBtnBackground="@drawable/ic_chevron_right_black_24dp"
+            app:titleText="Title"
+            app:titleTextColor="@color/colorPrimary"
+            app:titleTextSize="18sp" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -38,10 +38,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:textSize="@dimen/font_title"
-                    android:text="起个名字:" />
+                    android:text="起个名字:"
+                    android:textSize="@dimen/font_title" />
 
                 <EditText
+                    android:id="@+id/et_solution_edit_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -66,9 +67,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:textSize="@dimen/font_title"
                     android:text="一圈几天:"
-                    />
+                    android:textSize="@dimen/font_title" />
 
                 <View
                     android:layout_width="0dp"
@@ -85,7 +85,32 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/text_tv_solution_edit_company"
+                    android:textSize="@dimen/font_title" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/et_solution_edit_company"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_et_solution_edit_company" />
+
+            </LinearLayout>
+            <!--todo 进度:加入班组设置,周期设置等等 -->
         </LinearLayout>
 
 

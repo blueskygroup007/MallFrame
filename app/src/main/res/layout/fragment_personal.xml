@@ -135,25 +135,25 @@
                     android:id="@+id/btn_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="按钮一" />
+                    android:text="无" />
 
                 <Button
                     android:id="@+id/btn_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="按钮二" />
+                    android:text="无" />
 
                 <Button
                     android:id="@+id/btn_three"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="按钮三" />
+                    android:text="班组设置" />
 
                 <Button
                     android:id="@+id/btn_four"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="按钮四" />
+                    android:text="周期设置" />
             </LinearLayout>
         </LinearLayout>
 

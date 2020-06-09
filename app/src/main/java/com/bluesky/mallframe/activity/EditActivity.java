@@ -1,5 +1,6 @@
 package com.bluesky.mallframe.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,12 +10,17 @@ import androidx.appcompat.widget.Toolbar;
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
+import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 
+import java.io.Serializable;
+
 public class EditActivity extends BaseActivity {
+    public static final String DATA_SOLUTION = "DATA_SOLUTION";
     private Toolbar toolbar;
 
     private BSNumberPicker mNumberPicker;
+    private TurnSolution mSolution;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,8 @@ public class EditActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
+        Intent intent = getIntent();
+        mSolution = (TurnSolution) intent.getSerializableExtra(DATA_SOLUTION);
     }
 
     @Override

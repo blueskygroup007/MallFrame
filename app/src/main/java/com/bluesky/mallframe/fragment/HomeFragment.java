@@ -118,6 +118,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 
         solution = new TurnSolution();
+        solution.setCompany("唐钢二炼铁锅炉二工段");
         solution.setWorkdaykinds(new ArrayList<WorkDayKind>() {{
             add(kind1);
             add(kind2);
@@ -150,7 +151,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             add(day3);
 
         }});
-        solution.setName("唐钢三炼铁");
+        solution.setName("我的倒班111");
         solution.setUser(BmobUser.getCurrentUser(User.class));
         LogUtils.d(solution.toString());
     }
@@ -215,7 +216,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                solution.setName(solution.getName());
+//                solution.setName(solution.getName());
                 addSolution();
                 break;
             case R.id.btn_del:
@@ -269,7 +270,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-                    LogUtils.d("班组保存成功");
+                    LogUtils.d("保存成功");
 
                 } else {
                     LogUtils.e("保存失败" + e.toString());

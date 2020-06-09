@@ -39,4 +39,6 @@
     <string name="text_btn_two_picker_cancel">取消</string>
     <string name="text_menu_setup">设置</string>
     <string name="text_menu_share">分享</string>
+    <string name="text_tv_solution_edit_company">单位:</string>
+    <string name="hint_et_solution_edit_company">无</string>
 </resources>
