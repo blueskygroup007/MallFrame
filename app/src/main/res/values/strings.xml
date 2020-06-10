@@ -41,4 +41,6 @@
     <string name="text_menu_share">分享</string>
     <string name="text_tv_solution_edit_company">单位:</string>
     <string name="hint_et_solution_edit_company">无</string>
+    <string name="text_menu_item_set_default">设为默认</string>
+    <string name="text_menu_item_delete">删除方案</string>
 </resources>

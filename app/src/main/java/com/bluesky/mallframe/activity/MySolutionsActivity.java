@@ -2,6 +2,7 @@ package com.bluesky.mallframe.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ public class MySolutionsActivity extends BaseActivity {
         void onItemClick(View view, int position);
     }
 
+
     class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHolder> {
         private List<TurnSolution> mListData = new ArrayList<>();
         private OnItemClickListener mListener = null;
@@ -68,7 +71,7 @@ public class MySolutionsActivity extends BaseActivity {
         public void onViewRecycled(@NonNull ViewHolder holder) {
             super.onViewRecycled(holder);
             holder.mCbDefault.setOnCheckedChangeListener(null);
-
+//            holder.mCvRoot.setOnLongClickListener(null);
         }
 
         @Override
@@ -87,14 +90,15 @@ public class MySolutionsActivity extends BaseActivity {
                     mListData.get(position).setActive(isChecked);
                 }
             });
-            if (mListener != null) {
-                holder.mCvRoot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.onItemClick(v, position);
-                    }
-                });
-            }
+//            if (mListener != null) {
+//                holder.mCvRoot.setOnLongClickListener(new View.OnLongClickListener() {
+//                    @Override
+//                    public boolean onLongClick(View v) {
+//                        mListener.onItemClick(v, position);
+//                        return true;
+//                    }
+//                });
+//            }
         }
 
         @Override
@@ -102,7 +106,8 @@ public class MySolutionsActivity extends BaseActivity {
             return mListData.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
             TextView mTvNumber;
             TextView mTvName;
             TextView mTvInfo;
@@ -119,13 +124,44 @@ public class MySolutionsActivity extends BaseActivity {
                 mTvCompany = itemView.findViewById(R.id.tv_company);
                 mCbDefault = itemView.findViewById(R.id.cb_default);
                 mCvRoot = itemView.findViewById(R.id.card_root);
+                itemView.setOnCreateContextMenuListener(this);
             }
+
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                TurnSolution solution = mListData.get(getLayoutPosition());
+                getMenuInflater().inflate(R.menu.menu_solutions, menu);
+                menu.setHeaderTitle(solution.getName());
+
+            }
+
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_solutions, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_set_default:
+                Toast.makeText(this, "默认", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_item_delete:
+                Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -143,8 +179,19 @@ public class MySolutionsActivity extends BaseActivity {
             }
         });
         mRvSolution.setAdapter(mAdapter);
-
+        /* todo 知识点:RecyclerView右键菜单的实现之复杂方式
+         *
+         *  步骤:1,item根布局添加longClickable="true"
+         *       2,registerForContextMenu,注册给activity
+         *       3,重载onCreateContextMenu和onContextItemSelected方法
+         * */
+//        registerForContextMenu(mRvSolution);
+        /* 方式二:从RecyclerView的Adapter入手，在Adapter的ViewHolder中为每个itemView设置setOnLongClickListener监听，
+         * 然后在长按监听回调中设置当前的position，
+         * 为每个itemView设置setOnCreateContextMenuListener监听，通过上面记录的position来执行相应的动作。
+         * */
     }
+
 
     @Override
     protected void initData() {
