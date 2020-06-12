@@ -1,5 +1,7 @@
 package com.bluesky.mallframe.data;
 
+import java.util.Locale;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -7,7 +9,7 @@ import cn.bmob.v3.BmobObject;
  * @date 2020/4/26
  * Description:一圈中的某天,哪个班组上哪个班，例如：今天丙班上第一个白班，也就是一圈第一个班
  */
-public class WorkDay extends BmobObject implements Cloneable {
+public class WorkDay extends BmobObject implements Cloneable, Iinformation {
     //序号
     private Integer number;
     //哪个班
@@ -70,5 +72,21 @@ public class WorkDay extends BmobObject implements Cloneable {
                 ", workdaykind=" + workdaykind +
                 ", flag='" + flag + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getInfoName() {
+        return String.format(Locale.CHINA, "第%d天-%s", getNumber(), workdaykind.getInfoName());
+
+    }
+
+    @Override
+    public int getInfoNumber() {
+        return number;
+    }
+
+    @Override
+    public String getInfoDescribe() {
+        return String.format(workdaykind.getInfoDescribe());
     }
 }

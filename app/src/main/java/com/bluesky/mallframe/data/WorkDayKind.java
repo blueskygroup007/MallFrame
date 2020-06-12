@@ -7,7 +7,7 @@ import cn.bmob.v3.BmobObject;
  * @date 2020/4/26
  * Description:工作日类型，日，中，夜，休
  */
-public class WorkDayKind extends BmobObject implements Cloneable {
+public class WorkDayKind extends BmobObject implements Cloneable, Iinformation {
     //序号
     private Integer number;
     //名称
@@ -79,5 +79,20 @@ public class WorkDayKind extends BmobObject implements Cloneable {
 
     public void setFlag(String flag) {
         this.flag = flag;
+    }
+
+    @Override
+    public String getInfoName() {
+        return name;
+    }
+
+    @Override
+    public int getInfoNumber() {
+        return number;
+    }
+
+    @Override
+    public String getInfoDescribe() {
+        return String.format("%s到%s", getStarttime(), getEndtime());
     }
 }

@@ -9,7 +9,7 @@ import cn.bmob.v3.BmobObject;
  * @date 2020/4/26
  * Description:班组
  */
-public class WorkGroup extends BmobObject implements Cloneable {
+public class WorkGroup extends BmobObject implements Cloneable,Iinformation {
     //班组名称
     private String name = "";
     //班组序号
@@ -95,6 +95,21 @@ public class WorkGroup extends BmobObject implements Cloneable {
     @Override
     public int hashCode() {
         return Objects.hashCode(name, number, basedate, flag);
+    }
+
+    @Override
+    public String getInfoName() {
+        return name;
+    }
+
+    @Override
+    public int getInfoNumber() {
+        return number;
+    }
+
+    @Override
+    public String getInfoDescribe() {
+        return basedate;
     }
 
     //todo 知识点:查看WorkGroup类的Equals()方法,了解Equals和HashCode的区别与不同

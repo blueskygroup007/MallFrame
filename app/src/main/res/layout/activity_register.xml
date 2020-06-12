@@ -113,6 +113,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/bg_button_round"
+        android:background="@drawable/bg_button_round_large"
         android:text="@string/text_btn_reg" />
 </LinearLayout>

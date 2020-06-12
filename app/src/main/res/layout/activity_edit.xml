@@ -19,6 +19,7 @@
             app:titleTextSize="18sp" />-->
 
     <ScrollView
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -38,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="起个名字:"
+                    android:text="名称:"
                     android:textSize="@dimen/font_title" />
 
                 <EditText
@@ -67,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="一圈几天:"
+                    android:text="周期(天):"
                     android:textSize="@dimen/font_title" />
 
                 <View
@@ -84,6 +85,145 @@
                     app:text_size="8sp" />
 
             </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rl_work_day_kind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/card_margin"
+                android:background="@drawable/bg_bs_number_picker"
+                android:padding="@dimen/card_margin">
+
+                <TextView
+                    android:id="@+id/tv_title_work_day_kind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="班次设置:"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_edit_work_day_kind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_round_small"
+                    android:text="编辑"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ListView
+                    android:id="@+id/lv_work_day_kind"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_work_day_kind" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <!--<RelativeLayout
+                android:id="@+id/rl_work_day_kind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_button_round_blank">
+
+                <TextView
+                    android:id="@+id/tv_title_work_day_kind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="班次设置:" />
+
+                <Button
+                    android:id="@+id/btn_edit_work_day_kind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:text="编辑" />
+
+                <ListView
+                    android:id="@+id/lv_work_day_kind"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:isScrollContainer="false"
+                    android:layout_below="@id/tv_title_work_day_kind"
+                    android:layout_alignParentLeft="true" />
+
+            </RelativeLayout>-->
+
+            <RelativeLayout
+                android:id="@+id/rl_work_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/card_margin"
+                android:background="@drawable/bg_bs_number_picker"
+                android:padding="@dimen/card_margin"
+
+                android:paddingHorizontal="4dp">
+
+                <TextView
+                    android:id="@+id/tv_title_work_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="班组设置:" />
+
+                <Button
+                    android:id="@+id/btn_edit_work_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/bg_button_round_small"
+
+                    android:text="编辑" />
+
+                <ListView
+                    android:id="@+id/lv_work_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_title_work_group"
+                    android:layout_alignParentLeft="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_work_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/card_margin"
+                android:background="@drawable/bg_bs_number_picker"
+                android:padding="@dimen/card_margin">
+
+                <TextView
+                    android:id="@+id/tv_title_work_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="周期设置:" />
+
+                <Button
+                    android:id="@+id/btn_edit_work_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/bg_button_round_small"
+
+                    android:text="编辑" />
+
+                <ListView
+                    android:id="@+id/lv_work_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_title_work_day"
+                    android:layout_alignParentLeft="true" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,7 +247,8 @@
                     android:id="@+id/et_solution_edit_company"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_et_solution_edit_company" />
+                    android:hint="@string/hint_et_solution_edit_company"
+                    android:inputType="text" />
 
             </LinearLayout>
             <!--todo 进度:加入班组设置,周期设置等等 -->
@@ -119,16 +260,3 @@
 
 </LinearLayout>
 
-    <!--
-    <ProgressBar
-    android:id="@+id/progressBar2"
-    style="?android:attr/progressBarStyleLarge"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-
-
-    <ProgressBar
-    android:id="@+id/progressBar3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:indeterminateDrawable="@drawable/circle_progress_bar" />-->

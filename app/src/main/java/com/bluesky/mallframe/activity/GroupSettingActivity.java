@@ -116,6 +116,7 @@ public class GroupSettingActivity extends BaseActivity {
         //显示返回按钮
         if (getSupportActionBar() != null) {
             LogUtils.d("toolbar found!");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setTitle("编辑班组");
@@ -372,7 +373,7 @@ public class GroupSettingActivity extends BaseActivity {
                             String modifyStringDate = FORMAT_ONLY_DATE.format(calendar1.getTime());
                             LogUtils.d("返回的Calendar=" + modifyStringDate);
 
-                            //todo 选定日期后的处理
+                            //选定日期后的处理
                             list.get(position).setBasedate(modifyStringDate);
                             notifyDataSetChanged();
                         }

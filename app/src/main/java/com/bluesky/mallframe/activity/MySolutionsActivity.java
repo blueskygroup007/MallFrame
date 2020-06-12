@@ -40,6 +40,7 @@ public class MySolutionsActivity extends BaseActivity {
     private List<TurnSolution> mSolutions;
     private SolutionAdapter mAdapter;
     private RecyclerView mRvSolution;
+    private int mPosition = 0;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -57,6 +58,14 @@ public class MySolutionsActivity extends BaseActivity {
         public void setData(List<TurnSolution> listData) {
             mListData = listData;
             notifyDataSetChanged();
+        }
+
+        public void setCurPosition(int position) {
+            mPosition = position;
+        }
+
+        public int getCurPostion() {
+            return mPosition;
         }
 
         @NonNull
@@ -132,8 +141,9 @@ public class MySolutionsActivity extends BaseActivity {
                 TurnSolution solution = mListData.get(getLayoutPosition());
                 getMenuInflater().inflate(R.menu.menu_solutions, menu);
                 menu.setHeaderTitle(solution.getName());
-
+                setCurPosition(getLayoutPosition());
             }
+
 
         }
     }
@@ -143,20 +153,27 @@ public class MySolutionsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
+/*  //在ViewHolder中设置了该监听,所以activity中已不需要.只需要复写onContextItemSelected
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         getMenuInflater().inflate(R.menu.menu_solutions, menu);
-    }
+    }*/
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_set_default:
+            case R.id.menu_item_solutions_set_default:
                 Toast.makeText(this, "默认", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.menu_item_delete:
+            case R.id.menu_item_solutions_delete:
                 Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_item_solutions_edit:
+                Intent intent = new Intent();
+                intent.putExtra(EditActivity.DATA_SOLUTION, mSolutions.get(mAdapter.getCurPostion()));
+                intent.setClass(MySolutionsActivity.this, EditActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -169,7 +186,8 @@ public class MySolutionsActivity extends BaseActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRvSolution.setLayoutManager(layoutManager);
         mAdapter = new SolutionAdapter();
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+        //todo 单击监听的响应事件,应该设定为修改默认,原app是查看
+/*        mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent();
@@ -177,18 +195,30 @@ public class MySolutionsActivity extends BaseActivity {
                 intent.setClass(MySolutionsActivity.this, EditActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
+
+
+        /*
+         * todo 知识点:RecyclerView右键菜单的实现之三:我的方式
+         *      1,ViewHolder实现OnCreateContextMenuListener接口,
+         *       并在实现方法中inflate菜单布局(可将item的信息放入title),
+         *       并记录当前position(ViewHolder.getLayoutPosition()方法也可获得)
+         *      2,给adapter增加setPosition和getPosition方法,以便于在处理菜单事件时,获取item数据
+         *      3,让Activity重写onContextItemSelected,处理菜单事件
+         * */
+
         mRvSolution.setAdapter(mAdapter);
-        /* todo 知识点:RecyclerView右键菜单的实现之复杂方式
+        /* todo 知识点:RecyclerView右键菜单的实现之一:复杂方式
          *
          *  步骤:1,item根布局添加longClickable="true"
          *       2,registerForContextMenu,注册给activity
          *       3,重载onCreateContextMenu和onContextItemSelected方法
          * */
-//        registerForContextMenu(mRvSolution);
-        /* 方式二:从RecyclerView的Adapter入手，在Adapter的ViewHolder中为每个itemView设置setOnLongClickListener监听，
-         * 然后在长按监听回调中设置当前的position，
-         * 为每个itemView设置setOnCreateContextMenuListener监听，通过上面记录的position来执行相应的动作。
+
+        /* 方式二:
+         * 步骤:1,在ViewHolder中为每个itemView的根布局设置setOnLongClickListener监听，
+         *      2,然后在长按监听回调中设置当前的position，
+         *      3,为每个itemView设置setOnCreateContextMenuListener监听，通过上面记录的position来执行相应的动作。
          * */
     }
 
