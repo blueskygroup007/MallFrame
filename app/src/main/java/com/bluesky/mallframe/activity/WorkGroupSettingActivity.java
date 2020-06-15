@@ -86,18 +86,26 @@ public class WorkGroupSettingActivity extends BaseActivity {
         mNumberPicker.setOnNumberChangeListener(new BSNumberPicker.OnNumberChangeListener() {
             @Override
             public void onNumberInc(int number) {
-                if (number > mWorkgroups.size()) {
-                    WorkGroup workGroup = new WorkGroup();
-                    mAdapter.getList().add(workGroup);
-                    mAdapter.notifyDataSetChanged();
+                /*最多100条，最少0条*/
+                if (number < 100) {
+                    mNumberPicker.setNumber(++number);
+                    if (number > mWorkgroups.size()) {
+                        WorkGroup workGroup = new WorkGroup();
+                        mAdapter.getList().add(workGroup);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
             @Override
             public void onNumberDec(int number) {
-                if (number < mWorkgroups.size()) {
-                    mAdapter.getList().remove(mAdapter.getList().size() - 1);
-                    mAdapter.notifyDataSetChanged();
+                if (number > 0) {
+                    mNumberPicker.setNumber(--number);
+
+                    if (number < mWorkgroups.size()) {
+                        mAdapter.getList().remove(mAdapter.getList().size() - 1);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         });

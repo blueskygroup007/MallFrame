@@ -96,11 +96,11 @@ public class BSNumberPicker extends LinearLayout implements View.OnClickListener
         int number = getNumber();
         switch (v.getId()) {
             case R.id.btn_dec:
-                mTvNumber.setText(String.valueOf(--number));
+//                mTvNumber.setText(String.valueOf(--number));
                 mListener.onNumberDec(number);
                 break;
             case R.id.btn_inc:
-                mTvNumber.setText(String.valueOf(++number));
+//                mTvNumber.setText(String.valueOf(++number));
                 mListener.onNumberInc(number);
                 break;
             default:

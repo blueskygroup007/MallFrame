@@ -77,18 +77,24 @@ public class WorkDayKindSettingActivity extends BaseActivity {
         mNumberPicker.setOnNumberChangeListener(new BSNumberPicker.OnNumberChangeListener() {
             @Override
             public void onNumberInc(int number) {
-                if (number > mWorkDayKinds.size()) {
-                    WorkDayKind workDayKind = new WorkDayKind();
-                    mAdapter.getList().add(workDayKind);
-                    mAdapter.notifyDataSetChanged();
+                if (number < 100) {
+                    mNumberPicker.setNumber(++number);
+                    if (number > mWorkDayKinds.size()) {
+                        WorkDayKind workDayKind = new WorkDayKind();
+                        mAdapter.getList().add(workDayKind);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
             @Override
             public void onNumberDec(int number) {
-                if (number < mWorkDayKinds.size()) {
-                    mAdapter.getList().remove(mAdapter.getList().size() - 1);
-                    mAdapter.notifyDataSetChanged();
+                if (number > 0) {
+                    mNumberPicker.setNumber(--number);
+                    if (number < mWorkDayKinds.size()) {
+                        mAdapter.getList().remove(mAdapter.getList().size() - 1);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         });

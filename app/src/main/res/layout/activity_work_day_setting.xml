@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.WorkDaySettingActivity">
+
     <include layout="@layout/toolbar" />
 
     <LinearLayout
@@ -27,12 +28,17 @@
             android:layout_weight="1" />
 
         <com.bluesky.mallframe.ui.BSNumberPicker
-            android:id="@+id/np_group_count"
+            android:id="@+id/np_work_day_count"
             android:layout_width="80dp"
             android:layout_height="30dp"
-            app:current_number="4"
+            app:current_number="2"
             app:text_color="@color/colorPrimary"
             app:text_size="8sp" />
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_work_days"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

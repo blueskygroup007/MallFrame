@@ -1,5 +1,6 @@
 package com.bluesky.mallframe.fragment;
 
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -118,7 +120,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 
         solution = new TurnSolution();
-        solution.setCompany("二炼铁锅炉四期");
         solution.getWorkdaykinds().add(kind1);
         solution.getWorkdaykinds().add(kind2);
         solution.getWorkdaykinds().add(kind3);
@@ -129,23 +130,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         WorkDay day1 = new WorkDay();
         day1.setNumber(1);
-        day1.setWorkgroup(group3);
         day1.setWorkdaykind(kind1);
 
         WorkDay day2 = new WorkDay();
-        day1.setNumber(2);
-        day2.setWorkgroup(group3);
+        day2.setNumber(2);
         day2.setWorkdaykind(kind2);
 
         WorkDay day3 = new WorkDay();
-        day1.setNumber(3);
-        day3.setWorkgroup(group3);
+        day3.setNumber(3);
         day3.setWorkdaykind(kind3);
 
         solution.getWorkdays().add(day1);
         solution.getWorkdays().add(day2);
         solution.getWorkdays().add(day3);
 
+        solution.setCompany("二炼铁锅炉四期");
         solution.setName("加了休班222");
         solution.setUser(BmobUser.getCurrentUser(User.class));
         LogUtils.d(solution.toString());
@@ -211,7 +210,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-//                solution.setName(solution.getName());
+                solution.setCompany("二炼铁" + Math.random());
+                solution.setName("方案" + Math.random());
                 addSolution();
                 break;
             case R.id.btn_del:

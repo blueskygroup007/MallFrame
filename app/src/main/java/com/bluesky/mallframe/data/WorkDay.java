@@ -12,8 +12,6 @@ import cn.bmob.v3.BmobObject;
 public class WorkDay extends BmobObject implements Cloneable, Iinformation {
     //序号
     private Integer number;
-    //哪个班
-    private WorkGroup workgroup;
     //上什么班
     private WorkDayKind workdaykind;
     //扩展参数
@@ -24,7 +22,6 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
         WorkDay workDay = null;
         try {
             workDay = (WorkDay) super.clone();
-            workDay.setWorkgroup(workgroup.clone());
             workDay.setWorkdaykind(workdaykind.clone());
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -40,13 +37,6 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
         this.number = number;
     }
 
-    public WorkGroup getWorkgroup() {
-        return workgroup;
-    }
-
-    public void setWorkgroup(WorkGroup workgroup) {
-        this.workgroup = workgroup;
-    }
 
     public WorkDayKind getWorkdaykind() {
         return workdaykind;
@@ -68,7 +58,6 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
     public String toString() {
         return "WorkDay{" +
                 "number=" + number +
-                ", workgroup=" + workgroup +
                 ", workdaykind=" + workdaykind +
                 ", flag='" + flag + '\'' +
                 '}';
@@ -87,6 +76,6 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
 
     @Override
     public String getInfoDescribe() {
-        return String.format(workdaykind.getInfoDescribe());
+        return workdaykind.getInfoDescribe();
     }
 }

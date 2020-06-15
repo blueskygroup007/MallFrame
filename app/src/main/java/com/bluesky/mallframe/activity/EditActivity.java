@@ -74,6 +74,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_edit_work_day:
+                intent.putExtra(WorkDaySettingActivity.FLAG_INTENT_DATA, mSolution);
+                intent.setClass(this, WorkDaySettingActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
