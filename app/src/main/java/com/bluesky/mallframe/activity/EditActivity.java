@@ -3,17 +3,15 @@ package com.bluesky.mallframe.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IInterface;
 import android.util.ArrayMap;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -29,9 +27,11 @@ import com.bluesky.mallframe.data.WorkGroup;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 
 import java.util.List;
-import java.util.Map;
 
-public class EditActivity extends BaseActivity {
+/**
+ * todo:改进:每个编辑页面返回时,记录是否修改.用以统计总配置是否改动.
+ */
+public class EditActivity extends BaseActivity implements View.OnClickListener {
     public static final String DATA_SOLUTION = "DATA_SOLUTION";
     private Toolbar toolbar;
 
@@ -45,10 +45,39 @@ public class EditActivity extends BaseActivity {
     private ListView mLvWorkGroup;
     private ListView mLvWorkDay;
 
+    private TextView mTvTitleWorkDayKind;
+    private TextView mTvTitleWorkGroup;
+    private TextView mTvTitleWorkDay;
+
+    private Button mBtnEditWorkDayKind;
+    private Button mBtnEditWorkGroup;
+    private Button mBtnEditWorkDay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent();
+        switch (v.getId()) {
+            case R.id.btn_edit_work_day_kind:
+                intent.putExtra(WorkDayKindSettingActivity.FLAG_INTENT_DATA, mSolution);
+                intent.setClass(this, WorkDayKindSettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_edit_work_group:
+                intent.putExtra(WorkGroupSettingActivity.FLAG_INTENT_DATA, mSolution);
+                intent.setClass(this, WorkGroupSettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_edit_work_day:
+                break;
+            default:
+                break;
+        }
     }
 
     class InfoAdapter extends BaseAdapter {
@@ -77,8 +106,9 @@ public class EditActivity extends BaseActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            //todo 如果data为空或null.那么将各组的title设置成:未设置
             TextView tvName = new TextView(mContext);
-//            TextView tvDesc = new TextView(mContext);
+            //todo 可以在这里判断mData.get()的类型.用以区分不同类型的输出方式:(WorkDay需要序号,如果不从WorkDay.number中取的话)
             tvName.setText(String.format("%s: %s", ((Iinformation) (mData.get(position))).getInfoName(), ((Iinformation) (mData.get(position))).getInfoDescribe()));
             return tvName;
         }
@@ -122,9 +152,14 @@ public class EditActivity extends BaseActivity {
         mLvWorkDayKind.setAdapter(new InfoAdapter(mWorkDayKinds, this));
         mLvWorkGroup.setAdapter(new InfoAdapter(mWorkGroups, this));
         mLvWorkDay.setAdapter(new InfoAdapter(mWorkDays, this));
+        //重新计算三个ListView的高度
         getListViewSelfHeight(mLvWorkDayKind);
         getListViewSelfHeight(mLvWorkGroup);
         getListViewSelfHeight(mLvWorkDay);
+
+        mBtnEditWorkDayKind.setOnClickListener(this);
+        mBtnEditWorkGroup.setOnClickListener(this);
+        mBtnEditWorkDay.setOnClickListener(this);
 
     }
 
@@ -178,6 +213,12 @@ public class EditActivity extends BaseActivity {
         mLvWorkDayKind = findViewById(R.id.lv_work_day_kind);
         mLvWorkGroup = findViewById(R.id.lv_work_group);
         mLvWorkDay = findViewById(R.id.lv_work_day);
+        mTvTitleWorkDayKind = findViewById(R.id.tv_title_work_day_kind);
+        mTvTitleWorkGroup = findViewById(R.id.tv_title_work_group);
+        mTvTitleWorkDay = findViewById(R.id.tv_title_work_day);
+        mBtnEditWorkDayKind = findViewById(R.id.btn_edit_work_day_kind);
+        mBtnEditWorkGroup = findViewById(R.id.btn_edit_work_group);
+        mBtnEditWorkDay = findViewById(R.id.btn_edit_work_day);
     }
 
     @Override

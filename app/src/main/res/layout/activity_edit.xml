@@ -58,33 +58,7 @@
                     android:layout_weight="0" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="周期(天):"
-                    android:textSize="@dimen/font_title" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <com.bluesky.mallframe.ui.BSNumberPicker
-                    android:id="@+id/np_group_count"
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    app:current_number="4"
-                    app:text_color="@color/colorPrimary"
-                    app:text_size="8sp" />
-
-            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rl_work_day_kind"

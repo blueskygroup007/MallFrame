@@ -118,40 +118,35 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 
         solution = new TurnSolution();
-        solution.setCompany("唐钢二炼铁锅炉二工段");
-        solution.setWorkdaykinds(new ArrayList<WorkDayKind>() {{
-            add(kind1);
-            add(kind2);
-            add(kind3);
-        }});
-        solution.setWorkgroups(new ArrayList<WorkGroup>() {{
-            add(group1);
-            add(group2);
-            add(group3);
+        solution.setCompany("二炼铁锅炉四期");
+        solution.getWorkdaykinds().add(kind1);
+        solution.getWorkdaykinds().add(kind2);
+        solution.getWorkdaykinds().add(kind3);
 
-        }});
-
+        solution.getWorkgroups().add(group1);
+        solution.getWorkgroups().add(group2);
+        solution.getWorkgroups().add(group3);
 
         WorkDay day1 = new WorkDay();
+        day1.setNumber(1);
         day1.setWorkgroup(group3);
         day1.setWorkdaykind(kind1);
 
         WorkDay day2 = new WorkDay();
-
+        day1.setNumber(2);
         day2.setWorkgroup(group3);
         day2.setWorkdaykind(kind2);
 
         WorkDay day3 = new WorkDay();
+        day1.setNumber(3);
         day3.setWorkgroup(group3);
         day3.setWorkdaykind(kind3);
 
-        solution.setWorkdays(new ArrayList<WorkDay>() {{
-            add(day1);
-            add(day2);
-            add(day3);
+        solution.getWorkdays().add(day1);
+        solution.getWorkdays().add(day2);
+        solution.getWorkdays().add(day3);
 
-        }});
-        solution.setName("我的倒班111");
+        solution.setName("加了休班222");
         solution.setUser(BmobUser.getCurrentUser(User.class));
         LogUtils.d(solution.toString());
     }

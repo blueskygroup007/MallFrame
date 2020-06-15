@@ -1,25 +1,20 @@
 package com.bluesky.mallframe.fragment;
 
 import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.activity.EditActivity;
-import com.bluesky.mallframe.activity.GroupSettingActivity;
+import com.bluesky.mallframe.activity.WorkGroupSettingActivity;
 import com.bluesky.mallframe.activity.MySolutionsActivity;
-import com.bluesky.mallframe.activity.TermDaysSettingActivity;
-import com.bluesky.mallframe.activity.Test2Activity;
-import com.bluesky.mallframe.activity.TestActivity;
+import com.bluesky.mallframe.activity.WorkDayKindSettingActivity;
 import com.bluesky.mallframe.base.BaseFragment;
 import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
@@ -110,12 +105,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.btn_one:
-                intent.setClass(mContext, GroupSettingActivity.class);
+                intent.setClass(mContext, WorkGroupSettingActivity.class);
                 startActivity(intent);
 
                 break;
             case R.id.btn_two:
-                intent.setClass(mContext, TermDaysSettingActivity.class);
+                intent.setClass(mContext, WorkDayKindSettingActivity.class);
                 startActivity(intent);
 
                 break;
@@ -127,8 +122,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     @Override
                     public void onSolutionsLoaded(List<TurnSolution> solutions) {
 
-                        intent.putExtra(GroupSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
-                        intent.setClass(mContext, GroupSettingActivity.class);
+                        intent.putExtra(WorkGroupSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
+                        intent.setClass(mContext, WorkGroupSettingActivity.class);
                         startActivity(intent);
                     }
 
@@ -144,8 +139,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     @Override
                     public void onSolutionsLoaded(List<TurnSolution> solutions) {
 
-                        intent.putExtra(TermDaysSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
-                        intent.setClass(mContext, TermDaysSettingActivity.class);
+                        intent.putExtra(WorkDayKindSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
+                        intent.setClass(mContext, WorkDayKindSettingActivity.class);
                         startActivity(intent);
                     }
 

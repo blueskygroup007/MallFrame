@@ -53,7 +53,7 @@ import java.util.Set;
 import static android.app.AlertDialog.THEME_TRADITIONAL;
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
 
-public class TermDaysSettingActivity extends BaseActivity {
+public class WorkDayKindSettingActivity extends BaseActivity {
 
     public static final String FLAG_INTENT_DATA = "DATA_TERM_DAY";
 
@@ -207,7 +207,7 @@ public class TermDaysSettingActivity extends BaseActivity {
 
     @Override
     protected int initLayout() {
-        return R.layout.activity_term_days_setting;
+        return R.layout.activity_work_day_kind_setting;
 
     }
 
@@ -309,8 +309,8 @@ public class TermDaysSettingActivity extends BaseActivity {
         }
 
         private void showTwoTimeDialog(int position) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(TermDaysSettingActivity.this);
-            View view = LayoutInflater.from(TermDaysSettingActivity.this).inflate(R.layout.two_datepicker, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(WorkDayKindSettingActivity.this);
+            View view = LayoutInflater.from(WorkDayKindSettingActivity.this).inflate(R.layout.two_datepicker, null);
             TimePicker pickerStart = view.findViewById(R.id.tp_start);
             TimePicker pickerEnd = view.findViewById(R.id.tp_end);
             pickerStart.setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
@@ -431,11 +431,11 @@ public class TermDaysSettingActivity extends BaseActivity {
             String endTime = list.get(position).getEndtime();
             Calendar calendar = Calendar.getInstance();
             CostumTimePickerDialog dialog = new CostumTimePickerDialog(
-                    TermDaysSettingActivity.this,
+                    WorkDayKindSettingActivity.this,
                     THEME_TRADITIONAL, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    Toast.makeText(TermDaysSettingActivity.this, String.format("%s点%s分", hourOfDay, minute), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WorkDayKindSettingActivity.this, String.format("%s点%s分", hourOfDay, minute), Toast.LENGTH_SHORT).show();
                 }
             }, 0, 0, true);
 
@@ -448,7 +448,7 @@ public class TermDaysSettingActivity extends BaseActivity {
             Date curDate = stringToDate(startTime);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(curDate);
-            TimePickerDialog dialog = new TimePickerDialog(TermDaysSettingActivity.this, THEME_TRADITIONAL, new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog dialog = new TimePickerDialog(WorkDayKindSettingActivity.this, THEME_TRADITIONAL, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     Calendar calendar1 = Calendar.getInstance();

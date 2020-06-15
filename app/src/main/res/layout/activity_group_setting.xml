@@ -51,10 +51,10 @@
         android:id="@+id/tv_group_setting_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:paddingStart="@dimen/content_left_right_align_baseline"
         android:textColor="@color/material_color_red_300"
-        android:textSize="@dimen/font_tip" />
+        android:textSize="@dimen/font_tip"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_group_list"

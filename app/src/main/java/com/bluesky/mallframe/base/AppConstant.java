@@ -1,5 +1,7 @@
 package com.bluesky.mallframe.base;
 
+import com.bluesky.mallframe.data.WorkDayKind;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -26,5 +28,14 @@ public class AppConstant {
     public static final SimpleDateFormat FORMAT_ONLY_TIME = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
     public static final SimpleDateFormat FORMAT_ONLY_TIME_NO_SECS = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
+    //休班常量
+    public static final WorkDayKind REST_DAY = new WorkDayKind();
+
+    static {
+        REST_DAY.setName("休班");
+        REST_DAY.setStarttime("0:00");
+        REST_DAY.setEndtime("24:00");
+
+    }
 
 }

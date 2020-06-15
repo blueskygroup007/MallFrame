@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +34,6 @@ import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -46,8 +47,11 @@ import java.util.Set;
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 import static com.bluesky.mallframe.data.WorkGroup.FLAG_DEFAULT_WORKGROUP;
 
-
-public class GroupSettingActivity extends BaseActivity {
+/**
+ * todo 改进:班组名称的输入框,改成下拉选择框,可选项为:ABCD...,甲乙丙丁..,一二三四...,自定义输入.
+ * 或:增加选择控件,选择名称类型,然后每个item自动给定name.除非自定义.
+ */
+public class WorkGroupSettingActivity extends BaseActivity {
 
     public static final String FLAG_INTENT_DATA = "DATA_WORK_GROUP";
     //控件
@@ -59,6 +63,18 @@ public class GroupSettingActivity extends BaseActivity {
     private TurnSolution mSolution;
     private List<WorkGroup> mWorkgroups;
     private RvGroupAdapter mAdapter;
+    private static final List<String> mSelectorItems = new ArrayList<>();
+
+    static {
+        mSelectorItems.add("甲");
+        mSelectorItems.add("乙");
+        mSelectorItems.add("丙");
+        mSelectorItems.add("丁");
+        mSelectorItems.add("A");
+        mSelectorItems.add("B");
+        mSelectorItems.add("C");
+        mSelectorItems.add("D");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +101,9 @@ public class GroupSettingActivity extends BaseActivity {
                 }
             }
         });
+
     }
+
 
     @Override
     protected void initData() {
@@ -104,8 +122,11 @@ public class GroupSettingActivity extends BaseActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+
         mAdapter = new RvGroupAdapter(mWorkgroups);
         mRecyclerView.setAdapter(mAdapter);
+
+
     }
 
     @Override
@@ -201,11 +222,10 @@ public class GroupSettingActivity extends BaseActivity {
         return R.layout.activity_group_setting;
     }
 
-
     /**
      * RecyclerView的自定义适配器
      */
-    private class RvGroupAdapter extends RecyclerView.Adapter<RvGroupAdapter.ViewHolder> {
+    class RvGroupAdapter extends RecyclerView.Adapter<RvGroupAdapter.ViewHolder> {
         private List<WorkGroup> mBackupList = new ArrayList<>();
         private List<WorkGroup> mList;
 
@@ -360,7 +380,7 @@ public class GroupSettingActivity extends BaseActivity {
 
             //弹日期选择窗
             DatePickerDialog dialog = new DatePickerDialog(
-                    GroupSettingActivity.this,
+                    WorkGroupSettingActivity.this,
                     DatePickerDialog.THEME_TRADITIONAL,
                     new DatePickerDialog.OnDateSetListener() {
                         @Override

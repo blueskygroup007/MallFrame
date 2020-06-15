@@ -18,15 +18,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.WorkDaySettingActivity"></activity>
         <activity
             android:name=".activity.MySolutionsActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.TermDaysSettingActivity"
+            android:name=".activity.WorkDayKindSettingActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- windowSoftInputMode属性,让activity启动时不弹出软键盘 -->
         <activity
-            android:name=".activity.GroupSettingActivity"
+            android:name=".activity.WorkGroupSettingActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".activity.Test2Activity" />

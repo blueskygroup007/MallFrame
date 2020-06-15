@@ -1,9 +1,12 @@
 package com.bluesky.mallframe.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
+
+import static com.bluesky.mallframe.base.AppConstant.REST_DAY;
 
 /**
  * @author BlueSky
@@ -25,14 +28,18 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
     //你是哪个班组(在list中的序号,第几个班组)
     private Integer yourgroup = 0;
     //一圈中，每天倒班方式
-    private List<WorkDay> workdays;
+    private List<WorkDay> workdays = new ArrayList<>();
     //一共有几个班，甲乙丙丁
-    private List<WorkGroup> workgroups;
+    private List<WorkGroup> workgroups = new ArrayList<>();
 
     //一共有几种工作日（日，中，夜，休）
-    private List<WorkDayKind> workdaykinds;
+    private List<WorkDayKind> workdaykinds = new ArrayList<>();
     //扩展参数
     private String flags;
+
+    public TurnSolution() {
+        workdaykinds.add(REST_DAY);
+    }
 
     @Override
     public TurnSolution clone() {
