@@ -180,6 +180,7 @@ public class WorkDaySettingActivity extends BaseActivity {
         public WorkDayAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_work_day_selector, parent, false);
             ViewHolder viewHolder = new ViewHolder(view);
+            //todo 知识点:动态给ViewHolder添加控件,应该放在onCreateViewHolder中.而不是onBindViewHolder
             for (WorkDayKind kind : mKinds) {
                 viewHolder.mRgWorkDays.addView(addButton(kind.getName()));//将单选按钮添加到RadioGroup中
             }
