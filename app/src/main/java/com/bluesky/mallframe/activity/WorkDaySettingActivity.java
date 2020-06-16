@@ -15,6 +15,7 @@ import android.widget.ListAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -54,9 +55,7 @@ public class WorkDaySettingActivity extends BaseActivity {
                 int size = mWorkDays.size();
                 if (number < 100) {
                     mPicker.setNumber(++number);
-
                     if (number > size) {
-
                         //todo 错误：当number=0的时候，增加一个，此时，并没有数据可以克隆。
                         //todo 思考：是应该最少剩一个条目，还是允许删光。
                         WorkDay workDay = mWorkDays.get(size - 1).clone();
@@ -143,7 +142,8 @@ public class WorkDaySettingActivity extends BaseActivity {
 
         public RadioButton addButton(String name) {
             RadioButton radioButton = new RadioButton(mContext);
-            RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, 50);
+            //todo 知识点:动态添加时,使用weight的方法.在LayoutParams构造方法的第三个参数置1f
+            RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
             layoutParams.setMargins(10, 10, 10, 10);
             radioButton.setLayoutParams(layoutParams);
             radioButton.setText(name);
@@ -151,8 +151,8 @@ public class WorkDaySettingActivity extends BaseActivity {
             radioButton.setButtonDrawable(android.R.color.transparent);//隐藏单选圆形按钮
             radioButton.setGravity(Gravity.CENTER);
             radioButton.setPadding(10, 10, 10, 10);
-            radioButton.setTextColor(getResources().getColorStateList(R.color.blue));//设置选中/未选中的文字颜色
-            radioButton.setBackground(getResources().getDrawable(R.drawable.bg_button_round_small_selector));//设置按钮选中/未选中的背景
+//            radioButton.setTextColor(getResources().getColorStateList(R.color.blue));//设置选中/未选中的文字颜色
+            radioButton.setBackgroundResource(R.drawable.bg_button_round_small_selector);//设置按钮选中/未选中的背景
             return radioButton;
         }
 
@@ -164,7 +164,7 @@ public class WorkDaySettingActivity extends BaseActivity {
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 mTvNumber = itemView.findViewById(R.id.tv_item_work_day_number);
-                mGvWorkdays = itemView.findViewById(R.id.gv_item_work_day_kinds);
+//                mGvWorkdays = itemView.findViewById(R.id.gv_item_work_day_kinds);
                 mRgWorkDays = itemView.findViewById(R.id.rg_item_work_day_kinds);
             }
         }
@@ -172,15 +172,17 @@ public class WorkDaySettingActivity extends BaseActivity {
         @Override
         public void onViewRecycled(@NonNull ViewHolder holder) {
             super.onViewRecycled(holder);
+            holder.mRgWorkDays.setOnCheckedChangeListener(null);
         }
 
         @NonNull
         @Override
         public WorkDayAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_work_day_selector, parent, false);
-
-
             ViewHolder viewHolder = new ViewHolder(view);
+            for (WorkDayKind kind : mKinds) {
+                viewHolder.mRgWorkDays.addView(addButton(kind.getName()));//将单选按钮添加到RadioGroup中
+            }
             return viewHolder;
         }
 
@@ -188,10 +190,20 @@ public class WorkDaySettingActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.mTvNumber.setText(String.format("第%s天", mData.get(position).getNumber()));
-            for (WorkDayKind kind : mKinds) {
-                holder.mRgWorkDays.addView(addButton(kind.getName()));//将单选按钮添加到RadioGroup中
-            }
 
+            holder.mRgWorkDays.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    group.getCheckedRadioButtonId();
+                    for (int i = 0; i < group.getChildCount() - 1; i++) {
+                        if (group.getChildAt(i).getId() == group.getCheckedRadioButtonId()) {
+                            Toast.makeText(mContext, "点击的是：" + mKinds.get(i), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                    mData.get(position).setWorkdaykind(mKinds.get(position).clone());
+                }
+            });
 /*            mWorkDayKindAdapter.setOnSelectListener(new OnSelectListener() {
                 @Override
                 public void onSelected(int pos) {
@@ -239,8 +251,7 @@ public class WorkDaySettingActivity extends BaseActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-
-                Button item = new Button(mContext);
+                RadioButton item = new RadioButton(mContext);
                 item.setText(mDataKinds.get(position).getName());
                 item.setBackgroundResource(R.drawable.bg_button_round_small_selector);
                 item.setOnClickListener(new View.OnClickListener() {
@@ -254,8 +265,6 @@ public class WorkDaySettingActivity extends BaseActivity {
                 });
                 return item;
             }
-
-
         }
     }
 

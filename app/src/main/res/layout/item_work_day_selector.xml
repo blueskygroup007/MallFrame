@@ -2,8 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:baselineAlignedChildIndex="0"
     android:orientation="horizontal">
 
+    <!--知识点：关于baseline对齐.
+       1、 android:layout_alignBaseline：
+       相对布局（RalativeLayout）中使用，设置当前组件与参照组件的基线对齐，该属性为参照组件的ID。
+       如果作为基线的控件的内容为多行，则以第一行作为基线。
+
+2、android:baselineAligned：
+      线性布局（LinearLayout）中使用，设置是否允许用户调整它内容的基线。默认为ture，即LinearLayout中的控件的内容是基线对齐的。
+
+3、android:baselineAlignedChildIndex：
+      线性布局（LinearLayout）中使用，设置LinearLayout中第几个（从0开始计数）子组件作为基线对齐的控件，来和LinearLayout外的基线对齐。
+
+    -->
     <TextView
         android:id="@+id/tv_item_work_day_number"
         android:layout_width="wrap_content"
@@ -12,14 +25,16 @@
 
     <RadioGroup
         android:id="@+id/rg_item_work_day_kinds"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
-    <GridView
-        android:id="@+id/gv_item_work_day_kinds"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:numColumns="5" />
+        android:baselineAlignedChildIndex="0"
+        android:orientation="horizontal" />
+
+    <!--    <GridView
+            android:id="@+id/gv_item_work_day_kinds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:numColumns="5" />-->
 </LinearLayout>
