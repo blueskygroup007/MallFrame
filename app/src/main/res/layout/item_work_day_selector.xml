@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:text="第X天" />
 
+    <RadioGroup
+        android:id="@+id/rg_item_work_day_kinds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" />
+
     <GridView
         android:id="@+id/gv_item_work_day_kinds"
         android:layout_width="0dp"

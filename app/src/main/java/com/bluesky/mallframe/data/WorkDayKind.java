@@ -20,7 +20,7 @@ public class WorkDayKind extends BmobObject implements Cloneable, Iinformation {
     private String flag;
 
     @Override
-    protected WorkDayKind clone() {
+    public WorkDayKind clone() {
         WorkDayKind workDayKind = null;
         try {
             workDayKind = (WorkDayKind) super.clone();

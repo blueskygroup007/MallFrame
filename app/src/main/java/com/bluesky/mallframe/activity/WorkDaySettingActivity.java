@@ -3,12 +3,17 @@ package com.bluesky.mallframe.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -114,27 +119,53 @@ public class WorkDaySettingActivity extends BaseActivity {
         return R.layout.activity_work_day_setting;
     }
 
-    static class WorkDayAdapter extends RecyclerView.Adapter<WorkDayAdapter.ViewHolder> {
+
+    class WorkDayAdapter extends RecyclerView.Adapter<WorkDayAdapter.ViewHolder> {
 
         private final Context mContext;
+        private final List<WorkDayKind> mKinds;
         private List<WorkDay> mData;
-        private ListAdapter mWorkDayKindAdapter;
+        private WorkDayKindAdapter mWorkDayKindAdapter;
+
 
         public WorkDayAdapter(List<WorkDay> list, List<WorkDayKind> kinds, Context context) {
 
             this.mData = list;
             this.mContext = context;
-            mWorkDayKindAdapter = new WorkDayKindAdapter(kinds, context);
+            this.mKinds = kinds;
+            mWorkDayKindAdapter = new WorkDayKindAdapter(mKinds, context);
+
         }
 
-        static class ViewHolder extends RecyclerView.ViewHolder {
+        public List<WorkDay> getData() {
+            return mData;
+        }
+
+        public RadioButton addButton(String name) {
+            RadioButton radioButton = new RadioButton(mContext);
+            RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, 50);
+            layoutParams.setMargins(10, 10, 10, 10);
+            radioButton.setLayoutParams(layoutParams);
+            radioButton.setText(name);
+            radioButton.setTextSize(12);
+            radioButton.setButtonDrawable(android.R.color.transparent);//隐藏单选圆形按钮
+            radioButton.setGravity(Gravity.CENTER);
+            radioButton.setPadding(10, 10, 10, 10);
+            radioButton.setTextColor(getResources().getColorStateList(R.color.blue));//设置选中/未选中的文字颜色
+            radioButton.setBackground(getResources().getDrawable(R.drawable.bg_button_round_small_selector));//设置按钮选中/未选中的背景
+            return radioButton;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
             TextView mTvNumber;
             GridView mGvWorkdays;
+            RadioGroup mRgWorkDays;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 mTvNumber = itemView.findViewById(R.id.tv_item_work_day_number);
                 mGvWorkdays = itemView.findViewById(R.id.gv_item_work_day_kinds);
+                mRgWorkDays = itemView.findViewById(R.id.rg_item_work_day_kinds);
             }
         }
 
@@ -147,14 +178,27 @@ public class WorkDaySettingActivity extends BaseActivity {
         @Override
         public WorkDayAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_work_day_selector, parent, false);
+
+
             ViewHolder viewHolder = new ViewHolder(view);
             return viewHolder;
         }
 
+
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.mTvNumber.setText(String.format("第%s天", mData.get(position).getNumber()));
-            holder.mGvWorkdays.setAdapter(mWorkDayKindAdapter);
+            for (WorkDayKind kind : mKinds) {
+                holder.mRgWorkDays.addView(addButton(kind.getName()));//将单选按钮添加到RadioGroup中
+            }
+
+/*            mWorkDayKindAdapter.setOnSelectListener(new OnSelectListener() {
+                @Override
+                public void onSelected(int pos) {
+                    mData.get(position).setWorkdaykind(mKinds.get(pos).clone());
+                }
+            });
+            holder.mGvWorkdays.setAdapter(mWorkDayKindAdapter);*/
         }
 
 
@@ -163,13 +207,19 @@ public class WorkDaySettingActivity extends BaseActivity {
             return mData.size();
         }
 
-        private static class WorkDayKindAdapter extends BaseAdapter {
+
+        class WorkDayKindAdapter extends BaseAdapter {
             private List<WorkDayKind> mDataKinds;
             private Context mContext;
+            private OnSelectListener mListener;
 
             WorkDayKindAdapter(List<WorkDayKind> data, Context context) {
                 this.mDataKinds = data;
                 this.mContext = context;
+            }
+
+            public void setOnSelectListener(OnSelectListener listener) {
+                mListener = listener;
             }
 
             @Override
@@ -189,11 +239,27 @@ public class WorkDaySettingActivity extends BaseActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                TextView item = new TextView(mContext);
+
+                Button item = new Button(mContext);
                 item.setText(mDataKinds.get(position).getName());
+                item.setBackgroundResource(R.drawable.bg_button_round_small_selector);
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+                            item.setSelected(!item.isSelected());
+                            mListener.onSelected(position);
+                        }
+                    }
+                });
                 return item;
             }
+
+
         }
     }
 
+    public interface OnSelectListener {
+        void onSelected(int position);
+    }
 }
