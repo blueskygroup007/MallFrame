@@ -59,7 +59,6 @@
             </LinearLayout>
 
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rl_work_day_kind"
                 android:layout_width="match_parent"
@@ -225,7 +224,32 @@
                     android:inputType="text" />
 
             </LinearLayout>
-            <!--todo 进度:加入班组设置,周期设置等等 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/text_tv_solution_edit_flag"
+                    android:textSize="@dimen/font_title" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/et_solution_edit_flag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_et_solution_edit_flag"
+                    android:inputType="text" />
+            </LinearLayout>
         </LinearLayout>
 
 

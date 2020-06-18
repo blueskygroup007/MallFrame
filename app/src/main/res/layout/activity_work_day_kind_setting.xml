@@ -35,39 +35,9 @@
             android:layout_height="30dp"
             app:current_number="4"
             app:text_color="@color/colorPrimary"
-            app:text_size="8sp" />
+            app:text_size="@dimen/material_typography_title" />
 
     </LinearLayout>
-
-<!--    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/content_left_right_align_baseline"
-        android:layout_marginVertical="@dimen/content_left_right_align_baseline"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/text_tv_term_days_setting_hour"
-            android:textSize="@dimen/font_title" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <com.bluesky.mallframe.ui.BSNumberPicker
-            android:id="@+id/np_term_days_hour_count"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
-            app:current_number="8"
-            app:text_color="@color/colorPrimary"
-            app:text_size="8sp" />
-
-    </LinearLayout>-->
 
     <TextView
         android:id="@+id/tv_term_days_setting_message"

@@ -33,7 +33,7 @@
 
             app:current_number="4"
             app:text_color="@color/colorPrimary"
-            app:text_size="8sp" />
+            app:text_size="@dimen/material_typography_subheading" />
 
     </LinearLayout>
 

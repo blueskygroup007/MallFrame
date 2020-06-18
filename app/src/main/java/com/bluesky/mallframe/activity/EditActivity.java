@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,6 +38,10 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 
     private BSNumberPicker mNumberPicker;
     private TurnSolution mSolution;
+    private EditText mEtCompany;
+    private EditText mEtFlag;
+
+
     private List<WorkDayKind> mWorkDayKinds;
     private List<WorkDay> mWorkDays;
     private List<WorkGroup> mWorkGroups;
@@ -57,6 +62,13 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /*当从其他设置页面返回时，更新Edit页面的预览信息（3个list，1个自动生成标签的hint）*/
+        //todo 哪些放在onActivityResult中？
     }
 
     @Override
@@ -222,6 +234,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         mBtnEditWorkDayKind = findViewById(R.id.btn_edit_work_day_kind);
         mBtnEditWorkGroup = findViewById(R.id.btn_edit_work_group);
         mBtnEditWorkDay = findViewById(R.id.btn_edit_work_day);
+        mEtCompany = findViewById(R.id.et_solution_edit_company);
+        mEtFlag = findViewById(R.id.et_solution_edit_flag);
     }
 
     @Override

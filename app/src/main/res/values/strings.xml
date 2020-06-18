@@ -40,8 +40,10 @@
     <string name="text_menu_setup">设置</string>
     <string name="text_menu_share">分享</string>
     <string name="text_tv_solution_edit_company">公司:</string>
-    <string name="hint_et_solution_edit_company">无</string>
+    <string name="hint_et_solution_edit_company">请输入公司名称</string>
     <string name="text_menu_item_solutions_set_default">设为默认</string>
     <string name="text_menu_item_solutions_delete">删除</string>
     <string name="text_menu_item_solutions_edit">编辑</string>
+    <string name="text_tv_solution_edit_flag">标签</string>
+    <string name="hint_et_solution_edit_flag">请输入标签</string>
 </resources>

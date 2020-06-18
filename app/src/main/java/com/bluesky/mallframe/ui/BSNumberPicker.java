@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -58,6 +59,14 @@ public class BSNumberPicker extends LinearLayout implements View.OnClickListener
         mBtnInc.setOnClickListener(this);
     }
 
+/*    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int measuredWidth = getMeasuredWidth();
+        int measuredHeight = getMeasuredHeight();
+
+    }*/
+
     private void initTypeValue(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BSNumberPicker);
         mTextColor = a.getColor(R.styleable.BSNumberPicker_text_color, Color.BLACK);
@@ -75,7 +84,10 @@ public class BSNumberPicker extends LinearLayout implements View.OnClickListener
 
 //        mLayoutRoot.setBackgroundColor(Color.WHITE);
         mTvNumber.setTextColor(mTextColor);
-        mTvNumber.setTextSize(mTextSize);
+        /*
+         * todo 知识点：上面getDimension得到的是px,而setTextSize的单位是sp.所以要加一个参数COMPLEX_UNIT_PX
+        * */
+        mTvNumber.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         mTvNumber.setText(String.valueOf(mNumber));
     }
 
