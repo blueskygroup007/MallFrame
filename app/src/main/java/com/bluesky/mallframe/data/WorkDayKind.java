@@ -1,5 +1,9 @@
 package com.bluesky.mallframe.data;
 
+import com.google.common.base.Objects;
+
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -7,7 +11,7 @@ import cn.bmob.v3.BmobObject;
  * @date 2020/4/26
  * Description:工作日类型，日，中，夜，休
  */
-public class WorkDayKind extends BmobObject implements Cloneable, Iinformation {
+public class WorkDayKind extends BmobObject implements Cloneable, Iinformation, Serializable {
     //序号
     private Integer number;
     //名称
@@ -28,6 +32,23 @@ public class WorkDayKind extends BmobObject implements Cloneable, Iinformation {
             e.printStackTrace();
         }
         return workDayKind;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkDayKind that = (WorkDayKind) o;
+        return Objects.equal(number, that.number) &&
+                Objects.equal(name, that.name) &&
+                Objects.equal(starttime, that.starttime) &&
+                Objects.equal(endtime, that.endtime) &&
+                Objects.equal(flag, that.flag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(number, name, starttime, endtime, flag);
     }
 
     @Override

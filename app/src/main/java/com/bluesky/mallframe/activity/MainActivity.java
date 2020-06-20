@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioGroup;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.base.BaseFragment;

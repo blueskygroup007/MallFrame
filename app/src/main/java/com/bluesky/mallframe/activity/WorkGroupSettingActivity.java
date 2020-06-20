@@ -10,21 +10,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
@@ -54,6 +51,8 @@ import static com.bluesky.mallframe.data.WorkGroup.FLAG_DEFAULT_WORKGROUP;
 public class WorkGroupSettingActivity extends BaseActivity {
 
     public static final String FLAG_INTENT_DATA = "DATA_WORK_GROUP";
+    public static final int REQUESTCODE = 2;
+
     //控件
     private BSNumberPicker mNumberPicker;
     private RecyclerView mRecyclerView;
@@ -99,13 +98,16 @@ public class WorkGroupSettingActivity extends BaseActivity {
 
             @Override
             public void onNumberDec(int number) {
-                if (number > 0) {
+                if (number > 1) {
                     mNumberPicker.setNumber(--number);
 
                     if (number < mWorkgroups.size()) {
                         mAdapter.getList().remove(mAdapter.getList().size() - 1);
                         mAdapter.notifyDataSetChanged();
                     }
+                } else {
+                    Toast.makeText(WorkGroupSettingActivity.this, getString(R.string.toast_work_group_setting_minimum), Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -121,20 +123,13 @@ public class WorkGroupSettingActivity extends BaseActivity {
         //todo 不应该是solution,只需List<WorkGroup>
         Intent intent = getIntent();
         mSolution = (TurnSolution) intent.getSerializableExtra(FLAG_INTENT_DATA);
-
         mWorkgroups = mSolution.getWorkgroups();
         LogUtils.d(mWorkgroups);
-
-        mNumberPicker.setNumber(mWorkgroups.size());//默认就是1
-
-
+        mNumberPicker.setNumber(mWorkgroups.size());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-
         mAdapter = new RvGroupAdapter(mWorkgroups);
         mRecyclerView.setAdapter(mAdapter);
-
-
     }
 
     @Override
@@ -177,52 +172,35 @@ public class WorkGroupSettingActivity extends BaseActivity {
         mTvMsg.setText("提示:" + result);
         /*没有改动,直接退出*/
         if (result.equals(MSG_NO_CHANGE)) {
+            setResult(RESULT_CANCELED);
             finish();
         }
         /*修改正确,弹出是否保存对话框*/
         if (result.equals(MSG_OK)) {
-            showNormalDialog();
+            showSaveDialog(new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //...To-do
+                    SolutionDataSource mRemote = new SolutionRemoteDataSource();
+                    mSolution.setWorkgroups(mWorkgroups);
+                    LogUtils.d("保存前的workgroups=" + mWorkgroups);
+                    mRemote.updateSolution(mSolution);
+                    dialog.dismiss();
+                    Intent data = new Intent();
+                    data.putExtra(FLAG_INTENT_DATA, mSolution);
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //...To-do
+                    dialog.dismiss();
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+            });
         }
-    }
-
-    /**
-     * 是否保存的对话框
-     */
-    private void showNormalDialog() {
-        /* @setIcon 设置对话框图标
-         * @setTitle 设置对话框标题
-         * @setMessage 设置对话框消息提示
-         * setXXX方法返回Dialog对象，因此可以链式设置属性
-         */
-        final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(this);
-        normalDialog.setIcon(R.drawable.ic_save_black_24dp);
-        normalDialog.setTitle("保存");
-        normalDialog.setMessage("您修改了设置,是否保存?");
-
-        normalDialog.setPositiveButton("保存",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
-                        SolutionDataSource mRemote = new SolutionRemoteDataSource();
-                        mSolution.setWorkgroups(mWorkgroups);
-                        mRemote.updateSolution(mSolution);
-                        dialog.dismiss();
-                        finish();
-                    }
-                });
-        normalDialog.setNegativeButton("不保存",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
-                        dialog.dismiss();
-                        finish();
-                    }
-                });
-        // 显示
-        normalDialog.show();
     }
 
     @Override
@@ -268,7 +246,6 @@ public class WorkGroupSettingActivity extends BaseActivity {
                     list) {
                 mBackupList.add(workGroup.clone());
             }
-
             LogUtils.d("两个list的内容=" + mList + "---" + mBackupList);
             LogUtils.d("两个list的hashcode=" + mList.hashCode() + "---" + mBackupList.hashCode());
         }
@@ -317,15 +294,10 @@ public class WorkGroupSettingActivity extends BaseActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-//                    mList.get(Integer.parseInt(holder.mTvNumber.getText().toString()) - 1).setName(s.toString());
                     mList.get(position).setName(s.toString());
                 }
             };
 
-            //todo 已经在回收方法里移除了.这里应该就不必要了.但是有这一句也不影响
-            holder.mEtName.removeTextChangedListener(textWatcher);
-
-            //3.先清除监听器,修改后再设置监听器(也未成功....)
             WorkGroup workGroup = mList.get(position);
             holder.mTvNumber.setText(String.valueOf(position + 1));
             if (!(workGroup.getName() == null) && !("".equals(workGroup.getName()))) {
@@ -344,16 +316,21 @@ public class WorkGroupSettingActivity extends BaseActivity {
                 }
             });
             /*勾选默认,给checkbox设置监听*/
+            //todo checkbox的默认没有被成功保存
             holder.mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
+                        //将其他flag置空,其他checkBox清除勾选,并刷新
+                        for (int i = 0; i < mList.size(); i++) {
+                            mList.get(i).setFlag("");
+                        }
                         mList.get(position).setFlag(FLAG_DEFAULT_WORKGROUP);
+                        notifyDataSetChanged();
                     } else {
                         mList.get(position).setFlag("");
 
                     }
-                    LogUtils.d(mList.get(position).getFlag() + "----" + mBackupList.get(position).getFlag());
                 }
             });
             holder.mEtName.addTextChangedListener(textWatcher);
@@ -410,37 +387,6 @@ public class WorkGroupSettingActivity extends BaseActivity {
         }
 
 
-    }
-
-    /**
-     * todo 知识点:判断原始list和修改后的list是否不同(即是否当前页面被修改)
-     *
-     * @param list
-     * @param backupList
-     * @return
-     */
-    private boolean isListEqual(List<WorkGroup> list, List<WorkGroup> backupList) {
-        /*这里采用了第三方库
-         * 方法1:使用List.contains()方法互相比较
-         *
-         * */
-        return CollectionUtils.isEqualCollection(list, backupList);
-    }
-
-    /**
-     * todo 方法1:使用List.containsAll()方法互相比较,containsAll又依赖list中对象的Equals(),所以必须重写
-     * todo 查看WorkGroup类的Equals()方法,了解Equals和HashCode的区别与不同
-     *
-     * @param list
-     * @param backupList
-     * @return
-     */
-    private boolean isListEqual1(List list, List backupList) {
-        if (list.containsAll(backupList)) {
-            if (backupList.containsAll(list))
-                return true;
-        }
-        return false;
     }
 
     /**

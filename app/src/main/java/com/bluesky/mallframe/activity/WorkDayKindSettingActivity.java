@@ -56,6 +56,7 @@ import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
 public class WorkDayKindSettingActivity extends BaseActivity {
 
     public static final String FLAG_INTENT_DATA = "DATA_TERM_DAY";
+    public static final int REQUESTCODE = 1;
 
     //控件
     private BSNumberPicker mNumberPicker;
@@ -84,6 +85,9 @@ public class WorkDayKindSettingActivity extends BaseActivity {
                         mAdapter.getList().add(workDayKind);
                         mAdapter.notifyDataSetChanged();
                     }
+                } else {
+                    Toast.makeText(WorkDayKindSettingActivity.this, getString(R.string.toast_work_day_kind_setting_minimum), Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -163,6 +167,7 @@ public class WorkDayKindSettingActivity extends BaseActivity {
         /*没有改动,直接退出*/
         if (!mAdapter.isChanged()) {
             mTvMsg.setText("提示:" + MSG_NO_CHANGE);
+            setResult(RESULT_CANCELED);
             finish();
         } else {
             /*修改正确,弹出是否保存对话框*/
@@ -191,19 +196,22 @@ public class WorkDayKindSettingActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
                         SolutionDataSource mRemote = new SolutionRemoteDataSource();
                         mSolution.setWorkdaykinds(mWorkDayKinds);
                         mRemote.updateSolution(mSolution);
                         dialog.dismiss();
+                        Intent data = new Intent();
+                        data.putExtra(FLAG_INTENT_DATA, mSolution);
+                        setResult(RESULT_OK, data);
+                        finish();
                     }
                 });
         normalDialog.setNegativeButton("不保存",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
                         dialog.dismiss();
+                        setResult(RESULT_CANCELED);
                         finish();
                     }
                 });
@@ -222,7 +230,10 @@ public class WorkDayKindSettingActivity extends BaseActivity {
         private List<WorkDayKind> mList;
 
         public RvTermDaysAdapter(List<WorkDayKind> list) {
-            mBackupList.addAll(list);
+            for (WorkDayKind workDayKind :
+                    list) {
+                mBackupList.add(workDayKind.clone());
+            }
             mList = list;
         }
 
@@ -296,7 +307,6 @@ public class WorkDayKindSettingActivity extends BaseActivity {
                     mList.get(position).setName(s.toString());
                 }
             };
-
             WorkDayKind workDayKind = mList.get(position);
             holder.mTvNumber.setText(String.valueOf(position + 1));
             holder.mEtName.setText(workDayKind.getName());
@@ -305,7 +315,6 @@ public class WorkDayKindSettingActivity extends BaseActivity {
             holder.mTvSetupTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    chooseTimeDialog2(mList, position);
                     showTwoTimeDialog(position);
                 }
             });
@@ -366,10 +375,9 @@ public class WorkDayKindSettingActivity extends BaseActivity {
 
             setNumberPickerDivider(hourNumberPicker, Color.YELLOW);
             setNumberPickerDivider(minuteNumberPicker, Color.GREEN);
-/*            setNumberpickerTextColour(hourNumberPicker, Color.RED);
-            setNumberpickerTextColour(minuteNumberPicker, Color.BLUE);*/
-
-//        setPickerSize(hourNumberPicker, 30, this);
+            //            setNumberpickerTextColour(hourNumberPicker, Color.RED);
+            //            setNumberpickerTextColour(minuteNumberPicker, Color.BLUE);
+            //            setPickerSize(hourNumberPicker, 30, this);
         }
 
         /**
@@ -507,28 +515,5 @@ public class WorkDayKindSettingActivity extends BaseActivity {
         public CostumTimePickerDialog(Context context, int themeResId, OnTimeSetListener listener, int hourOfDay, int minute, boolean is24HourView) {
             super(context, themeResId, listener, hourOfDay, minute, is24HourView);
         }
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-/*            BSNumberPicker numberPicker = new BSNumberPicker(TermDaysSettingActivity.this);
-
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-
-            params.gravity = Gravity.TOP;
-            params.leftMargin = 100;
-            params.rightMargin = 100;
-//            params.topMargin = -100;
-            //获取按钮位置
-            Button button = getButton(DialogInterface.BUTTON_POSITIVE);
-            ViewGroup.LayoutParams layoutParams = button.getLayoutParams();
-
-            WindowManager.LayoutParams lp = getWindow().getAttributes();
-            lp.height = getResources().getDisplayMetrics().heightPixels + 200;
-//            getWindow().getDecorView().getLayoutParams();
-            addContentView(numberPicker, params);*/
-        }
-
-
     }
 }

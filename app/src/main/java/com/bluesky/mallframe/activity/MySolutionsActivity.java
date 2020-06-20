@@ -9,15 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
-import androidx.core.view.LayoutInflaterCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +26,6 @@ import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.google.common.base.Strings;
-import com.google.common.primitives.Booleans;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,18 +39,158 @@ public class MySolutionsActivity extends BaseActivity {
     private RecyclerView mRvSolution;
     private int mPosition = 0;
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_solutions_set_default:
+                Toast.makeText(this, "默认", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_item_solutions_delete:
+                Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_item_solutions_edit:
+                Intent intent = new Intent();
+                intent.putExtra(EditActivity.FLAG_INTENT_DATA, mSolutions.get(mAdapter.getCurPostion()));
+                intent.setClass(MySolutionsActivity.this, EditActivity.class);
+                startActivityForResult(intent, EditActivity.REQUESTCODE);
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case EditActivity.REQUESTCODE:
+                    if (data != null) {
+                        TurnSolution solution = (TurnSolution) data.getSerializableExtra(EditActivity.FLAG_INTENT_DATA);
+                        mSolutions.set(mAdapter.getCurPostion(), solution);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void initEvent() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mRvSolution.setLayoutManager(layoutManager);
+        mAdapter = new SolutionAdapter();
+        //todo 单击监听的响应事件,应该设定为修改默认,原app是查看
+/*        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                intent.putExtra(EditActivity.DATA_SOLUTION, mSolutions.get(position));
+                intent.setClass(MySolutionsActivity.this, EditActivity.class);
+                startActivity(intent);
+            }
+        });*/
+
+
+        /*
+         * todo 知识点:RecyclerView右键菜单的实现之三:我的方式
+         *      1,ViewHolder实现OnCreateContextMenuListener接口,
+         *       并在实现方法中inflate菜单布局(可将item的信息放入title),
+         *       并记录当前position(ViewHolder.getLayoutPosition()方法也可获得)
+         *      2,给adapter增加setPosition和getPosition方法,以便于在处理菜单事件时,获取item数据
+         *      3,让Activity重写onContextItemSelected,处理菜单事件
+         * */
+
+        mRvSolution.setAdapter(mAdapter);
+        /* todo 知识点:RecyclerView右键菜单的实现之一:复杂方式
+         *
+         *  步骤:1,item根布局添加longClickable="true"
+         *       2,registerForContextMenu,注册给activity
+         *       3,重载onCreateContextMenu和onContextItemSelected方法
+         * */
+
+        /* 方式二:
+         * 步骤:1,在ViewHolder中为每个itemView的根布局设置setOnLongClickListener监听，
+         *      2,然后在长按监听回调中设置当前的position，
+         *      3,为每个itemView设置setOnCreateContextMenuListener监听，通过上面记录的position来执行相应的动作。
+         * */
+    }
+
+/*  //在ViewHolder中设置了该监听,所以activity中已不需要.只需要复写onContextItemSelected
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_solutions, menu);
+    }*/
+
+    @Override
+    protected void initData() {
+        mSource = new SolutionRemoteDataSource();
+        mSource.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
+            @Override
+            public void onSolutionsLoaded(List<TurnSolution> solutions) {
+                LogUtils.d("获取的倒班表=" + solutions.toString());
+                mSolutions = solutions;
+                mAdapter.setData(mSolutions);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                Toast.makeText(MySolutionsActivity.this, "没有可用的倒班表", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void initView() {
+        //设置toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        //Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现
+        toolbar.setTitle("我的倒班");
+        setSupportActionBar(toolbar);
+        //显示返回按钮
+        if (getSupportActionBar() != null) {
+            LogUtils.d("toolbar found!");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+        } else {
+            LogUtils.d("toolbar not found!");
+        }
+
+        //查找控件
+        mRvSolution = findViewById(R.id.rv_solutions);
+    }
+
+    @Override
+    protected int initLayout() {
+        return R.layout.activity_my_solutions;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
     class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHolder> {
         private List<TurnSolution> mListData = new ArrayList<>();
-        private OnItemClickListener mListener = null;
-
-        public void setOnItemClickListener(OnItemClickListener listener) {
-            mListener = listener;
-        }
 
         public void setData(List<TurnSolution> listData) {
             mListData = listData;
@@ -146,137 +283,5 @@ public class MySolutionsActivity extends BaseActivity {
 
 
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-/*  //在ViewHolder中设置了该监听,所以activity中已不需要.只需要复写onContextItemSelected
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.menu_solutions, menu);
-    }*/
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_solutions_set_default:
-                Toast.makeText(this, "默认", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.menu_item_solutions_delete:
-                Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.menu_item_solutions_edit:
-                Intent intent = new Intent();
-                intent.putExtra(EditActivity.DATA_SOLUTION, mSolutions.get(mAdapter.getCurPostion()));
-                intent.setClass(MySolutionsActivity.this, EditActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
-        return super.onContextItemSelected(item);
-    }
-
-    @Override
-    protected void initEvent() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRvSolution.setLayoutManager(layoutManager);
-        mAdapter = new SolutionAdapter();
-        //todo 单击监听的响应事件,应该设定为修改默认,原app是查看
-/*        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent();
-                intent.putExtra(EditActivity.DATA_SOLUTION, mSolutions.get(position));
-                intent.setClass(MySolutionsActivity.this, EditActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
-
-        /*
-         * todo 知识点:RecyclerView右键菜单的实现之三:我的方式
-         *      1,ViewHolder实现OnCreateContextMenuListener接口,
-         *       并在实现方法中inflate菜单布局(可将item的信息放入title),
-         *       并记录当前position(ViewHolder.getLayoutPosition()方法也可获得)
-         *      2,给adapter增加setPosition和getPosition方法,以便于在处理菜单事件时,获取item数据
-         *      3,让Activity重写onContextItemSelected,处理菜单事件
-         * */
-
-        mRvSolution.setAdapter(mAdapter);
-        /* todo 知识点:RecyclerView右键菜单的实现之一:复杂方式
-         *
-         *  步骤:1,item根布局添加longClickable="true"
-         *       2,registerForContextMenu,注册给activity
-         *       3,重载onCreateContextMenu和onContextItemSelected方法
-         * */
-
-        /* 方式二:
-         * 步骤:1,在ViewHolder中为每个itemView的根布局设置setOnLongClickListener监听，
-         *      2,然后在长按监听回调中设置当前的position，
-         *      3,为每个itemView设置setOnCreateContextMenuListener监听，通过上面记录的position来执行相应的动作。
-         * */
-    }
-
-
-    @Override
-    protected void initData() {
-        mSource = new SolutionRemoteDataSource();
-        mSource.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
-            @Override
-            public void onSolutionsLoaded(List<TurnSolution> solutions) {
-                LogUtils.d("获取的倒班表=" + solutions.toString());
-                mSolutions = solutions;
-                mAdapter.setData(mSolutions);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                Toast.makeText(MySolutionsActivity.this, "没有可用的倒班表", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    protected void initView() {
-        //设置toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        //Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现
-        toolbar.setTitle("我的倒班");
-        setSupportActionBar(toolbar);
-        //显示返回按钮
-        if (getSupportActionBar() != null) {
-            LogUtils.d("toolbar found!");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-        } else {
-            LogUtils.d("toolbar not found!");
-        }
-
-        //查找控件
-        mRvSolution = findViewById(R.id.rv_solutions);
-    }
-
-    @Override
-    protected int initLayout() {
-        return R.layout.activity_my_solutions;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

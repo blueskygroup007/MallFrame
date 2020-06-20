@@ -1,17 +1,14 @@
 package com.bluesky.mallframe.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,18 +25,65 @@ import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.WorkDay;
 import com.bluesky.mallframe.data.WorkDayKind;
+import com.bluesky.mallframe.data.source.SolutionDataSource;
+import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorkDaySettingActivity extends BaseActivity {
 
     public static final String FLAG_INTENT_DATA = "DATA_WORK_DAY";
+    public static final int REQUESTCODE = 3;
+
     private RecyclerView mRvWorkDays;
     private TurnSolution mSolution;
     private List<WorkDay> mWorkDays;
     private WorkDayAdapter mAdapter;
     private BSNumberPicker mPicker;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //todo 不需要检查adapter的各种情况:重复,空缺等,只需要是否保存弹窗
+        if (mAdapter.isChanged()) {
+            showSaveDialog(new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SolutionDataSource mRemote = new SolutionRemoteDataSource();
+                    mSolution.setWorkdays(mWorkDays);
+                    mRemote.updateSolution(mSolution);
+                    dialog.dismiss();
+                    Intent data = new Intent();
+                    data.putExtra(FLAG_INTENT_DATA, mSolution);
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+            });
+        } else {
+            // todo 为什么父类方法不能finish?
+            setResult(RESULT_CANCELED);
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +101,8 @@ public class WorkDaySettingActivity extends BaseActivity {
                     mPicker.setNumber(++number);
                     if (number > size) {
                         //todo 错误：当number=0的时候，增加一个，此时，并没有数据可以克隆。
-                        //todo 思考：是应该最少剩一个条目，还是允许删光。
                         WorkDay workDay = mWorkDays.get(size - 1).clone();
+                        workDay.setNumber(number);
                         mWorkDays.add(workDay);
                         mAdapter.notifyDataSetChanged();
                     }
@@ -68,12 +112,14 @@ public class WorkDaySettingActivity extends BaseActivity {
             @Override
             public void onNumberDec(int number) {
                 int size = mWorkDays.size();
-                if (number > 0) {
+                if (number > 2) {
                     mPicker.setNumber(--number);
                     if (number < size) {
                         mWorkDays.remove(size - 1);
                         mAdapter.notifyDataSetChanged();
                     }
+                } else {
+                    Toast.makeText(WorkDaySettingActivity.this, getString(R.string.toast_work_day_setting_minimum), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -124,16 +170,25 @@ public class WorkDaySettingActivity extends BaseActivity {
         private final Context mContext;
         private final List<WorkDayKind> mKinds;
         private List<WorkDay> mData;
-        private WorkDayKindAdapter mWorkDayKindAdapter;
+        private List<WorkDay> mBackup = new ArrayList<>();
 
+        public boolean isChanged() {
+            LogUtils.d("周期比较=" + mData + "----" + mBackup);
+            return !isListEqual(mData, mBackup);
+        }
+
+        public List<WorkDay> getBackup() {
+            return mBackup;
+        }
 
         public WorkDayAdapter(List<WorkDay> list, List<WorkDayKind> kinds, Context context) {
-
             this.mData = list;
             this.mContext = context;
             this.mKinds = kinds;
-            mWorkDayKindAdapter = new WorkDayKindAdapter(mKinds, context);
-
+            for (WorkDay workDay :
+                    list) {
+                mBackup.add(workDay.clone());
+            }
         }
 
         public List<WorkDay> getData() {
@@ -156,23 +211,17 @@ public class WorkDaySettingActivity extends BaseActivity {
             return radioButton;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView mTvNumber;
-            GridView mGvWorkdays;
-            RadioGroup mRgWorkDays;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                mTvNumber = itemView.findViewById(R.id.tv_item_work_day_number);
-//                mGvWorkdays = itemView.findViewById(R.id.gv_item_work_day_kinds);
-                mRgWorkDays = itemView.findViewById(R.id.rg_item_work_day_kinds);
-            }
-        }
-
         @Override
         public void onViewRecycled(@NonNull ViewHolder holder) {
             super.onViewRecycled(holder);
             holder.mRgWorkDays.setOnCheckedChangeListener(null);
+            //清除所有Radiobutton的选中状态
+            for (int i = 0; i < mKinds.size(); i++) {
+                View childAt = holder.mRgWorkDays.getChildAt(i);
+                if (childAt instanceof RadioButton) {
+                    ((RadioButton) childAt).setChecked(false);
+                }
+            }
         }
 
         @NonNull
@@ -187,89 +236,55 @@ public class WorkDaySettingActivity extends BaseActivity {
             return viewHolder;
         }
 
-
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            //todo 问题:这里的序号采用的是WorkDay对象的number.其他地方用的是position
+            //numberPicker增加一项时,clone了当前项,并设置了新number
+            //两种方法取一,倾向于使用number成员变量
             holder.mTvNumber.setText(String.format("第%s天", mData.get(position).getNumber()));
+            holder.mRgWorkDays.clearCheck();
+            //给radiobutton设置选中状态,遍历,对比name是否相等
+            for (int i = 0; i < mKinds.size(); i++) {
+                View childAt = holder.mRgWorkDays.getChildAt(i);
+                if (childAt instanceof RadioButton) {
+                    if (mData.get(position).getWorkdaykind().getName().equals(mKinds.get(i).getName())) {
+                        ((RadioButton) childAt).setChecked(true);
+                    } else {
+                        ((RadioButton) childAt).setChecked(false);
 
+                    }
+                }
+            }
             holder.mRgWorkDays.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     group.getCheckedRadioButtonId();
-                    for (int i = 0; i < group.getChildCount() - 1; i++) {
+                    for (int i = 0; i < group.getChildCount(); i++) {
                         if (group.getChildAt(i).getId() == group.getCheckedRadioButtonId()) {
                             Toast.makeText(mContext, "点击的是：" + mKinds.get(i), Toast.LENGTH_SHORT).show();
-
+                            mData.get(position).setWorkdaykind(mKinds.get(i).clone());
+                            LogUtils.d("isChange=" + isChanged());
                         }
                     }
-                    mData.get(position).setWorkdaykind(mKinds.get(position).clone());
                 }
             });
-/*            mWorkDayKindAdapter.setOnSelectListener(new OnSelectListener() {
-                @Override
-                public void onSelected(int pos) {
-                    mData.get(position).setWorkdaykind(mKinds.get(pos).clone());
-                }
-            });
-            holder.mGvWorkdays.setAdapter(mWorkDayKindAdapter);*/
-        }
 
+        }
 
         @Override
         public int getItemCount() {
             return mData.size();
         }
 
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView mTvNumber;
+            RadioGroup mRgWorkDays;
 
-        class WorkDayKindAdapter extends BaseAdapter {
-            private List<WorkDayKind> mDataKinds;
-            private Context mContext;
-            private OnSelectListener mListener;
-
-            WorkDayKindAdapter(List<WorkDayKind> data, Context context) {
-                this.mDataKinds = data;
-                this.mContext = context;
-            }
-
-            public void setOnSelectListener(OnSelectListener listener) {
-                mListener = listener;
-            }
-
-            @Override
-            public int getCount() {
-                return mDataKinds.size();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return mDataKinds.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                RadioButton item = new RadioButton(mContext);
-                item.setText(mDataKinds.get(position).getName());
-                item.setBackgroundResource(R.drawable.bg_button_round_small_selector);
-                item.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mListener != null) {
-                            item.setSelected(!item.isSelected());
-                            mListener.onSelected(position);
-                        }
-                    }
-                });
-                return item;
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                mTvNumber = itemView.findViewById(R.id.tv_item_work_day_number);
+                mRgWorkDays = itemView.findViewById(R.id.rg_item_work_day_kinds);
             }
         }
-    }
-
-    public interface OnSelectListener {
-        void onSelected(int position);
     }
 }

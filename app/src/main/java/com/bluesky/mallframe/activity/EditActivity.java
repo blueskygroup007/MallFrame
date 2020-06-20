@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -25,6 +28,8 @@ import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.WorkDay;
 import com.bluesky.mallframe.data.WorkDayKind;
 import com.bluesky.mallframe.data.WorkGroup;
+import com.bluesky.mallframe.data.source.SolutionDataSource;
+import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 
 import java.util.List;
@@ -33,31 +38,32 @@ import java.util.List;
  * todo:改进:每个编辑页面返回时,记录是否修改.用以统计总配置是否改动.
  */
 public class EditActivity extends BaseActivity implements View.OnClickListener {
-    public static final String DATA_SOLUTION = "DATA_SOLUTION";
+    public static final String FLAG_INTENT_DATA = "DATA_SOLUTION";
+    public static final int REQUESTCODE = 4;
+    private static boolean FLAG_MODIFIED = false;
     private Toolbar toolbar;
-
     private BSNumberPicker mNumberPicker;
     private TurnSolution mSolution;
     private EditText mEtCompany;
     private EditText mEtFlag;
-
-
     private List<WorkDayKind> mWorkDayKinds;
     private List<WorkDay> mWorkDays;
     private List<WorkGroup> mWorkGroups;
-
     private ListView mLvWorkDayKind;
     private ListView mLvWorkGroup;
     private ListView mLvWorkDay;
-
     private TextView mTvTitleWorkDayKind;
     private TextView mTvTitleWorkGroup;
     private TextView mTvTitleWorkDay;
-
     private Button mBtnEditWorkDayKind;
     private Button mBtnEditWorkGroup;
     private Button mBtnEditWorkDay;
-
+    private InfoAdapter mAdapterWorkDayKind;
+    private InfoAdapter mAdapterWorkGroup;
+    private InfoAdapter mAdapterWorkDay;
+    private CheckBox mCbDefault;
+    private EditText mEtName;
+    private TurnSolution mBackup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +72,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        /*当从其他设置页面返回时，更新Edit页面的预览信息（3个list，1个自动生成标签的hint）*/
-        //todo 哪些放在onActivityResult中？
+        super.onResume(); /*当从其他设置页面返回时，更新Edit页面的预览信息（3个list，1个自动生成标签的hint）*//*todo 哪些放在onActivityResult中？*/
     }
 
     @Override
@@ -76,32 +80,69 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.btn_edit_work_day_kind:
-                intent.putExtra(WorkDayKindSettingActivity.FLAG_INTENT_DATA, mSolution);
-                intent.setClass(this, WorkDayKindSettingActivity.class);
-                startActivity(intent);
+                intent.putExtra(WorkDayKindSettingActivity.FLAG_INTENT_DATA, mSolution).setClass(this, WorkDayKindSettingActivity.class);
+                startActivityForResult(intent, WorkDayKindSettingActivity.REQUESTCODE);
                 break;
             case R.id.btn_edit_work_group:
-                intent.putExtra(WorkGroupSettingActivity.FLAG_INTENT_DATA, mSolution);
-                intent.setClass(this, WorkGroupSettingActivity.class);
-                startActivity(intent);
+                intent.putExtra(WorkGroupSettingActivity.FLAG_INTENT_DATA, mSolution).setClass(this, WorkGroupSettingActivity.class);
+                startActivityForResult(intent, WorkGroupSettingActivity.REQUESTCODE);
                 break;
             case R.id.btn_edit_work_day:
-                intent.putExtra(WorkDaySettingActivity.FLAG_INTENT_DATA, mSolution);
-                intent.setClass(this, WorkDaySettingActivity.class);
-                startActivity(intent);
+                intent.putExtra(WorkDaySettingActivity.FLAG_INTENT_DATA, mSolution).setClass(this, WorkDaySettingActivity.class);
+                startActivityForResult(intent, WorkDaySettingActivity.REQUESTCODE);
                 break;
             default:
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            //返回RESULT_OK就说明数据被修改过了.设定EditActivity的修改标志位
+            FLAG_MODIFIED = true;
+            switch (requestCode) {
+                case WorkDayKindSettingActivity.REQUESTCODE:
+                    mSolution = (TurnSolution) data.getSerializableExtra(WorkDayKindSettingActivity.FLAG_INTENT_DATA);
+                    mAdapterWorkDayKind.setData(mSolution.getWorkdaykinds());
+                    /* todo 知识点:notifyDataSetChanged()与 setAdapter()都能更新list.
+                            但是由于getListViewSelfHeight计算list高度后,需要setAdapter.
+                     */
+                    //因为可能新增了item,所以这里重新计算list高度,并重设adapter
+                    getListViewSelfHeight(mLvWorkDayKind);
+                    mLvWorkDayKind.setAdapter(mAdapterWorkDayKind);
+                    break;
+                case WorkGroupSettingActivity.REQUESTCODE:
+                    mSolution = (TurnSolution) data.getSerializableExtra(WorkGroupSettingActivity.FLAG_INTENT_DATA);
+                    mAdapterWorkGroup.setData(mSolution.getWorkgroups());
+                    getListViewSelfHeight(mLvWorkGroup);
+                    mLvWorkGroup.setAdapter(mAdapterWorkGroup);
+                    break;
+                case WorkDaySettingActivity.REQUESTCODE:
+                    mSolution = (TurnSolution) data.getSerializableExtra(WorkDaySettingActivity.FLAG_INTENT_DATA);
+                    mAdapterWorkDay.setData(mSolution.getWorkdays());
+                    getListViewSelfHeight(mLvWorkDay);
+                    mLvWorkDay.setAdapter(mAdapterWorkDay);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+
     class InfoAdapter extends BaseAdapter {
         private final Context mContext;
-        private final List mData;
+        private List mData;
 
         public InfoAdapter(List data, Context context) {
             mData = data;
             mContext = context;
+        }
+
+        public void setData(List data) {
+            mData = data;
         }
 
         @Override
@@ -120,54 +161,43 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            //todo 如果data为空或null.那么将各组的title设置成:未设置
-            TextView tvName = new TextView(mContext);
-            //todo 可以在这里判断mData.get()的类型.用以区分不同类型的输出方式:(WorkDay需要序号,如果不从WorkDay.number中取的话)
+        public View getView(int position, View convertView, ViewGroup parent) { /*todo 如果data为空或null.那么将各组的title设置成:未设置*/
+            TextView tvName = new TextView(mContext); /*todo 可以在这里判断mData.get()的类型.用以区分不同类型的输出方式:(WorkDay需要序号,如果不从WorkDay.number中取的话)*/
             tvName.setText(String.format("%s: %s", ((Iinformation) (mData.get(position))).getInfoName(), ((Iinformation) (mData.get(position))).getInfoDescribe()));
             return tvName;
         }
     }
 
     /**
-     * Todo 知识点:当ScroolView包裹ListView时,只能显示一行的解决方法
-     *
-     * @param listView
+     * Todo 知识点:当ScroolView包裹ListView时,只能显示一行的解决方法 @param listView
      */
-    public void getListViewSelfHeight(ListView listView) {
-        // 获取ListView对应的Adapter
-        ListAdapter listAdapter = listView.getAdapter();
-        //健壮性的判断
-        if (listAdapter == null) {
-            return;
-        }
-        // 统计所有子项的总高度
+    public void getListViewSelfHeight(ListView listView) { /* 获取ListView对应的Adapter*/
+        ListAdapter listAdapter = listView.getAdapter(); /*健壮性的判断*/
+        if (listAdapter == null) return;
         int totalHeight = 0;
-        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {
-            // listAdapter.getCount()返回数据项的数目
-            View listItem = listAdapter.getView(i, null, listView);
-            // 调用measure方法 传0是测量默认的大小
+        for (int i = 0, len = listAdapter.getCount(); i < len; i++) { /* listAdapter.getCount()返回数据项的数目*/
+            View listItem = listAdapter.getView(i, null, listView); /* 调用measure方法 传0是测量默认的大小*/
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
-        }
-        //通过父控件进行高度的申请
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        //listAdapter.getCount() - 1 从零开始 listView.getDividerHeight()获取子项间分隔符占用的高度
+        } /*通过父控件进行高度的申请*/
+        ViewGroup.LayoutParams params = listView.getLayoutParams(); /*listAdapter.getCount() - 1 从零开始 listView.getDividerHeight()获取子项间分隔符占用的高度*/
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
 
     @Override
-    protected void initEvent() {
-        //todo 将List<object>转换成Map<String,?>
-//        List<Iinformation> dataWorkDayKinds = list2map(mWorkDayKinds);
+    protected void initEvent() {//todo 将List<object>转换成Map<String,?> List<Iinformation> dataWorkDayKinds =
+//        list2map(mWorkDayKinds);
 //        ArrayMap<String, String> dataWorkDays = list2map(mWorkDays);
 //        ArrayMap<String, String> dataWorkGroups = list2map(mWorkGroups);
-        //todo 分别生成三个listview,来展示倒班数据
-        mLvWorkDayKind.setAdapter(new InfoAdapter(mWorkDayKinds, this));
-        mLvWorkGroup.setAdapter(new InfoAdapter(mWorkGroups, this));
-        mLvWorkDay.setAdapter(new InfoAdapter(mWorkDays, this));
-        //重新计算三个ListView的高度
+        /*todo 分别生成三个listview,来展示倒班数据*/
+        mAdapterWorkDayKind = new InfoAdapter(mWorkDayKinds, this);
+        mLvWorkDayKind.setAdapter(mAdapterWorkDayKind);
+        mAdapterWorkGroup = new InfoAdapter(mWorkGroups, this);
+        mLvWorkGroup.setAdapter(mAdapterWorkGroup);
+        mAdapterWorkDay = new InfoAdapter(mWorkDays, this);
+        mLvWorkDay.setAdapter(mAdapterWorkDay);
+        /*重新计算三个ListView的高度*/
         getListViewSelfHeight(mLvWorkDayKind);
         getListViewSelfHeight(mLvWorkGroup);
         getListViewSelfHeight(mLvWorkDay);
@@ -175,7 +205,18 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         mBtnEditWorkDayKind.setOnClickListener(this);
         mBtnEditWorkGroup.setOnClickListener(this);
         mBtnEditWorkDay.setOnClickListener(this);
-
+        //根据data初始化所有控件
+        mEtName.setText(mSolution.getName());
+        mEtCompany.setText(mSolution.getCompany());
+        mEtFlag.setText(mSolution.getFlags());
+        mCbDefault.setChecked(mSolution.getActive());
+        //默认勾选事件
+        mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mSolution.setActive(isChecked);
+            }
+        });
     }
 
 
@@ -197,29 +238,33 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initData() {
         Intent intent = getIntent();
-        mSolution = (TurnSolution) intent.getSerializableExtra(DATA_SOLUTION);
+        mSolution = (TurnSolution) intent.getSerializableExtra(FLAG_INTENT_DATA);
         mWorkDayKinds = mSolution.getWorkdaykinds();
         mWorkDays = mSolution.getWorkdays();
         mWorkGroups = mSolution.getWorkgroups();
+        //todo 进度:1.备份solution
+        //          2.返回时,把控件的值存回mSolution
+        //          3.比对两个solution
+        mBackup = mSolution.clone();
     }
 
     @Override
     protected void initView() {
-        //设置toolbar
+        /*设置toolbar*/
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //显示返回按钮
+        /*显示返回按钮*/
         if (getSupportActionBar() != null) {
             LogUtils.d("toolbar found!");
-            //显示左上角返回图标
+            /*显示左上角返回图标*/
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
-            //Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现
+            /*Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现*/
             getSupportActionBar().setTitle("编辑倒班");
             //显示应用程序图标
-//            getSupportActionBar().setIcon(R.drawable.ic_launcher_foreground);
+            /*            getSupportActionBar().setIcon(R.drawable.ic_launcher_foreground);*/
         } else {
             LogUtils.d("toolbar not found!");
         }
@@ -234,8 +279,10 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         mBtnEditWorkDayKind = findViewById(R.id.btn_edit_work_day_kind);
         mBtnEditWorkGroup = findViewById(R.id.btn_edit_work_group);
         mBtnEditWorkDay = findViewById(R.id.btn_edit_work_day);
+        mEtName = findViewById(R.id.et_solution_edit_name);
         mEtCompany = findViewById(R.id.et_solution_edit_company);
         mEtFlag = findViewById(R.id.et_solution_edit_flag);
+        mCbDefault = findViewById(R.id.cb_edit_default);
     }
 
     @Override
@@ -265,10 +312,22 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (FLAG_MODIFIED) {
+                    SolutionDataSource mRemote = new SolutionRemoteDataSource();
+                    mRemote.updateSolution(mSolution);
+                    Intent data = new Intent();
+                    data.putExtra(FLAG_INTENT_DATA, mSolution);
+                    setResult(RESULT_OK, data);
+                    finish();
+                } else {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
                 return true;
             case R.id.menu_item_action_toolbar_save:
-                //todo 保存倒班信息
+                /*todo 保存倒班信息*/
+                SolutionDataSource mRemote = new SolutionRemoteDataSource();
+                mRemote.updateSolution(mSolution);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

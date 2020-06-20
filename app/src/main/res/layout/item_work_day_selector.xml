@@ -31,10 +31,4 @@
         android:baselineAlignedChildIndex="0"
         android:orientation="horizontal" />
 
-    <!--    <GridView
-            android:id="@+id/gv_item_work_day_kinds"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:numColumns="5" />-->
 </LinearLayout>

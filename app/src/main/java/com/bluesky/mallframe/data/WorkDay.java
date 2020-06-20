@@ -1,5 +1,9 @@
 package com.bluesky.mallframe.data;
 
+import androidx.annotation.Nullable;
+
+import com.google.common.base.Objects;
+
 import java.util.Locale;
 
 import cn.bmob.v3.BmobObject;
@@ -27,6 +31,21 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
             e.printStackTrace();
         }
         return workDay;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkDay workDay = (WorkDay) o;
+        return Objects.equal(number, workDay.number) &&
+                Objects.equal(workdaykind, workDay.workdaykind) &&
+                Objects.equal(flag, workDay.flag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(number, workdaykind, flag);
     }
 
     public Integer getNumber() {

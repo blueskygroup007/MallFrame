@@ -46,4 +46,8 @@
     <string name="text_menu_item_solutions_edit">编辑</string>
     <string name="text_tv_solution_edit_flag">标签</string>
     <string name="hint_et_solution_edit_flag">请输入标签</string>
+    <string name="text_cb_edit_default">默认</string>
+    <string name="toast_work_day_setting_minimum">周期不得少于两天</string>
+    <string name="toast_work_group_setting_minimum">班组不得少于一个</string>
+    <string name="toast_work_day_kind_setting_minimum">班组不得少于一个</string>
 </resources>
