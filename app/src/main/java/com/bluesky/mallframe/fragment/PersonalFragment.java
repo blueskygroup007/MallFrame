@@ -12,9 +12,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.activity.EditActivity;
-import com.bluesky.mallframe.activity.WorkGroupSettingActivity;
 import com.bluesky.mallframe.activity.MySolutionsActivity;
 import com.bluesky.mallframe.activity.WorkDayKindSettingActivity;
+import com.bluesky.mallframe.activity.WorkGroupSettingActivity;
 import com.bluesky.mallframe.base.BaseFragment;
 import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
@@ -55,6 +55,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     protected void initView(View view) {
         //设置toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("我的");
+
         /*todo 知识点:在fragment中使用toolbar
          *  不再需要onCreateOptionsMenu和onOptionsItemSelected
          * 步骤一,告诉fragment,我有菜单

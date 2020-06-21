@@ -1,5 +1,6 @@
 package com.bluesky.mallframe.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
+import com.bluesky.mallframe.base.App;
+import com.bluesky.mallframe.base.AppConstant;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
@@ -49,9 +52,17 @@ public class MySolutionsActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_solutions_set_default:
                 Toast.makeText(this, "默认", Toast.LENGTH_SHORT).show();
+                setSolutionActive(mSolutions, mAdapter.getCurPostion());
                 break;
             case R.id.menu_item_solutions_delete:
-                Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
+                //todo 删除solution,要弹出对话框,对话框要改成能设定title的
+                App.showDialog(this, AppConstant.DELETE_DIALOG_RES, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MySolutionsActivity.this, "删除", Toast.LENGTH_SHORT).show();
+
+                    }
+                }, null);
                 break;
             case R.id.menu_item_solutions_edit:
                 Intent intent = new Intent();
@@ -71,17 +82,31 @@ public class MySolutionsActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case EditActivity.REQUESTCODE:
-                    //todo 如果返回的solution被设定为默认,则要取消其他的默认
-                    //todo 不管resultcode是ok还是cancel,solution都可能已经改变,因为有三个编辑子页面
+                    //如果返回的solution被设定为默认,则要取消其他的默认,因为默认只能有一个
+                    //不管resultcode是ok还是cancel,solution都可能已经改变,因为有三个编辑子页面
                     if (data != null) {
                         TurnSolution solution = (TurnSolution) data.getSerializableExtra(EditActivity.FLAG_INTENT_DATA);
                         mSolutions.set(mAdapter.getCurPostion(), solution);
+                        if (solution.getActive()) {
+                            setSolutionActive(mSolutions, mAdapter.getCurPostion());
+                        }
                         mAdapter.notifyDataSetChanged();
                     }
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    /**
+     * 取消其他solution的默认
+     *
+     * @param position
+     */
+    private void setSolutionActive(List<TurnSolution> list, int position) {
+        for (int i = 0; i < mSolutions.size(); i++) {
+            list.get(i).setActive(i == position);
         }
     }
 
@@ -219,7 +244,6 @@ public class MySolutionsActivity extends BaseActivity {
         public void onViewRecycled(@NonNull ViewHolder holder) {
             super.onViewRecycled(holder);
             holder.mCbDefault.setOnCheckedChangeListener(null);
-//            holder.mCvRoot.setOnLongClickListener(null);
         }
 
         @Override
@@ -229,24 +253,16 @@ public class MySolutionsActivity extends BaseActivity {
             holder.mTvName.setText(solution.getName());
             holder.mTvInfo.setText(String.format(Locale.CHINA, "天数:%d  班组:%d  %s", solution.getWorkdays().size(), solution.getWorkgroups().size(), solution.getDefaultWorkGroup()));
             String company = Strings.isNullOrEmpty(solution.getCompany()) ? "无" : solution.getCompany();
-            holder.mTvCompany.setText(String.format(Locale.CHINA, "公司:", company));
+            holder.mTvCompany.setText(String.format(Locale.CHINA, "公司:%s", company));
 
             holder.mCbDefault.setChecked(solution.getActive());
             holder.mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mListData.get(position).setActive(isChecked);
+                    setSolutionActive(mListData, position);
+                    notifyDataSetChanged();
                 }
             });
-//            if (mListener != null) {
-//                holder.mCvRoot.setOnLongClickListener(new View.OnLongClickListener() {
-//                    @Override
-//                    public boolean onLongClick(View v) {
-//                        mListener.onItemClick(v, position);
-//                        return true;
-//                    }
-//                });
-//            }
         }
 
         @Override

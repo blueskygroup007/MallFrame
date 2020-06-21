@@ -1,5 +1,6 @@
 package com.bluesky.mallframe.base;
 
+import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.data.WorkDayKind;
 
 import java.text.SimpleDateFormat;
@@ -37,5 +38,18 @@ public class AppConstant {
         REST_DAY.setEndtime("24:00");
 
     }
+
+    public static final App.DialogResource SAVE_DIALOG_RES = new App.DialogResource(R.drawable.ic_save_black_24dp
+            , "保存"
+            , "您修改了设置,是否保存?"
+            , "保存"
+            , "取消");
+
+    public static final App.DialogResource DELETE_DIALOG_RES = new App.DialogResource(R.drawable.ic_delete_black_24dp
+            , "删除"
+            , "确定要删除该项吗?"
+            , "删除"
+            , "取消");
+
 
 }

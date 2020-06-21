@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="@color/colorAccent"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M12,17.27L18.18,21l-1.64,-7.03L22,9.24l-7.19,-0.61L12,2 9.19,8.63 2,9.24l5.46,4.73L5.82,21z" />
+</vector><!--个人总结:
+        用途1:一张矢量图,多种颜色?没学会.在vector中,tint能替代fillcolor,或者使用tintMode布尔运算前景背景色
+        用途2:EditText有多个tint属性:backgroundTint,foregroundTint,能够改变下划线颜色,光标颜色等
+    -->
+    <!--Todo 知识点:android:tint属性,Tint意为着色器,是Android5.0引入的一个属性-->
+    <!--自 API 21 （Android M）开始，Android SDK 引入 tint 着色器,
+    可以随意改变安卓项目中图标或者 View 背景的颜色，一定程度上可以减少同一个样式不同颜色图标的数量，
+    从而起到 Apk 瘦身的作用。不过使用 tint 存在一定的兼容性问题-->
+
+    <!--android:tint：给图标着色的属性,值为所要着色的颜色值,没有版本限制;通常用于给透明通道的 png 图标或者点九图着色。
+        android:tintMode：图标着色模式,值为枚举类型,共有种可选值（add、multiply、screen、src_over、src_in、src_atop），仅可用于 API 21 及更高版本。
+ -->
+
+    <!--对应于给图片着色的这两个属性，给 View 背景着色也有两个属性：
+    backgroundTint 和 backgroundTintMode，用法相同，
+    只是作用于 android:background 属性。需要注意的是，这两个属性也只是作用于 API 21 及更高版本。-->

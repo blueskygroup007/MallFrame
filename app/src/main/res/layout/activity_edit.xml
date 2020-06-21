@@ -55,11 +55,11 @@
                 <!--todo 知识点:给checkbox更换勾选框样式-->
                 <CheckBox
                     android:id="@+id/cb_edit_default"
-                    android:button="@drawable/selector_checkbox_default"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_cb_edit_default"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:button="@drawable/selector_checkbox_default"
+                    android:text="@string/text_cb_edit_default" />
             </LinearLayout>
 
 

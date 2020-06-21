@@ -69,6 +69,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+
     /**
      * 是否保存的对话框
      */

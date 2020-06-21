@@ -1,6 +1,5 @@
 package com.bluesky.mallframe.fragment;
 
-import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,7 +27,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -185,6 +183,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     protected void initView(View view) {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("主页");
+
         setHasOptionsMenu(true);
         toolbar.inflateMenu(R.menu.menu_fragment_home);
 
