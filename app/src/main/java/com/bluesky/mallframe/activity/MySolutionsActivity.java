@@ -71,6 +71,8 @@ public class MySolutionsActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case EditActivity.REQUESTCODE:
+                    //todo 如果返回的solution被设定为默认,则要取消其他的默认
+                    //todo 不管resultcode是ok还是cancel,solution都可能已经改变,因为有三个编辑子页面
                     if (data != null) {
                         TurnSolution solution = (TurnSolution) data.getSerializableExtra(EditActivity.FLAG_INTENT_DATA);
                         mSolutions.set(mAdapter.getCurPostion(), solution);

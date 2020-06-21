@@ -13,7 +13,7 @@ public class WorkGroup extends BmobObject implements Cloneable,Iinformation {
     //班组名称
     private String name = "";
     //班组序号
-    private Integer number;
+    private Integer number=0;
     //倒班基准(日期,不含时间)
     private String basedate = "";
     //扩展参数

@@ -1,5 +1,7 @@
 package com.bluesky.mallframe.data;
 
+import com.google.common.base.Objects;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
     //是否激活
     private String company;
 
-    /* todo 知识点:Boolean和Integer包装类应该赋初值,否则默认初始值是null */
+    /* todo 知识点:Boolean和Integer包装类应该赋初值,否则默认初始值是null,String也该赋初值 */
     private Boolean active = false;
     //你是哪个班组(在list中的序号,第几个班组)
     private Integer yourgroup = 0;
@@ -35,10 +37,31 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
     //一共有几种工作日（日，中，夜，休）
     private List<WorkDayKind> workdaykinds = new ArrayList<>();
     //扩展参数
-    private String flags;
+    private String flags = "";
 
     public TurnSolution() {
         workdaykinds.add(REST_DAY);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TurnSolution solution = (TurnSolution) o;
+        return Objects.equal(user, solution.user) &&
+                Objects.equal(name, solution.name) &&
+                Objects.equal(company, solution.company) &&
+                Objects.equal(active, solution.active) &&
+                Objects.equal(yourgroup, solution.yourgroup) &&
+                Objects.equal(workdays, solution.workdays) &&
+                Objects.equal(workgroups, solution.workgroups) &&
+                Objects.equal(workdaykinds, solution.workdaykinds) &&
+                Objects.equal(flags, solution.flags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(user, name, company, active, yourgroup, workdays, workgroups, workdaykinds, flags);
     }
 
     @Override
@@ -47,6 +70,9 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
         TurnSolution turnSolution = null;
         try {
             turnSolution = (TurnSolution) super.clone();
+            turnSolution.workdays = new ArrayList<>();
+            turnSolution.workdaykinds = new ArrayList<>();
+            turnSolution.workgroups = new ArrayList<>();
             for (WorkDay workDay :
                     workdays) {
                 turnSolution.workdays.add(workDay.clone());

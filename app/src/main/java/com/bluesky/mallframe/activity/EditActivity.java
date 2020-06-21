@@ -1,6 +1,7 @@
 package com.bluesky.mallframe.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.ArrayMap;
@@ -210,13 +211,13 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         mEtCompany.setText(mSolution.getCompany());
         mEtFlag.setText(mSolution.getFlags());
         mCbDefault.setChecked(mSolution.getActive());
-        //默认勾选事件
-        mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        //默认勾选事件,不设置监听,否则直接就存储了,退出时无法比对修改项了.
+        /*mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mSolution.setActive(isChecked);
             }
-        });
+        });*/
     }
 
 
@@ -285,6 +286,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         mCbDefault = findViewById(R.id.cb_edit_default);
     }
 
+
     @Override
     protected int initLayout() {
         return R.layout.activity_edit;
@@ -312,26 +314,63 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (FLAG_MODIFIED) {
-                    SolutionDataSource mRemote = new SolutionRemoteDataSource();
-                    mRemote.updateSolution(mSolution);
-                    Intent data = new Intent();
-                    data.putExtra(FLAG_INTENT_DATA, mSolution);
-                    setResult(RESULT_OK, data);
-                    finish();
-                } else {
+                String name = mEtName.getText().toString().trim();
+                String company = mEtCompany.getText().toString().trim();
+                String flag = mEtFlag.getText().toString().trim();
+                boolean active = mCbDefault.isChecked();
+
+                LogUtils.d(name + mSolution.getName() + "---" + company + mSolution.getCompany()
+                        + "---" + flag + mSolution.getFlags() + "---" + active + mSolution.getActive()
+                );
+                if (name.equals(mSolution.getName())
+                        && company.equals(mSolution.getCompany())
+                        && flag.equals(mSolution.getFlags())
+                        && active == mSolution.getActive()) {
                     setResult(RESULT_CANCELED);
                     finish();
+                } else {
+                    //当前页面被修改过了,弹出保存对话框
+                    showSaveDialog(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent data = new Intent();
+                            data.putExtra(FLAG_INTENT_DATA, mSolution);
+                            setResult(RESULT_OK, data);
+                            saveSolution();
+                            dialog.dismiss();
+                            finish();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            setResult(RESULT_CANCELED);
+                            dialog.dismiss();
+                            finish();
+                        }
+                    });
                 }
+
                 return true;
             case R.id.menu_item_action_toolbar_save:
                 /*todo 保存倒班信息*/
-                SolutionDataSource mRemote = new SolutionRemoteDataSource();
-                mRemote.updateSolution(mSolution);
+                saveSolution();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void saveSolution(/*String name, String company, String flag, boolean active*/) {
+        SolutionDataSource mRemote = new SolutionRemoteDataSource();
+        mSolution.setName(mEtName.getText().toString().trim());
+        mSolution.setCompany(mEtCompany.getText().toString().trim());
+        mSolution.setActive(mCbDefault.isChecked());
+        mSolution.setFlags(mEtFlag.getText().toString().trim());
+//        mSolution.setName(name);
+//        mSolution.setCompany(company);
+//        mSolution.setFlags(flag);
+//        mSolution.setActive(active);
+        mRemote.updateSolution(mSolution);
     }
 }

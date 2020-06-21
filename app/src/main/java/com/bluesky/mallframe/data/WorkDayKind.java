@@ -13,15 +13,15 @@ import cn.bmob.v3.BmobObject;
  */
 public class WorkDayKind extends BmobObject implements Cloneable, Iinformation, Serializable {
     //序号
-    private Integer number;
+    private Integer number=0;
     //名称
-    private String name;
+    private String name="";
     //上班时间(不含秒的日期)
-    private String starttime;
+    private String starttime="";
     //下班时间(不含秒的日期)
-    private String endtime;
+    private String endtime="";
     //扩展参数
-    private String flag;
+    private String flag="";
 
     @Override
     public WorkDayKind clone() {

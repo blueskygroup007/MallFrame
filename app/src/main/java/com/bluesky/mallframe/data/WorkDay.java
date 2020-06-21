@@ -15,18 +15,18 @@ import cn.bmob.v3.BmobObject;
  */
 public class WorkDay extends BmobObject implements Cloneable, Iinformation {
     //序号
-    private Integer number;
+    private Integer number=0;
     //上什么班
     private WorkDayKind workdaykind;
     //扩展参数
-    private String flag;
+    private String flag="";
 
     @Override
     public WorkDay clone() {
         WorkDay workDay = null;
         try {
             workDay = (WorkDay) super.clone();
-            workDay.setWorkdaykind(workdaykind.clone());
+//            workDay.setWorkdaykind(workdaykind.clone());
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
