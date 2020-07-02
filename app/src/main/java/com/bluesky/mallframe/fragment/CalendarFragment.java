@@ -35,7 +35,9 @@ import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 /**
  * @author BlueSky
  * @date 2020/4/20
- * Description:
+ * Description: todo 修改了默认方案的话,重新回到CalendarFragment,需要刷新
+ * //todo Bug:因为WorkDay里面存储的是序列化的对象,所以当WorkGroup和WorkDayKind被修改后,workdays里面存储的还是原来的对象
+ * //todo 解决方案:WorkDay里只存储WorkDayKind的序号,就像solution里存储的getDefaultWorkGroup是序号一样.
  */
 public class CalendarFragment extends BaseFragment implements CalendarView.OnCalendarSelectListener,
         CalendarView.OnYearChangeListener,
@@ -165,7 +167,8 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
         List<WorkDay> workdays = solution.getWorkdays();
         final int termDays = workdays.size();
         //获取默认班组和基准日期
-        final WorkGroup defaultWorkGroup = solution.getWorkgroups().get(solution.getYourgroup());
+//        final WorkGroup defaultWorkGroup = solution.getWorkgroups().get(solution.getYourgroup());
+        final WorkGroup defaultWorkGroup = solution.getWorkgroups().get(solution.getDefaultWorkGroup());
         java.util.Calendar baseDate = java.util.Calendar.getInstance();
 
         try {

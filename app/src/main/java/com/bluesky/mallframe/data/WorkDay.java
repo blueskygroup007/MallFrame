@@ -12,12 +12,15 @@ import cn.bmob.v3.BmobObject;
  * @author BlueSky
  * @date 2020/4/26
  * Description:一圈中的某天,哪个班组上哪个班，例如：今天丙班上第一个白班，也就是一圈第一个班
+ * //todo 使用integer序号来代替实体WorkDayKind对象
  */
 public class WorkDay extends BmobObject implements Cloneable, Iinformation {
     //序号
     private Integer number=0;
     //上什么班
     private WorkDayKind workdaykind;
+    //班次序号
+    private Integer workdaykindnumber;
     //扩展参数
     private String flag="";
 

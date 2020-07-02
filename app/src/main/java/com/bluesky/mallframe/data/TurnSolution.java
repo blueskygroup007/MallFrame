@@ -96,7 +96,7 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
      *
      * @return 班组名字
      */
-    public String getDefaultWorkGroup() {
+/*    public String getDefaultWorkGroup() {
         for (WorkGroup workGroup :
                 workgroups) {
             if (workGroup.getFlag().equals(WorkGroup.FLAG_DEFAULT_WORKGROUP)) {
@@ -104,6 +104,20 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
             }
         }
         return "";
+    }*/
+
+    /**
+     * 获取自己所在的班组
+     *
+     * @return 班组序号
+     */
+    public int getDefaultWorkGroup() {
+        for (int i = 0; i < workgroups.size(); i++) {
+            if (workgroups.get(i).getFlag().equals(WorkGroup.FLAG_DEFAULT_WORKGROUP)) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     @Override
