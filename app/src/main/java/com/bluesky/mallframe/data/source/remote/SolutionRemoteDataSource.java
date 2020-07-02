@@ -1,7 +1,5 @@
 package com.bluesky.mallframe.data.source.remote;
 
-import android.util.Log;
-
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.User;
@@ -30,11 +28,7 @@ public class SolutionRemoteDataSource implements SolutionDataSource {
 
     @Override
     public void loadSolutions(LoadSolutionsCallback callback) {
-
         BmobQuery<TurnSolution> query = new BmobQuery<>();
-//      用此方式可以构造一个BmobPointer对象。只需要设置objectId就行
-//      Post post = new Post();
-//      post.setObjectId("ESIt3334");
         User user = BmobUser.getCurrentUser(User.class);
         query.addWhereEqualTo("user", user.getObjectId());
 //      希望同时查询该评论的发布者的信息，以及该帖子的作者的信息，这里用到上面`include`的并列对象查询和内嵌对象的查询
@@ -46,6 +40,8 @@ public class SolutionRemoteDataSource implements SolutionDataSource {
                 if (e == null) {
                     callback.onSolutionsLoaded(object);
                 } else {
+                    LogUtils.d("获取所有方案的错误信息:" + e.toString());
+
                     callback.onDataNotAvailable();
                 }
             }

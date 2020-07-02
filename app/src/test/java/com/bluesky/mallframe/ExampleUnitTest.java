@@ -4,13 +4,15 @@ import com.blankj.utilcode.constant.TimeConstants;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.TimeUtils;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Period;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -68,5 +70,23 @@ public class ExampleUnitTest {
         b.set(0, "zzz");
         System.out.println(CollectionUtils.isEqualCollection(a, b));
         System.out.println(a + "---" + b);
+    }
+
+    @Test
+    public void DateTest() {
+        Calendar startCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+        startCalendar.set(1978, 7, 28);
+        endCalendar.set(2020, 7, 1);
+        long millisOfDay = 24 * 60 * 60 * 1000;
+        System.out.println("第一种算法=" + (startCalendar.getTimeInMillis() - endCalendar.getTimeInMillis()) / millisOfDay);
+
+        DateTime start = new DateTime(1978, 7, 28, 0, 0);
+        DateTime end = new DateTime(2020, 7, 1, 0, 0);
+        int days = Days.daysBetween(start, end).getDays();
+        Period period = new Period(start, end);
+        System.out.println("year=" + period.getYears() + "month=" + period.getMonths() + "day=" + period.getDays());
+        Days days1 = Days.daysBetween(start, end);
+        System.out.println("第二种算法=" + Days.daysBetween(start, end).getDays());
     }
 }

@@ -3,13 +3,18 @@ package com.bluesky.mallframe.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentTransaction;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.base.BaseFragment;
+import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.User;
+import com.bluesky.mallframe.data.source.SolutionDataSource;
+import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.fragment.CalendarFragment;
 import com.bluesky.mallframe.fragment.HomeFragment;
 import com.bluesky.mallframe.fragment.PersonalFragment;
@@ -18,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
-    public static final String PARAM = "USER";
+    public static final String FLAG_INTENT_DATA = "DATA_USER";
+
     private RadioGroup mRgMain;
 
     private List<BaseFragment> mFragments;
@@ -62,11 +68,16 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        LogUtils.d("MainActivity initData()");
         Intent intent = getIntent();
-        User user = (User) intent.getSerializableExtra(PARAM);
+        User user = (User) intent.getSerializableExtra(FLAG_INTENT_DATA);
         if (user != null) {
-//            mTvInfo.setText(user.toString());
+            //todo 计划在这里获取三个fragment所需的所有后台数据。
+        } else {
+            Toast.makeText(this, "获取用户失败！！", Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     @Override

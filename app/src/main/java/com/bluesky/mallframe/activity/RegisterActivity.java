@@ -206,7 +206,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if (e == null) {
                     Toast.makeText(RegisterActivity.this, "短信注册或登录成功：" + bmobUser.getUsername(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    intent.putExtra(MainActivity.PARAM, bmobUser);
+                    intent.putExtra(MainActivity.FLAG_INTENT_DATA, bmobUser);
                     startActivity(intent);
                 } else {
                     Toast.makeText(RegisterActivity.this, "短信注册或登录失败：" + e.getErrorCode() + "-" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -257,7 +257,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     LogUtils.d("短信注册或登录成功：" + user.getUsername());
                     Toast.makeText(RegisterActivity.this, "短信注册或登录成功：" + user.getUsername(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    intent.putExtra(MainActivity.PARAM, user);
+                    intent.putExtra(MainActivity.FLAG_INTENT_DATA, user);
                     startActivity(intent);
                     finish();
                 } else {

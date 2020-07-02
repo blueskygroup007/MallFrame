@@ -13,14 +13,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.activity.EditActivity;
 import com.bluesky.mallframe.activity.MySolutionsActivity;
-import com.bluesky.mallframe.activity.WorkDayKindSettingActivity;
-import com.bluesky.mallframe.activity.WorkGroupSettingActivity;
 import com.bluesky.mallframe.base.BaseFragment;
-import com.bluesky.mallframe.data.TurnSolution;
-import com.bluesky.mallframe.data.source.SolutionDataSource;
-import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
-
-import java.util.List;
 
 /**
  * @author BlueSky
@@ -29,20 +22,11 @@ import java.util.List;
  */
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
     private TextView mTvTitle;
-    private Button mBtnEdit, mBtnOne, mBtnTwo, mBtnThree, mBtnFour;
-    private SolutionDataSource mRemote = new SolutionRemoteDataSource();
-
     private Button mBtnMySolutions;
 
     @Override
     protected void initEvent() {
         mBtnMySolutions.setOnClickListener(this);
-        mBtnEdit.setOnClickListener(this);
-
-        mBtnOne.setOnClickListener(this);
-        mBtnTwo.setOnClickListener(this);
-        mBtnThree.setOnClickListener(this);
-        mBtnFour.setOnClickListener(this);
     }
 
     @Override
@@ -78,13 +62,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             }
         });
         mTvTitle = view.findViewById(R.id.tv_fragment_personal_title);
-        mBtnEdit = view.findViewById(R.id.btn_personal_edit);
-
-        mBtnOne = view.findViewById(R.id.btn_one);
-        mBtnTwo = view.findViewById(R.id.btn_two);
-        mBtnThree = view.findViewById(R.id.btn_three);
-        mBtnFour = view.findViewById(R.id.btn_four);
-
         mBtnMySolutions = view.findViewById(R.id.btn_personal_my_solution);
     }
 
@@ -101,57 +78,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 intent.setClass(mContext, MySolutionsActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.btn_personal_edit:
-                intent.setClass(mContext, EditActivity.class);
-                startActivity(intent);
-                break;
 
-            case R.id.btn_one:
-                intent.setClass(mContext, WorkGroupSettingActivity.class);
-                startActivity(intent);
-
-                break;
-            case R.id.btn_two:
-                intent.setClass(mContext, WorkDayKindSettingActivity.class);
-                startActivity(intent);
-
-                break;
-
-            case R.id.btn_three:
-                //班组设置
-                //todo 这里耗时太长了.应该先显示activity,在activity里面去取数据库,回调时,更新list
-                mRemote.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
-                    @Override
-                    public void onSolutionsLoaded(List<TurnSolution> solutions) {
-
-                        intent.putExtra(WorkGroupSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
-                        intent.setClass(mContext, WorkGroupSettingActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable() {
-
-                    }
-                });
-                break;
-            case R.id.btn_four:
-                //周期设置
-                mRemote.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
-                    @Override
-                    public void onSolutionsLoaded(List<TurnSolution> solutions) {
-
-                        intent.putExtra(WorkDayKindSettingActivity.FLAG_INTENT_DATA, solutions.get(0));
-                        intent.setClass(mContext, WorkDayKindSettingActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable() {
-
-                    }
-                });
-                break;
             default:
 
         }

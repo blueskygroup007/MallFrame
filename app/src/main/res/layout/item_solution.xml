@@ -2,12 +2,12 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="10dp"
     app:cardElevation="3dp"
-    android:id="@+id/card_root"
     app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="true">
     <!--app:cardUseCompatPadding="true"   // 如果您需要将CardView与其他视图对齐，可能在21以下，可以将此标志设置为true，CardView将在21之后的平台上添加相同的填充值。
@@ -67,14 +67,22 @@
             app:layout_constraintTop_toBottomOf="@id/tv_info"
             tools:text="公司:唐钢二炼铁" />
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1px"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/cb_default"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/cb_default"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginRight="@dimen/devider_margin"
+            android:background="@drawable/bg_selector_checkbox_yours"
             android:button="@drawable/selector_checkbox_default"
             android:text="@string/text_cb_edit_default"
-            android:background="@drawable/bg_selector_checkbox_yours"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

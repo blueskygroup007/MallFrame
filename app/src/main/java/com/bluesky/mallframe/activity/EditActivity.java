@@ -10,11 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +24,7 @@ import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.data.Iinformation;
 import com.bluesky.mallframe.data.TurnSolution;
+import com.bluesky.mallframe.data.User;
 import com.bluesky.mallframe.data.WorkDay;
 import com.bluesky.mallframe.data.WorkDayKind;
 import com.bluesky.mallframe.data.WorkGroup;
@@ -32,6 +33,10 @@ import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * todo:改进:每个编辑页面返回时,记录是否修改.用以统计总配置是否改动.
@@ -60,7 +65,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     private InfoAdapter mAdapterWorkDayKind;
     private InfoAdapter mAdapterWorkGroup;
     private InfoAdapter mAdapterWorkDay;
-    private CheckBox mCbDefault;
+    //    private CheckBox mCbDefault;
     private EditText mEtName;
     private TurnSolution mBackup;
 
@@ -208,14 +213,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         mEtName.setText(mSolution.getName());
         mEtCompany.setText(mSolution.getCompany());
         mEtFlag.setText(mSolution.getFlags());
-        mCbDefault.setChecked(mSolution.getActive());
-        //默认勾选事件,不设置监听,否则直接就存储了,退出时无法比对修改项了.
-        /*mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mSolution.setActive(isChecked);
-            }
-        });*/
+//        mCbDefault.setChecked(mSolution.getActive());
+
     }
 
 
@@ -281,7 +280,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         mEtName = findViewById(R.id.et_solution_edit_name);
         mEtCompany = findViewById(R.id.et_solution_edit_company);
         mEtFlag = findViewById(R.id.et_solution_edit_flag);
-        mCbDefault = findViewById(R.id.cb_edit_default);
+//        mCbDefault = findViewById(R.id.cb_edit_default);
     }
 
 
@@ -333,37 +332,18 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         String name = mEtName.getText().toString().trim();
         String company = mEtCompany.getText().toString().trim();
         String flag = mEtFlag.getText().toString().trim();
-        boolean active = mCbDefault.isChecked();
+//        boolean active = mCbDefault.isChecked();
 
         LogUtils.d(name + mSolution.getName() + "---" + company + mSolution.getCompany()
-                + "---" + flag + mSolution.getFlags() + "---" + active + mSolution.getActive()
+                + "---" + flag + mSolution.getFlags()
         );
         if ((!FLAG_MODIFIED) && (name.equals(mSolution.getName())
                 && company.equals(mSolution.getCompany())
                 && flag.equals(mSolution.getFlags())
-                && active == mSolution.getActive())) {
+        )) {
             setResult(RESULT_CANCELED);
             finish();
         } else {
-            //当前页面被修改过了,弹出保存对话框
-/*            showSaveDialog(new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent data = new Intent();
-                    data.putExtra(FLAG_INTENT_DATA, mSolution);
-                    setResult(RESULT_OK, data);
-                    saveSolution();
-                    dialog.dismiss();
-                    finish();
-                }
-            }, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    setResult(RESULT_CANCELED);
-                    dialog.dismiss();
-                    finish();
-                }
-            });*/
 
             //todo 未完成部分:这里应该加入空项检测
             //当前页面项修改过,或者3个list修改过,就直接保存退出
@@ -379,12 +359,10 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         SolutionDataSource mRemote = new SolutionRemoteDataSource();
         mSolution.setName(mEtName.getText().toString().trim());
         mSolution.setCompany(mEtCompany.getText().toString().trim());
-        mSolution.setActive(mCbDefault.isChecked());
         mSolution.setFlags(mEtFlag.getText().toString().trim());
-//        mSolution.setName(name);
-//        mSolution.setCompany(company);
-//        mSolution.setFlags(flag);
-//        mSolution.setActive(active);
+
         mRemote.updateSolution(mSolution);
+
+
     }
 }

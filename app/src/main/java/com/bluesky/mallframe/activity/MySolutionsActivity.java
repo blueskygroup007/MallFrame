@@ -105,7 +105,11 @@ public class MySolutionsActivity extends BaseActivity {
      * @param position
      */
     private void setSolutionActive(List<TurnSolution> list, int position) {
+        //两个方案,目前用方案1
+        //1.每个solution中都有activie标识
+        //2.User中有默认solution字段
         for (int i = 0; i < mSolutions.size(); i++) {
+
             list.get(i).setActive(i == position);
         }
     }
@@ -160,6 +164,7 @@ public class MySolutionsActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+
         mSource = new SolutionRemoteDataSource();
         mSource.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
             @Override

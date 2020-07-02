@@ -112,6 +112,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         PreferenceUtils.put("password", pwd);
                     }
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra(MainActivity.FLAG_INTENT_DATA, user);
                     startActivity(intent);
                     finish();
                     //因为后台没有开启邮箱验证,所以,如果启用,会报错9015
