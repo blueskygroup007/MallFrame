@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -24,7 +23,6 @@ import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.data.Iinformation;
 import com.bluesky.mallframe.data.TurnSolution;
-import com.bluesky.mallframe.data.User;
 import com.bluesky.mallframe.data.WorkDay;
 import com.bluesky.mallframe.data.WorkDayKind;
 import com.bluesky.mallframe.data.WorkGroup;
@@ -33,10 +31,6 @@ import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.ui.BSNumberPicker;
 
 import java.util.List;
-
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * todo:改进:每个编辑页面返回时,记录是否修改.用以统计总配置是否改动.
@@ -138,11 +132,16 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 
     class InfoAdapter extends BaseAdapter {
         private final Context mContext;
+        private final TextView mTitle;
         private List mData;
+        private final String mStrTitle;
 
-        public InfoAdapter(List data, Context context) {
+
+        public InfoAdapter(List data, Context context, TextView title) {
             mData = data;
             mContext = context;
+            mTitle = title;
+            mStrTitle = mTitle.getText().toString();
         }
 
         public void setData(List data) {
@@ -167,7 +166,34 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) { /*todo 如果data为空或null.那么将各组的title设置成:未设置*/
             TextView tvName = new TextView(mContext); /*todo 可以在这里判断mData.get()的类型.用以区分不同类型的输出方式:(WorkDay需要序号,如果不从WorkDay.number中取的话)*/
-            tvName.setText(String.format("%s: %s", ((Iinformation) (mData.get(position))).getInfoName(), ((Iinformation) (mData.get(position))).getInfoDescribe()));
+
+            //todo 知识点:List未分配空间为null,只分配了空间则为isEmpty=true;
+            if (mData == null || mData.isEmpty()) {
+                mTitle.setText(String.format("%s未设置", mStrTitle));
+            } else {
+                mTitle.setText(mStrTitle);
+                if (mData.get(0) instanceof WorkDayKind) {
+                    tvName.setText(String.format("%s: %s"
+                            , ((Iinformation) (mData.get(position))).getInfoName()
+                            , ((Iinformation) (mData.get(position))).getInfoDescribe()));
+
+                }
+                if (mData.get(0) instanceof WorkGroup) {
+                    tvName.setText(String.format("%s: %s"
+                            , ((Iinformation) (mData.get(position))).getInfoName()
+                            , ((Iinformation) (mData.get(position))).getInfoDescribe()));
+
+                }
+                if (mData.get(0) instanceof WorkDay) {
+                    tvName.setText(String.format("%s: %s"
+                            , ((Iinformation) (mData.get(position))).getInfoName()
+                            , mSolution.getWorkdaykinds().get(((WorkDay) (mData.get(position))).getWorkdaykindnumber()).getInfoName()));
+
+                }
+
+
+            }
+
             return tvName;
         }
     }
@@ -195,11 +221,11 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
 //        ArrayMap<String, String> dataWorkDays = list2map(mWorkDays);
 //        ArrayMap<String, String> dataWorkGroups = list2map(mWorkGroups);
         /*todo 分别生成三个listview,来展示倒班数据*/
-        mAdapterWorkDayKind = new InfoAdapter(mWorkDayKinds, this);
+        mAdapterWorkDayKind = new InfoAdapter(mWorkDayKinds, this, mTvTitleWorkDayKind);
         mLvWorkDayKind.setAdapter(mAdapterWorkDayKind);
-        mAdapterWorkGroup = new InfoAdapter(mWorkGroups, this);
+        mAdapterWorkGroup = new InfoAdapter(mWorkGroups, this, mTvTitleWorkGroup);
         mLvWorkGroup.setAdapter(mAdapterWorkGroup);
-        mAdapterWorkDay = new InfoAdapter(mWorkDays, this);
+        mAdapterWorkDay = new InfoAdapter(mWorkDays, this, mTvTitleWorkDay);
         mLvWorkDay.setAdapter(mAdapterWorkDay);
         /*重新计算三个ListView的高度*/
         getListViewSelfHeight(mLvWorkDayKind);

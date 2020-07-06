@@ -1,10 +1,11 @@
 package com.bluesky.mallframe.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -40,8 +41,7 @@ import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
  * //todo 解决方案:WorkDay里只存储WorkDayKind的序号,就像solution里存储的getDefaultWorkGroup是序号一样.
  */
 public class CalendarFragment extends BaseFragment implements CalendarView.OnCalendarSelectListener,
-        CalendarView.OnYearChangeListener,
-        View.OnClickListener {
+        CalendarView.OnYearChangeListener {
 
     TextView mTextMonthDay;
 
@@ -61,6 +61,8 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
     //    GroupRecyclerView mRecyclerView;
 
     int[] workDayColor = new int[]{0xFF000000, 0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFF800000, 0xFFff8c00, 0xFF808000, 0xFF00ffff};
+    private Map<String, Calendar> mCalendarMap;
+    private Map<String, Calendar> mGeneralMap;
 
 
     @SuppressLint("SetTextI18n")
@@ -107,10 +109,6 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
         mTextLunar.setText("今日");
         mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
 
-        Button btnTest1 = view.findViewById(R.id.btn_calendar_test1);
-        Button btnTest2 = view.findViewById(R.id.btn_calendar_test2);
-        btnTest1.setOnClickListener(this);
-        btnTest2.setOnClickListener(this);
     }
 
     @Override
@@ -120,17 +118,51 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
     }
 
     @Override
+    public void setData(Map<String, Calendar> map) {
+        if (mCalendarMap == null) {
+            mCalendarMap = map;
+            if (mCalendarView != null) {
+                mCalendarView.setSchemeDate(map);
+            }
+        }
+    }
+
+    @Override
     protected void initEvent() {
 
     }
 
     @Override
     protected void initData() {
-        generateCalendarData();
-
+/*        generateCalendarData(false);
+        new MapTask().execute();*/
+        if (mCalendarMap != null) {
+            mCalendarView.setSchemeDate(mCalendarMap);
+        }
     }
 
-    private void generateCalendarData() {
+    class MapTask extends AsyncTask<Void, Void, Map<String, Calendar>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(mContext, "启动生成Map线程!!!", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Map<String, Calendar> doInBackground(Void... voids) {
+            generateCalendarData(true);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Map<String, Calendar> stringCalendarMap) {
+            super.onPostExecute(stringCalendarMap);
+            Toast.makeText(mContext, "所有年份的Map已经生成!!!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void generateCalendarData(boolean isAll) {
         //1.获取active的solution
         SolutionRemoteDataSource source = new SolutionRemoteDataSource();
         source.loadSolutions(new SolutionDataSource.LoadSolutionsCallback() {
@@ -145,7 +177,11 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
                 }
                 //2.根据solution来生成map
                 if (mSolution != null) {
-                    generateMap(mSolution);
+                    if (isAll) {
+                        generateMapManyYear(mSolution);
+                    } else {
+                        generateMapCurrentYear(mSolution);
+                    }
                 }
             }
 
@@ -162,7 +198,9 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
      *
      * @param solution
      */
-    private void generateMap(TurnSolution solution) {
+    private void generateMapManyYear(TurnSolution solution) {
+        LogUtils.d("开始生成Map:-----所有年");
+
         //获取周期list和天数
         List<WorkDay> workdays = solution.getWorkdays();
         final int termDays = workdays.size();
@@ -202,7 +240,7 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
                     int number = interval % termDays;
                     //todo 3.生成每一个Scheme
                     try {
-                        WorkDayKind workdaykind = workdays.get(number).getWorkdaykind();
+                        WorkDayKind workdaykind = mSolution.getWorkdaykinds().get(workdays.get(number).getWorkdaykindnumber());
                         map.put(getSchemeCalendar(y, i, j, workDayColor[number], workdaykind.getName()).toString(),
                                 getSchemeCalendar(y, i, j, workDayColor[number], workdaykind.getName()));
                     } catch (Exception e) {
@@ -212,74 +250,77 @@ public class CalendarFragment extends BaseFragment implements CalendarView.OnCal
                 }
             }
         }
-
-
-
-        /*map.put(getSchemeCalendar(year, month, 3, 0xFF40db25, "假").toString(),
-                getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
-        map.put(getSchemeCalendar(year, month, 6, 0xFFe69138, "事").toString(),
-                getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
-        map.put(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议").toString(),
-                getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
-        map.put(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记").toString(),
-                getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
-        map.put(getSchemeCalendar(year, month, 14, 0xFFedc56d, "记").toString(),
-                getSchemeCalendar(year, month, 14, 0xFFedc56d, "记"));
-        map.put(getSchemeCalendar(year, month, 15, 0xFFaacc44, "假").toString(),
-                getSchemeCalendar(year, month, 15, 0xFFaacc44, "假"));
-        map.put(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记").toString(),
-                getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
-        map.put(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假").toString(),
-                getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
-        map.put(getSchemeCalendar(year, month, 27, 0xFF13acf0, "多").toString(),
-                getSchemeCalendar(year, month, 27, 0xFF13acf0, "多"));*/
         //此方法在巨大的数据量上不影响遍历性能，推荐使用
+        mGeneralMap=map;
         mCalendarView.setSchemeDate(map);
+        LogUtils.d("开始生成Map:-----所有年----完成");
+
     }
 
-
     /**
-     * 计算间隔天数
+     * 生成日历所需的map
      *
-     * @param c1
-     * @param c2
-     * @return
+     * @param solution
      */
-    private long daysBetween(java.util.Calendar c1, java.util.Calendar c2) {
-        long millisOfDay = 24 * 60 * 60 * 1000;
-        return (c1.getTimeInMillis() - c2.getTimeInMillis()) / millisOfDay;
+    private void generateMapCurrentYear(TurnSolution solution) {
+        LogUtils.d("开始生成Map:-----当前年");
+
+        //获取周期list和天数
+        List<WorkDay> workdays = solution.getWorkdays();
+        final int termDays = workdays.size();
+        //获取默认班组和基准日期
+//        final WorkGroup defaultWorkGroup = solution.getWorkgroups().get(solution.getYourgroup());
+        final WorkGroup defaultWorkGroup = solution.getWorkgroups().get(solution.getDefaultWorkGroup());
+        java.util.Calendar baseDate = java.util.Calendar.getInstance();
+
+        try {
+            Date date = FORMAT_ONLY_DATE.parse(defaultWorkGroup.getBasedate());
+            baseDate.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DateTime baseTime = new DateTime(baseDate);
+
+        LogUtils.d("baseTime=" + baseTime);
+        int year = mCalendarView.getCurYear();
+        int month = mCalendarView.getCurMonth();
+        LogUtils.d("当前year=" + year + "年" + month + "月");
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        DateTime everyDay;
+        Map<String, Calendar> map = new HashMap<>();
+
+        //1.遍历当前年的每一天
+        calendar.set(java.util.Calendar.YEAR, year);
+        for (int i = 1; i <= 12; i++) {
+            calendar.set(java.util.Calendar.MONTH, i - 1);
+            for (int j = 1; j <= calendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH); j++) {
+                calendar.set(java.util.Calendar.DAY_OF_MONTH, j);
+                everyDay = new DateTime(calendar);
+                //2.计算两个日期相差天数,可以为负值,所以用绝对值
+                int interval = Math.abs(daysBetween(everyDay, baseTime));
+//                LogUtils.d("everyDay=" + everyDay + "| interval=" + interval);
+                //取余
+                int number = interval % termDays;
+                //todo 3.生成每一个Scheme
+                try {
+                    WorkDayKind workdaykind = mSolution.getWorkdaykinds().get(workdays.get(number).getWorkdaykindnumber());
+                    map.put(getSchemeCalendar(year, i, j, workDayColor[number], workdaykind.getName()).toString(),
+                            getSchemeCalendar(year, i, j, workDayColor[number], workdaykind.getName()));
+                } catch (Exception e) {
+                    LogUtils.e(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+        //此方法在巨大的数据量上不影响遍历性能，推荐使用
+        mCalendarView.setSchemeDate(map);
+        LogUtils.d("开始生成Map:-----当前年----完成");
+
     }
 
     private int daysBetween(DateTime start, DateTime end) {
         return Days.daysBetween(start, end).getDays();
     }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_calendar_test1:
-
-                break;
-            case R.id.btn_calendar_test2:
-
-                break;
-            default:
-
-        }
-
-    }
-
-
-    private Calendar getSchemeCalendar2(int year, int month, int day, int color, String text) {
-        Calendar calendar = new Calendar();
-        calendar.setYear(year);
-        calendar.setMonth(month);
-        calendar.setDay(day);
-        calendar.setSchemeColor(color);//如果单独标记颜色、则会使用这个颜色
-        calendar.setScheme(text);
-        return calendar;
-    }
-
 
     private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
         Calendar calendar = new Calendar();

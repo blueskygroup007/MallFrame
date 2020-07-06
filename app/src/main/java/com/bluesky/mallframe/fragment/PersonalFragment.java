@@ -14,6 +14,9 @@ import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.activity.EditActivity;
 import com.bluesky.mallframe.activity.MySolutionsActivity;
 import com.bluesky.mallframe.base.BaseFragment;
+import com.haibin.calendarview.Calendar;
+
+import java.util.Map;
 
 /**
  * @author BlueSky
@@ -68,6 +71,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected int setLayout() {
         return R.layout.fragment_personal;
+    }
+
+    @Override
+    public void setData(Map<String, Calendar> map) {
+
     }
 
     @Override

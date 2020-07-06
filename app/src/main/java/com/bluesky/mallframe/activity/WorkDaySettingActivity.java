@@ -247,7 +247,7 @@ public class WorkDaySettingActivity extends BaseActivity {
             for (int i = 0; i < mKinds.size(); i++) {
                 View childAt = holder.mRgWorkDays.getChildAt(i);
                 if (childAt instanceof RadioButton) {
-                    if (mData.get(position).getWorkdaykind().getName().equals(mKinds.get(i).getName())) {
+                    if (mData.get(position).getWorkdaykindnumber() == i) {
                         ((RadioButton) childAt).setChecked(true);
                     } else {
                         ((RadioButton) childAt).setChecked(false);
@@ -262,7 +262,7 @@ public class WorkDaySettingActivity extends BaseActivity {
                     for (int i = 0; i < group.getChildCount(); i++) {
                         if (group.getChildAt(i).getId() == group.getCheckedRadioButtonId()) {
                             Toast.makeText(mContext, "点击的是：" + mKinds.get(i), Toast.LENGTH_SHORT).show();
-                            mData.get(position).setWorkdaykind(mKinds.get(i).clone());
+                            mData.get(position).setWorkdaykindnumber(i);
                             LogUtils.d("isChange=" + isChanged());
                         }
                     }

@@ -13,17 +13,17 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 public class User extends BmobUser {
     //昵称
-    private String nickname;
+    private String nickname="";
     //注册时间
-    private String registerdate;
+    private String registerdate="";
     //签名
-    private String desc;
+    private String desc="";
     //年龄
-    private Integer age;
+    private Integer age=0;
     //性别
-    private Boolean gender;
+    private Boolean gender=true;
     //头像
-    private BmobFile avatar;
+    private BmobFile avatar=null;
 
 
     public User() {

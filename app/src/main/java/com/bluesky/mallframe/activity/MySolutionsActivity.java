@@ -108,9 +108,13 @@ public class MySolutionsActivity extends BaseActivity {
         //两个方案,目前用方案1
         //1.每个solution中都有activie标识
         //2.User中有默认solution字段
-        for (int i = 0; i < mSolutions.size(); i++) {
 
+        //遍历设置每个solution的active
+        for (int i = 0; i < mSolutions.size(); i++) {
             list.get(i).setActive(i == position);
+            //更新后台每条solution
+            SolutionRemoteDataSource remote = new SolutionRemoteDataSource();
+            remote.updateSolution(list.get(i));
         }
     }
 

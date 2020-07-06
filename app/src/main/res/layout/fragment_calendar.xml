@@ -106,9 +106,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#fff"
+            app:calendar_height="@dimen/avatar_width_height"
             app:calendar_padding="10dp"
             app:current_month_lunar_text_color="#CFCFCF"
             app:current_month_text_color="#333333"
+            app:day_text_size="26sp"
+            app:lunar_text_size="12sp"
             app:max_year="2050"
             app:min_year="1950"
             app:month_view="com.bluesky.mallframe.ui.CustomMonthView"
@@ -124,6 +127,7 @@
             app:week_background="#fff"
             app:week_start_with="sun"
             app:week_text_color="#e1e1e1"
+            app:week_text_size="20sp"
             app:week_view="com.bluesky.mallframe.ui.CustomWeekView"
             app:year_view="com.bluesky.mallframe.ui.CustomYearView"
             app:year_view_day_text_color="#333333"
@@ -138,17 +142,17 @@
 
     </com.haibin.calendarview.CalendarLayout>
 
-    <Button
-        android:id="@+id/btn_calendar_test1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="测试1" />
+    <!--    <Button
+            android:id="@+id/btn_calendar_test1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试1" />
 
-    <Button
-        android:id="@+id/btn_calendar_test2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="测试2" />
+        <Button
+            android:id="@+id/btn_calendar_test2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试2" />-->
 </LinearLayout>
 
 

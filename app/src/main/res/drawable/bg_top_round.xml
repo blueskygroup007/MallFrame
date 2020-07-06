@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- rectangle表示为矩形 -->
+
+    <!-- 填充的颜色 -->
+    <solid android:color="@color/colorPrimary" />
+    <!-- 边框的颜色和粗细 -->
+    <stroke
+        android:width="1dp"
+        android:color="@color/colorPrimary" />
+
+
+    <!--todo 知识点：
+    1.在设置圆角时,圆角半径的大小必须大于1,否则是没有圆角效果的
+    2.如果你想单独设置某几个角是圆角, 你必须首先声明 radius 属性(必须大于1),
+      然后在其他四个角的属性中设置每个角的实际想要的半径大小, 不想圆角的设置为("0dp").
+    -->
+    <corners
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="0dp"
+        android:radius="2dp"
+        android:topLeftRadius="10dp"
+        android:topRightRadius="10dp" />
+
+</shape>

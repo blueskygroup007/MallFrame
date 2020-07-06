@@ -1,7 +1,5 @@
 package com.bluesky.mallframe.data;
 
-import androidx.annotation.Nullable;
-
 import com.google.common.base.Objects;
 
 import java.util.Locale;
@@ -16,13 +14,12 @@ import cn.bmob.v3.BmobObject;
  */
 public class WorkDay extends BmobObject implements Cloneable, Iinformation {
     //序号
-    private Integer number=0;
-    //上什么班
-    private WorkDayKind workdaykind;
+    private Integer number = 0;
+
     //班次序号
-    private Integer workdaykindnumber;
+    private Integer workdaykindnumber=0;
     //扩展参数
-    private String flag="";
+    private String flag = "";
 
     @Override
     public WorkDay clone() {
@@ -42,13 +39,22 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
         if (o == null || getClass() != o.getClass()) return false;
         WorkDay workDay = (WorkDay) o;
         return Objects.equal(number, workDay.number) &&
-                Objects.equal(workdaykind, workDay.workdaykind) &&
+                Objects.equal(workdaykindnumber, workDay.workdaykindnumber) &&
                 Objects.equal(flag, workDay.flag);
     }
 
     @Override
+    public String toString() {
+        return "WorkDay{" +
+                "number=" + number +
+                ", workdaykindnumber=" + workdaykindnumber +
+                ", flag='" + flag + '\'' +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
-        return Objects.hashCode(number, workdaykind, flag);
+        return Objects.hashCode(number, workdaykindnumber, flag);
     }
 
     public Integer getNumber() {
@@ -59,13 +65,12 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
         this.number = number;
     }
 
-
-    public WorkDayKind getWorkdaykind() {
-        return workdaykind;
+    public Integer getWorkdaykindnumber() {
+        return workdaykindnumber;
     }
 
-    public void setWorkdaykind(WorkDayKind workdaykind) {
-        this.workdaykind = workdaykind;
+    public void setWorkdaykindnumber(Integer workdaykindnumber) {
+        this.workdaykindnumber = workdaykindnumber;
     }
 
     public String getFlag() {
@@ -77,17 +82,8 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
     }
 
     @Override
-    public String toString() {
-        return "WorkDay{" +
-                "number=" + number +
-                ", workdaykind=" + workdaykind +
-                ", flag='" + flag + '\'' +
-                '}';
-    }
-
-    @Override
     public String getInfoName() {
-        return String.format(Locale.CHINA, "第%d天-%s", getNumber(), workdaykind.getInfoName());
+        return String.format(Locale.CHINA, "第%d天-第%d个班", getNumber(), getWorkdaykindnumber());
 
     }
 
@@ -98,6 +94,6 @@ public class WorkDay extends BmobObject implements Cloneable, Iinformation {
 
     @Override
     public String getInfoDescribe() {
-        return workdaykind.getInfoDescribe();
+        return String.format(Locale.CHINA, "第%d天-第%d个班", getNumber(), getWorkdaykindnumber());
     }
 }

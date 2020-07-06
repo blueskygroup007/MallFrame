@@ -9,64 +9,271 @@
 
     <include layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/tv_fragment_home_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        tools:text="HomeFragment" />
+    <!--   <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal">
 
-    <ListView
-        android:id="@+id/lv_solution"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:choiceMode="singleChoice"
-        android:divider="@color/divider"
-        android:dividerHeight="@dimen/material_divider_height"
-        android:listSelector="@color/material_color_red_100" />
+           <TextView
+               android:layout_width="0dp"
+               android:layout_height="150dp"
+               android:layout_margin="@dimen/devider_margin"
+               android:layout_weight="1"
+               android:background="@drawable/bg_button_round_large"
+               android:elevation="10dp"
+               android:gravity="center"
+               android:textSize="80sp"
+               tools:text="12月" />
 
-    <!--    <com.zyyoona7.wheel.WheelView
-            android:id="@+id/wv_week"
+           <TextView
+               android:layout_width="0dp"
+               android:layout_height="150dp"
+               android:layout_margin="@dimen/devider_margin"
+               android:layout_weight="1"
+               android:background="@drawable/bg_button_round_large"
+               android:elevation="10dp"
+               android:gravity="center"
+               android:textSize="80sp"
+               tools:text="6日" />
+
+       </LinearLayout>-->
+    <!--    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="#e0f2f1"
-
-            app:wv_curved="true"
-            app:wv_curvedArcDirection="left"
-            app:wv_curvedArcDirectionFactor="0.5"
-            app:wv_cyclic="true"
-            app:wv_dividerColor="#e0f2f1"
-            app:wv_dividerHeight="0.5dp"
-            app:wv_dividerPaddingForWrap="10dp"
-            app:wv_dividerType="fill"
-            app:wv_drawSelectedRect="true"
-            app:wv_integerFormat="%03d"
-            app:wv_integerNeedFormat="true"
-            app:wv_lineSpacing="10dp"
-            app:wv_normalItemTextColor="@color/colorPrimaryDark"
-            app:wv_refractRatio="0.8"
-            app:wv_selectedItemPosition="4"
-            app:wv_selectedItemTextColor="@color/colorPrimary"
-            app:wv_selectedRectColor="#aebfbe"
-            app:wv_showDivider="true"
-            app:wv_textAlign="center"
-            app:wv_textBoundaryMargin="10dp"
-
-            app:wv_textSize="20sp"
-            app:wv_visibleItems="3" />
-
-        <com.zyyoona7.picker.DatePickerView
-            android:id="@+id/dpv_date"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />-->
+            android:layout_marginLeft="@dimen/devider_margin"
+            android:layout_marginRight="@dimen/devider_margin"
+            android:background="@drawable/bg_bs_number_picker"
+            android:gravity="center"
+            android:text="后夜"
+            android:textColor="@color/black"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            tools:text="后夜" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/devider_margin"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_1x">
+
+        <RelativeLayout
+            android:id="@+id/rl_tool"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/bg_top_round">
+
+            <TextView
+                android:id="@+id/tv_month_day"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:textColor="#000000"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                tools:text="7月6日" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/tv_month_day"
+                android:orientation="vertical"
+                android:paddingLeft="6dp"
+                android:paddingTop="12dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="12dp"
+                tools:ignore="RelativeOverlap">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="后夜"
+                    android:textColor="@color/material_color_red_400"
+                    android:textSize="48sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom"
+                    android:textColor="#000000"
+                    android:textSize="32sp"
+                    android:visibility="gone"
+                    tools:text="2018" />
+
+                <TextView
+                    android:id="@+id/tv_lunar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:textColor="#000000"
+                    android:textSize="32sp"
+                    android:visibility="gone"
+                    tools:ignore="SmallSp"
+                    tools:text="初五" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_current"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp">
+
+                <ImageView
+                    android:id="@+id/ib_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_baseline_calendar_today_24"
+                    android:tint="#000000"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_current_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="13"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+            </FrameLayout>
+        </RelativeLayout>
+
+        <com.haibin.calendarview.CalendarLayout
+            android:id="@+id/calendarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/bg_bottom_round"
+            android:orientation="vertical"
+            app:calendar_content_view_id="@+id/recyclerView"
+            app:default_status="shrink">
+
+            <com.haibin.calendarview.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:calendar_height="@dimen/avatar_width_height"
+                app:calendar_padding="10dp"
+                app:current_month_lunar_text_color="#CFCFCF"
+                app:current_month_text_color="#333333"
+                app:day_text_size="26sp"
+                app:lunar_text_size="12sp"
+                app:max_year="2050"
+                app:min_year="1950"
+                app:month_view="com.bluesky.mallframe.ui.CustomMonthView"
+                app:month_view_show_mode="mode_fix"
+                app:other_month_lunar_text_color="#e1e1e1"
+                app:other_month_text_color="#e1e1e1"
+                app:scheme_text="假"
+                app:scheme_text_color="#333"
+                app:scheme_theme_color="#128c4b"
+                app:selected_lunar_text_color="#fff"
+                app:selected_text_color="#fff"
+                app:selected_theme_color="#046cea"
+                app:week_background="@android:color/transparent"
+                app:week_start_with="sun"
+                app:week_text_color="@color/material_color_black_26_percent"
+                app:week_text_size="20sp"
+                app:week_view="com.bluesky.mallframe.ui.CustomWeekView"
+                app:year_view="com.bluesky.mallframe.ui.CustomYearView"
+                app:year_view_day_text_color="#333333"
+                app:year_view_day_text_size="7sp"
+                app:year_view_month_text_color="#ff0000"
+                app:year_view_month_text_size="20sp"
+                app:year_view_scheme_color="#f17706"
+                app:year_view_select_text_color="#fff"
+                app:year_view_week_height="12dp"
+                app:year_view_week_text_color="#e1e1e1"
+                app:year_view_week_text_size="6sp" />
+
+        </com.haibin.calendarview.CalendarLayout>
+
+    </LinearLayout>
+    <!--天气布局-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/devider_margin"
+        android:background="@drawable/bg_bs_number_picker"
+        android:orientation="vertical"
+        android:padding="@dimen/devider_margin">
+
+
+        <ImageView
+            android:id="@+id/iv_weather_pic"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_baseline_cloud_24" />
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="1px"
+            android:layout_height="128dp"
+            android:layout_alignRight="@id/iv_weather_pic" />
+
+        <TextView
+            android:id="@+id/tv_weather_sity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/view_divider"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_horizontal"
+            android:text="唐山"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            tools:text="唐山" />
+
+        <TextView
+            android:id="@+id/tv_weather_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_weather_sity"
+            android:layout_alignLeft="@id/view_divider"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_horizontal"
+            android:text="26℃～19℃"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            tools:text="26℃～19℃" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_weather_temp"
+            android:layout_alignLeft="@id/view_divider"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_horizontal"
+            android:text="东南风2级"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="东南风2级" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/btn_add"

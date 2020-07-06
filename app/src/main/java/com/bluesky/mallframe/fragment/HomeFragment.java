@@ -1,11 +1,8 @@
 package com.bluesky.mallframe.fragment;
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +17,8 @@ import com.bluesky.mallframe.data.WorkDayKind;
 import com.bluesky.mallframe.data.WorkGroup;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
+import com.haibin.calendarview.CalendarLayout;
+import com.haibin.calendarview.CalendarView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -41,12 +41,7 @@ import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
  * @date 2020/4/20
  * Description:
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
-    private TextView mTvTitle;
-    //    private WheelView<String> mWvWeek;
-//    private DatePickerView mDpvDate;
-    private ListView mLvSolutions;
-    private SolutionAdapter mAdapter;
+public class HomeFragment extends BaseFragment implements View.OnClickListener, CalendarView.OnCalendarSelectListener, CalendarView.OnYearChangeListener {
     private List<TurnSolution> mListSolutions = new ArrayList<>();
     private Button mBtnAdd, mBtnDelete, mBtnUpdate, mBtnQuery;
 
@@ -55,6 +50,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     TurnSolution solution;
     private SolutionDataSource mRemote = new SolutionRemoteDataSource();
 
+
+    //日历控件相关
+    TextView mTextMonthDay;
+    TextView mTextYear;
+    TextView mTextLunar;
+    TextView mTextCurrentDay;
+    CalendarView mCalendarView;
+    RelativeLayout mRelativeTool;
+    CalendarLayout mCalendarLayout;
+    private int mYear;
+
+    private TurnSolution mSolution = null;
+    private Map<String, com.haibin.calendarview.Calendar> mCalendarMap;
 
     private void testData() {
 
@@ -128,15 +136,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         WorkDay day1 = new WorkDay();
         day1.setNumber(1);
-        day1.setWorkdaykind(kind1);
+        day1.setWorkdaykindnumber(0);
 
         WorkDay day2 = new WorkDay();
         day2.setNumber(2);
-        day2.setWorkdaykind(kind2);
+        day1.setWorkdaykindnumber(1);
 
         WorkDay day3 = new WorkDay();
         day3.setNumber(3);
-        day3.setWorkdaykind(kind3);
+        day1.setWorkdaykindnumber(2);
 
         solution.getWorkdays().add(day1);
         solution.getWorkdays().add(day2);
@@ -151,59 +159,84 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void initEvent() {
-/*        mDpvDate.setOnDateSelectedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(BaseDatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
-//                Snackbar.make();
-            }
-        });*/
-
         mBtnAdd.setOnClickListener(this);
         mBtnDelete.setOnClickListener(this);
         mBtnUpdate.setOnClickListener(this);
         mBtnQuery.setOnClickListener(this);
-        mLvSolutions.setOnItemClickListener(this);
-        mLvSolutions.setOnItemLongClickListener(this);
     }
 
     @Override
     protected void initData() {
-        mTvTitle.setText("这是主页面fragment!");
         LogUtils.d("主页面的fragment的数据被初始化了");
-
-        mAdapter = new SolutionAdapter();
-        mLvSolutions.setAdapter(mAdapter);
-
-//        mWvWeek.setData(mListWeek);
+        if (mCalendarMap != null) {
+            mCalendarView.setSchemeDate(mCalendarMap);
+        }
         testData();
-
     }
 
     @Override
     protected void initView(View view) {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("主页");
+        toolbar.setTitle("今日");
 
         setHasOptionsMenu(true);
         toolbar.inflateMenu(R.menu.menu_fragment_home);
-
-
-        mTvTitle = view.findViewById(R.id.tv_fragment_home_title);
-//        mWvWeek = view.findViewById(R.id.wv_week);
-//        mDpvDate = view.findViewById(R.id.dpv_date);
 
         mBtnAdd = view.findViewById(R.id.btn_add);
         mBtnDelete = view.findViewById(R.id.btn_del);
         mBtnUpdate = view.findViewById(R.id.btn_update);
         mBtnQuery = view.findViewById(R.id.btn_query);
-        mLvSolutions = view.findViewById(R.id.lv_solution);
 
+
+        mTextMonthDay = view.findViewById(R.id.tv_month_day);
+        mTextYear = view.findViewById(R.id.tv_year);
+        mTextLunar = view.findViewById(R.id.tv_lunar);
+        mRelativeTool = view.findViewById(R.id.rl_tool);
+        mCalendarView = view.findViewById(R.id.calendarView);
+        mTextCurrentDay = view.findViewById(R.id.tv_current_day);
+        mTextMonthDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mCalendarLayout.isExpand()) {
+                    mCalendarLayout.expand();
+                    return;
+                }
+                mCalendarView.showYearSelectLayout(mYear);
+                mTextLunar.setVisibility(View.GONE);
+                mTextYear.setVisibility(View.GONE);
+                mTextMonthDay.setText(String.valueOf(mYear));
+            }
+        });
+        view.findViewById(R.id.fl_current).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCalendarView.scrollToCurrent();
+            }
+        });
+        mCalendarLayout = view.findViewById(R.id.calendarLayout);
+        mCalendarView.setOnCalendarSelectListener(this);
+        mCalendarView.setOnYearChangeListener(this);
+        mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
+        mYear = mCalendarView.getCurYear();
+        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
+        mTextLunar.setText("今日");
+        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
     }
 
     @Override
     protected int setLayout() {
         return R.layout.fragment_home;
+    }
+
+    @Override
+    public void setData(Map<String, com.haibin.calendarview.Calendar> map) {
+        if (mCalendarMap == null) {
+            mCalendarMap = map;
+            if (mCalendarView != null) {
+                mCalendarView.setSchemeDate(map);
+            }
+        }
     }
 
     @Override
@@ -215,10 +248,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 addSolution();
                 break;
             case R.id.btn_del:
-                int position = mLvSolutions.getCheckedItemPosition();
-                LogUtils.d("准备删除的位置是" + position);
-                TurnSolution curSolution = mListSolutions.get(position);
-                mRemote.deleteSolution(curSolution.getObjectId());
                 break;
             case R.id.btn_update:
                 User user = BmobUser.getCurrentUser(User.class);
@@ -245,7 +274,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         LogUtils.d("查找所有solution:" + solutions.toString());
                         mListSolutions.clear();
                         mListSolutions.addAll(solutions);
-                        mAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -274,58 +302,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
-    /**
-     * ListView的Item点击处理事件
-     *
-     * @param parent
-     * @param view
-     * @param position
-     * @param id
-     */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        LogUtils.d("点击了第" + position + "个选项=" + mListSolutions.get(position).getName());
-        mLvSolutions.setSelection(position);
+    public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
+
     }
 
-    /**
-     * ListView的Item长按点击处理事件
-     *
-     * @param parent
-     * @param view
-     * @param position
-     * @param id
-     * @return
-     */
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        //todo 显示删除按钮
-        return false;
+    public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean isClick) {
+//        mTextLunar.setVisibility(View.VISIBLE);
+//        mTextYear.setVisibility(View.VISIBLE);
+//        mTextMonthDay.setText(calendar.getMonth() + "月" + calendar.getDay() + "日");
+//        mTextYear.setText(String.valueOf(calendar.getYear()));
+//        mTextLunar.setText(calendar.getLunar());
+        mYear = calendar.getYear();
     }
 
-    class SolutionAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return mListSolutions.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mListSolutions.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView tvSolution = new TextView(HomeFragment.this.mContext);
-            TurnSolution solution = mListSolutions.get(position);
-            tvSolution.setText(solution.getName());
-            return tvSolution;
-        }
+    @Override
+    public void onYearChange(int year) {
+//        mTextMonthDay.setText(String.valueOf(year));
     }
 }

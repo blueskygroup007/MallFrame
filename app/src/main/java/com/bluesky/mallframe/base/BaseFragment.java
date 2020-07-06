@@ -10,6 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.haibin.calendarview.Calendar;
+
+import java.util.Map;
+
 /**
  * @author BlueSky
  * @date 2020/3/30
@@ -50,6 +54,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int setLayout();
 
+    public abstract void setData(Map<String, Calendar> map);
 
     @Override
     public void onDestroy() {
