@@ -1,11 +1,13 @@
 package com.bluesky.mallframe.fragment;
 
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
@@ -63,6 +65,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     private TurnSolution mSolution = null;
     private Map<String, com.haibin.calendarview.Calendar> mCalendarMap;
+
+    //当日班次显示
+    private TextView mTvWorkKind;
 
     private void testData() {
 
@@ -222,6 +227,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
         mTextLunar.setText("今日");
         mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
+
+        mTvWorkKind = view.findViewById(R.id.tv_home_work_kind);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.kuhei);
+        mTvWorkKind.setTypeface(typeface);
     }
 
     @Override
