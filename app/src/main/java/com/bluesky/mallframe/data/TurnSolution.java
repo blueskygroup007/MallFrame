@@ -43,6 +43,19 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
         workdaykinds.add(REST_DAY);
     }
 
+    public TurnSolution(TurnSolution solution) {
+        this.user = solution.user;
+        this.name = solution.name;
+        this.company = solution.company;
+        this.active = solution.active;
+        this.yourgroup = solution.yourgroup;
+        this.workdays = solution.workdays;
+        this.workgroups = solution.workgroups;
+        this.workdaykinds = solution.workdaykinds;
+        this.flags = solution.flags;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

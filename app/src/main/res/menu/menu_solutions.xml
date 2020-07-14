@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu_item_solutions_edit"
-        android:title="@string/text_menu_item_solutions_edit"
-        android:icon="@drawable/ic_delete_black_24dp"/>
+    <item
+        android:id="@+id/menu_item_solutions_edit"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="@string/text_menu_item_solutions_edit" />
     <item
         android:id="@+id/menu_item_solutions_set_default"
         android:icon="@drawable/ic_star_black_24dp"
         android:title="@string/text_menu_item_solutions_set_default" />
+    <item
+        android:id="@+id/menu_item_solutions_upload"
+        android:icon="@drawable/ic_baseline_cloud_upload_24"
+        android:title="@string/text_menu_item_solutions_upload" />
     <item
         android:id="@+id/menu_item_solutions_delete"
         android:icon="@drawable/ic_delete_black_24dp"

@@ -57,6 +57,14 @@
                         android:text="我的倒班" />
 
                     <Button
+                        android:id="@+id/btn_personal_upload"
+                        android:layout_rowWeight="0"
+                        android:layout_columnWeight="1"
+                        android:drawableLeft="@drawable/ic_baseline_cloud_upload_24"
+                        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
+                        android:gravity="left|center_vertical"
+                        android:text="我的共享" />
+                    <Button
                         android:layout_rowWeight="0"
                         android:layout_columnWeight="1"
                         android:drawableLeft="@drawable/ic_baseline_bar_chart_24"
@@ -64,13 +72,6 @@
                         android:gravity="left|center_vertical"
                         android:text="统计数据" />
 
-                    <Button
-                        android:layout_rowWeight="0"
-                        android:layout_columnWeight="1"
-                        android:drawableLeft="@drawable/ic_star_black_24dp"
-                        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
-                        android:gravity="left|center_vertical"
-                        android:text="休假数据" />
 
                     <Button
                         android:layout_rowWeight="0"

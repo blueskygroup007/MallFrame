@@ -20,6 +20,11 @@ public class AppConstant {
     //Bmob app id
     public static final String BMOB_APP_ID = "222d9d20cb02f1ce9278b0e584d887dd";
 
+    //中国天气ID
+    public static final String WEATHER_ID="SJPe3PEfvi";
+    //和天气密钥
+    public static final String HE_WEATHER_ID="56d25837c5b7412fb2b3bd253a577dd5";
+
 
     //时间格式
     public static final SimpleDateFormat FORMAT_FULL_DATE = new SimpleDateFormat("yyyy-MM-dd - HH:mm:ss", Locale.getDefault());

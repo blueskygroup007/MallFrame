@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -28,19 +29,24 @@ import com.bluesky.mallframe.data.WorkDayKind;
 import com.bluesky.mallframe.data.WorkGroup;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
-import com.bluesky.mallframe.ui.BSNumberPicker;
 
 import java.util.List;
 
 /**
- * todo:改进:每个编辑页面返回时,记录是否修改.用以统计总配置是否改动.
+ * 改进:每个编辑页面返回时,记录是否修改.用以统计总配置是否改动.
+ * todo 改造:
+ * 1.根据调用者的RequestCode来判断,隐藏三个编辑按钮,加载不同的menu
  */
 public class EditActivity extends BaseActivity implements View.OnClickListener {
     public static final String FLAG_INTENT_DATA = "DATA_SOLUTION";
+    public static final String FLAG_INTENT_TYPE = "CALL_TYPE";
+    public static final int TYPE_EDIT = 1;
+    public static final int TYPE_DISPLAY = 2;
+
     public static final int REQUESTCODE = 4;
+
+
     private static boolean FLAG_MODIFIED = false;
-    private Toolbar toolbar;
-    private BSNumberPicker mNumberPicker;
     private TurnSolution mSolution;
     private EditText mEtCompany;
     private EditText mEtFlag;
@@ -62,6 +68,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     //    private CheckBox mCbDefault;
     private EditText mEtName;
     private TurnSolution mBackup;
+
+    //调用EditActivity的类型:编辑,只显示
+    private int mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +196,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
                 if (mData.get(0) instanceof WorkDay) {
                     tvName.setText(String.format("%s: %s"
                             , ((Iinformation) (mData.get(position))).getInfoName()
-                            , mSolution.getWorkdaykinds().get(((WorkDay) (mData.get(position))).getWorkdaykindnumber()).getInfoName()));
+                            , mSolution.getWorkdaykinds().get(((WorkDay) (mData.get(position))).getWorkdaykindnumber()).getName()));
 
                 }
 
@@ -232,9 +241,15 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
         getListViewSelfHeight(mLvWorkGroup);
         getListViewSelfHeight(mLvWorkDay);
 
-        mBtnEditWorkDayKind.setOnClickListener(this);
-        mBtnEditWorkGroup.setOnClickListener(this);
-        mBtnEditWorkDay.setOnClickListener(this);
+        if (mType == TYPE_EDIT) {
+            mBtnEditWorkDayKind.setOnClickListener(this);
+            mBtnEditWorkGroup.setOnClickListener(this);
+            mBtnEditWorkDay.setOnClickListener(this);
+        } else {
+            mBtnEditWorkDay.setVisibility(View.GONE);
+            mBtnEditWorkGroup.setVisibility(View.GONE);
+            mBtnEditWorkDayKind.setVisibility(View.GONE);
+        }
         //根据data初始化所有控件
         mEtName.setText(mSolution.getName());
         mEtCompany.setText(mSolution.getCompany());
@@ -262,6 +277,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initData() {
         Intent intent = getIntent();
+        mType = intent.getIntExtra(FLAG_INTENT_TYPE, TYPE_EDIT);
         mSolution = (TurnSolution) intent.getSerializableExtra(FLAG_INTENT_DATA);
         mWorkDayKinds = mSolution.getWorkdaykinds();
         mWorkDays = mSolution.getWorkdays();
@@ -293,7 +309,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             LogUtils.d("toolbar not found!");
         }
 
-        mNumberPicker = findViewById(R.id.np_group_count);
         mLvWorkDayKind = findViewById(R.id.lv_work_day_kind);
         mLvWorkGroup = findViewById(R.id.lv_work_group);
         mLvWorkDay = findViewById(R.id.lv_work_day);
@@ -323,7 +338,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_edit, menu);
+        if (mType == TYPE_DISPLAY) {
+            getMenuInflater().inflate(R.menu.menu_toolbar_edit, menu);
+        }
         return true;
     }
 
@@ -344,9 +361,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.menu_item_action_toolbar_save:
-                //保存倒班信息(暂时废弃)
-//                saveSolution();
+            case R.id.menu_item_action_toolbar_delete:
+                //todo 取消共享
+                Toast.makeText(mContext, "点击了取消共享", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

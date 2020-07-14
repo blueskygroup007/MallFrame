@@ -11,8 +11,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
-import com.bluesky.mallframe.activity.EditActivity;
 import com.bluesky.mallframe.activity.MySolutionsActivity;
+import com.bluesky.mallframe.activity.UpLoadActivity;
 import com.bluesky.mallframe.base.BaseFragment;
 import com.haibin.calendarview.Calendar;
 
@@ -26,10 +26,12 @@ import java.util.Map;
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
     private TextView mTvTitle;
     private Button mBtnMySolutions;
+    private Button mBtnUpLoad;
 
     @Override
     protected void initEvent() {
         mBtnMySolutions.setOnClickListener(this);
+        mBtnUpLoad.setOnClickListener(this);
     }
 
     @Override
@@ -66,6 +68,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         });
         mTvTitle = view.findViewById(R.id.tv_fragment_personal_title);
         mBtnMySolutions = view.findViewById(R.id.btn_personal_my_solution);
+        mBtnUpLoad = view.findViewById(R.id.btn_personal_upload);
     }
 
     @Override
@@ -86,7 +89,10 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 intent.setClass(mContext, MySolutionsActivity.class);
                 startActivity(intent);
                 break;
-
+            case R.id.btn_personal_upload:
+                intent.setClass(mContext, UpLoadActivity.class);
+                startActivity(intent);
+                break;
             default:
 
         }

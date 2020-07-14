@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,13 +28,19 @@ import com.bluesky.mallframe.base.App;
 import com.bluesky.mallframe.base.AppConstant;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.data.TurnSolution;
+import com.bluesky.mallframe.data.UpLoadTurnSolution;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
+import com.bluesky.mallframe.data.source.remote.UpLoadSolutionRemoteDataSource;
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 
 
 public class MySolutionsActivity extends BaseActivity {
@@ -40,7 +48,7 @@ public class MySolutionsActivity extends BaseActivity {
     private List<TurnSolution> mSolutions;
     private SolutionAdapter mAdapter;
     private RecyclerView mRvSolution;
-    private int mPosition = 0;
+//    private int mPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,7 @@ public class MySolutionsActivity extends BaseActivity {
             case R.id.menu_item_solutions_set_default:
                 Toast.makeText(this, "默认", Toast.LENGTH_SHORT).show();
                 setSolutionActive(mSolutions, mAdapter.getCurPostion());
+                mAdapter.notifyDataSetChanged();
                 break;
             case R.id.menu_item_solutions_delete:
                 //todo 删除solution,要弹出对话框,对话框要改成能设定title的
@@ -69,6 +78,15 @@ public class MySolutionsActivity extends BaseActivity {
                 intent.putExtra(EditActivity.FLAG_INTENT_DATA, mSolutions.get(mAdapter.getCurPostion()));
                 intent.setClass(MySolutionsActivity.this, EditActivity.class);
                 startActivityForResult(intent, EditActivity.REQUESTCODE);
+                break;
+            case R.id.menu_item_solutions_upload:
+                //todo upload方案的处理
+                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                Date date = calendar.getTime();
+                String onlyDate = FORMAT_ONLY_DATE.format(date);
+                //todo bug:这样生成的solution的user对象,在表格中,不是指针.
+                UpLoadTurnSolution upLoadTurnSolution = new UpLoadTurnSolution(mSolutions.get(mAdapter.getCurPostion()), onlyDate);
+                new UpLoadSolutionRemoteDataSource().addSolution(upLoadTurnSolution);
                 break;
             default:
                 break;
@@ -100,7 +118,7 @@ public class MySolutionsActivity extends BaseActivity {
     }
 
     /**
-     * 取消其他solution的默认
+     * 设置默认,并取消其他solution的默认
      *
      * @param position
      */
@@ -116,6 +134,7 @@ public class MySolutionsActivity extends BaseActivity {
             SolutionRemoteDataSource remote = new SolutionRemoteDataSource();
             remote.updateSolution(list.get(i));
         }
+//        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -183,6 +202,7 @@ public class MySolutionsActivity extends BaseActivity {
                 Toast.makeText(MySolutionsActivity.this, "没有可用的倒班表", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
@@ -203,6 +223,8 @@ public class MySolutionsActivity extends BaseActivity {
             LogUtils.d("toolbar not found!");
         }
 
+//        toolbar.inflateMenu(R.menu.menu_activity_mysolution);
+
         //查找控件
         mRvSolution = findViewById(R.id.rv_solutions);
     }
@@ -213,11 +235,24 @@ public class MySolutionsActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_activity_mysolution, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.menu_add_new:
+                Toast.makeText(this, "点击了新建", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_add_download:
+                Toast.makeText(this, "点击了下载", Toast.LENGTH_SHORT).show();
+                break;
             default:
                 break;
         }
@@ -227,6 +262,7 @@ public class MySolutionsActivity extends BaseActivity {
 
     class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHolder> {
         private List<TurnSolution> mListData = new ArrayList<>();
+        private int mPosition;
 
         public void setData(List<TurnSolution> listData) {
             mListData = listData;
@@ -252,7 +288,7 @@ public class MySolutionsActivity extends BaseActivity {
         @Override
         public void onViewRecycled(@NonNull ViewHolder holder) {
             super.onViewRecycled(holder);
-            holder.mCbDefault.setOnCheckedChangeListener(null);
+//            holder.mCbDefault.setOnCheckedChangeListener(null);
         }
 
         @Override
@@ -263,15 +299,17 @@ public class MySolutionsActivity extends BaseActivity {
             holder.mTvInfo.setText(String.format(Locale.CHINA, "天数:%d  班组:%d  %s", solution.getWorkdays().size(), solution.getWorkgroups().size(), solution.getDefaultWorkGroup()));
             String company = Strings.isNullOrEmpty(solution.getCompany()) ? "无" : solution.getCompany();
             holder.mTvCompany.setText(String.format(Locale.CHINA, "公司:%s", company));
+            holder.mIvDefault.setVisibility(solution.getActive() ? View.VISIBLE : View.INVISIBLE);
+//            holder.mIvUpload.setVisibility();
 
-            holder.mCbDefault.setChecked(solution.getActive());
+/*            holder.mCbDefault.setChecked(solution.getActive());
             holder.mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     setSolutionActive(mListData, position);
                     notifyDataSetChanged();
                 }
-            });
+            });*/
         }
 
         @Override
@@ -287,7 +325,8 @@ public class MySolutionsActivity extends BaseActivity {
             TextView mTvCompany;
             CheckBox mCbDefault;
             CardView mCvRoot;
-
+            ImageView mIvDefault;
+            ImageView mIvUpload;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -297,6 +336,8 @@ public class MySolutionsActivity extends BaseActivity {
                 mTvCompany = itemView.findViewById(R.id.tv_company);
                 mCbDefault = itemView.findViewById(R.id.cb_default);
                 mCvRoot = itemView.findViewById(R.id.card_root);
+                mIvDefault = itemView.findViewById(R.id.iv_default);
+                mIvUpload = itemView.findViewById(R.id.iv_upload);
                 itemView.setOnCreateContextMenuListener(this);
             }
 

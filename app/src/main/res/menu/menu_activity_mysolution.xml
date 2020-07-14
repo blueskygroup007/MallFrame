@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/ic_add_box_black_24dp"
+        android:title="@string/text_menu_share"
+        app:showAsAction="ifRoom">
+        <menu>
+
+            <item
+                android:id="@+id/menu_add_new"
+                android:icon="@drawable/ic_baseline_create_24"
+                android:title="@string/text_menu_item_add_new"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/menu_add_download"
+                android:icon="@drawable/ic_baseline_cloud_download_24"
+                android:title="@string/text_menu_item_add_download"
+                app:showAsAction="never" />
+
+        </menu>
+
+    </item>
+</menu>

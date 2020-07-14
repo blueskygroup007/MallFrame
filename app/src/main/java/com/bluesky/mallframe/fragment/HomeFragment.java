@@ -1,5 +1,6 @@
 package com.bluesky.mallframe.fragment;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,9 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+import heweather.com.weathernetsdk.view.HeContent;
+import heweather.com.weathernetsdk.view.SuspendView;
+import heweather.com.weathernetsdk.view.SynopticNetworkCustomView;
 
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
@@ -68,6 +72,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     //当日班次显示
     private TextView mTvWorkKind;
+
 
     private void testData() {
 
@@ -181,10 +186,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void initView(View view) {
-
+        //todo 知识点:fragment和activity中使用toolbar的不同.
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("今日");
-
+        //todo 知识点:fragment中使用右上角菜单.
         setHasOptionsMenu(true);
         toolbar.inflateMenu(R.menu.menu_fragment_home);
 
@@ -228,9 +233,43 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         mTextLunar.setText("今日");
         mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
 
+        //第三方字库测试
         mTvWorkKind = view.findViewById(R.id.tv_home_work_kind);
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.kuhei);
         mTvWorkKind.setTypeface(typeface);
+
+        //天气测试按钮
+        Button btnWeather = view.findViewById(R.id.btn_weather);
+        btnWeather.setOnClickListener(this);
+
+        //天气控件
+        SynopticNetworkCustomView synopticNetworkCustomView = view.findViewById(R.id.synopticNetworkCustomView);
+        /**
+         * 设置控件的对齐方式 默认居中
+         * 详见viewGravity
+         */
+        synopticNetworkCustomView.setViewGravity(HeContent.GRAVITY_CENTER);
+        /**
+         * 设置控件的显示风格 默认横向
+         * 详见viewType
+         */
+        synopticNetworkCustomView.setViewType(HeContent.TYPE_HORIZONTAL);
+        /**
+         * 设置控件内边距 默认为0
+         * left 左边距
+         * top 上边距
+         * right 右边距
+         * bottom 下边距
+         */
+        synopticNetworkCustomView.setViewPadding(5, 5, 5, 5);
+        /**
+         * 设置控件文字颜色 默认为黑色
+         */
+        synopticNetworkCustomView.setViewTextColor(Color.BLACK);
+
+        //显示控件
+        synopticNetworkCustomView.show();
+
     }
 
     @Override
@@ -251,6 +290,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_weather:
+                break;
             case R.id.btn_add:
                 solution.setCompany("二炼铁" + Math.random());
                 solution.setName("方案" + Math.random());
@@ -296,6 +337,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 break;
         }
     }
+
 
     private void addSolution() {
         solution.save(new SaveListener<String>() {

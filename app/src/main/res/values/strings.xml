@@ -50,4 +50,9 @@
     <string name="toast_work_day_setting_minimum">周期不得少于两天</string>
     <string name="toast_work_group_setting_minimum">班组不得少于一个</string>
     <string name="toast_work_day_kind_setting_minimum">班组不得少于一个</string>
+    <string name="text_menu_item_add_new">新建</string>
+    <string name="text_menu_item_add_download">下载</string>
+    <string name="text_menu_item_solutions_upload">共享方案</string>
+    <string name="text_menu_item_upload_cancel">取消共享</string>
+    <string name="text_menu_item_upload_download">下载方案</string>
 </resources>

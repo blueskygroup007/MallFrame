@@ -18,6 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--天气插件的H5页面-->
+        <activity android:name="heweather.com.weathernetsdk.view.SdkWebViewActivity" />
+
         <activity android:name=".activity.WorkDaySettingActivity"></activity>
         <activity
             android:name=".activity.MySolutionsActivity"
@@ -51,6 +54,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.UpLoadActivity" />
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"

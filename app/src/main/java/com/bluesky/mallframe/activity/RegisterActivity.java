@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.bluesky.mallframe.R;
@@ -41,12 +43,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //左侧添加一个默认的返回图标
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //不显示图标,只显示标题
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-        //设置返回键可用,4.0之前默认为true,之后默认为false
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
@@ -87,6 +83,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void initView() {
+        //设置toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        //Toolbar的标题不能居中,使用Toolbar布局中的自定义TextView能实现
+        toolbar.setTitle("注册");
+        setSupportActionBar(toolbar);
+        //显示返回按钮
+        if (getSupportActionBar() != null) {
+            LogUtils.d("toolbar found!");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+        } else {
+            LogUtils.d("toolbar not found!");
+        }
+
         mEtPhone = findViewById(R.id.et_reg_phone);
         mTvPhoneState = findViewById(R.id.tv_reg_phone_state);
         mEtVcode = findViewById(R.id.et_reg_vcode);

@@ -22,3 +22,17 @@
 -keepclasseswithmembers class * {
     public <init>(android.content.Context);
 }
+
+
+
+    -dontwarn com.squareup.**
+
+    -dontwarn okio.**
+
+    -keep public class org.codehaus.* { *; }
+
+    -keep public class java.nio.* { *; }
+
+
+
+

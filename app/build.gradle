@@ -33,6 +33,7 @@ dependencies {
     implementation("com.google.guava:guava:29.0-android")
     /*加入该依赖,则bmob不再报错*/
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation files('libs\\Plugin_SDK_Android_V2.1.jar')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
