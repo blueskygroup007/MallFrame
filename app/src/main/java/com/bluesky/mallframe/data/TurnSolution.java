@@ -19,25 +19,25 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
 
 
     //方案归属于哪个用户
-    private User user;
+    protected User user;
     //方案名称
-    private String name;
+    protected String name;
     //是否激活
-    private String company;
+    protected String company;
 
     /* todo 知识点:Boolean和Integer包装类应该赋初值,否则默认初始值是null,String也该赋初值 */
-    private Boolean active = false;
+    protected Boolean active = false;
     //你是哪个班组(在list中的序号,第几个班组)
-    private Integer yourgroup = 0;
+    protected Integer yourgroup = 0;
     //一圈中，每天倒班方式
-    private List<WorkDay> workdays = new ArrayList<>();
+    protected List<WorkDay> workdays = new ArrayList<>();
     //一共有几个班，甲乙丙丁
-    private List<WorkGroup> workgroups = new ArrayList<>();
+    protected List<WorkGroup> workgroups = new ArrayList<>();
 
     //一共有几种工作日（日，中，夜，休）
-    private List<WorkDayKind> workdaykinds = new ArrayList<>();
+    protected List<WorkDayKind> workdaykinds = new ArrayList<>();
     //扩展参数
-    private String flags = "";
+    protected String flags = "";
 
     public TurnSolution() {
         workdaykinds.add(REST_DAY);
@@ -55,7 +55,17 @@ public class TurnSolution extends BmobObject implements Serializable, Cloneable 
         this.flags = solution.flags;
     }
 
-
+    public TurnSolution(UpLoadTurnSolution solution) {
+        this.user = solution.user;
+        this.name = solution.name;
+        this.company = solution.company;
+        this.active = solution.active;
+        this.yourgroup = solution.yourgroup;
+        this.workdays = solution.workdays;
+        this.workgroups = solution.workgroups;
+        this.workdaykinds = solution.workdaykinds;
+        this.flags = solution.flags;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

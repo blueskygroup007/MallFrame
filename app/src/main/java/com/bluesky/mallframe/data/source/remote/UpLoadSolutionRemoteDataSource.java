@@ -125,4 +125,20 @@ public class UpLoadSolutionRemoteDataSource implements UpLoadSolutionDataSource 
 
 
     }
+
+    @Override
+    public void deleteSolution(String id) {
+        UpLoadTurnSolution solution = new UpLoadTurnSolution(new TurnSolution(), "");
+        solution.setObjectId(id);
+        solution.delete(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    LogUtils.d("删除成功:" + solution.getUpdatedAt());
+                } else {
+                    LogUtils.d("删除失败：" + e.getMessage());
+                }
+            }
+        });
+    }
 }

@@ -29,6 +29,7 @@ import com.bluesky.mallframe.base.AppConstant;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.UpLoadTurnSolution;
+import com.bluesky.mallframe.data.User;
 import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.data.source.remote.UpLoadSolutionRemoteDataSource;
@@ -39,6 +40,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import cn.bmob.v3.BmobUser;
 
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 
@@ -69,7 +72,9 @@ public class MySolutionsActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(MySolutionsActivity.this, "删除", Toast.LENGTH_SHORT).show();
-
+                        mSource.deleteSolution(mSolutions.get(mAdapter.getCurPostion()).getObjectId());
+                        mSolutions.remove(mAdapter.getCurPostion());
+                        mAdapter.notifyDataSetChanged();
                     }
                 }, null);
                 break;
@@ -84,9 +89,26 @@ public class MySolutionsActivity extends BaseActivity {
                 Calendar calendar = Calendar.getInstance(Locale.getDefault());
                 Date date = calendar.getTime();
                 String onlyDate = FORMAT_ONLY_DATE.format(date);
+
                 //todo bug:这样生成的solution的user对象,在表格中,不是指针.
-                UpLoadTurnSolution upLoadTurnSolution = new UpLoadTurnSolution(mSolutions.get(mAdapter.getCurPostion()), onlyDate);
+//                UpLoadTurnSolution upLoadTurnSolution = new UpLoadTurnSolution(mSolutions.get(mAdapter.getCurPostion()), onlyDate);
+                TurnSolution solution = mSolutions.get(mAdapter.getCurPostion());
+                UpLoadTurnSolution upLoadTurnSolution = new UpLoadTurnSolution(solution, onlyDate);
+                /*upLoadTurnSolution.setUser(solution.getUser());
+                upLoadTurnSolution.setName(solution.getName());
+                upLoadTurnSolution.setCompany(solution.getCompany());
+                upLoadTurnSolution.setActive(solution.getActive());
+                upLoadTurnSolution.setYourgroup(solution.getYourgroup());
+                upLoadTurnSolution.setWorkdays(solution.getWorkdays());
+                upLoadTurnSolution.setWorkgroups(solution.getWorkgroups());
+                upLoadTurnSolution.setWorkdaykinds(solution.getWorkdaykinds());
+                upLoadTurnSolution.setFlags(solution.getFlags());*/
+
+//                upLoadTurnSolution.setUser(BmobUser.getCurrentUser(User.class));
+                LogUtils.d("currentUser=  " + BmobUser.getCurrentUser(User.class).toString());
+                LogUtils.d("getUser=  " + upLoadTurnSolution.getUser().toString());
                 new UpLoadSolutionRemoteDataSource().addSolution(upLoadTurnSolution);
+
                 break;
             default:
                 break;
@@ -301,15 +323,6 @@ public class MySolutionsActivity extends BaseActivity {
             holder.mTvCompany.setText(String.format(Locale.CHINA, "公司:%s", company));
             holder.mIvDefault.setVisibility(solution.getActive() ? View.VISIBLE : View.INVISIBLE);
 //            holder.mIvUpload.setVisibility();
-
-/*            holder.mCbDefault.setChecked(solution.getActive());
-            holder.mCbDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    setSolutionActive(mListData, position);
-                    notifyDataSetChanged();
-                }
-            });*/
         }
 
         @Override

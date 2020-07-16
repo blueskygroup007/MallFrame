@@ -22,6 +22,7 @@ import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.base.BaseActivity;
 import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.UpLoadTurnSolution;
+import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.bluesky.mallframe.data.source.remote.UpLoadSolutionRemoteDataSource;
 import com.google.common.base.Strings;
 
@@ -42,7 +43,7 @@ public class UpLoadActivity extends BaseActivity {
 
     private RecyclerView mRvListView;
     private UpLoadAdapter mAdapter;
-    private UpLoadSolutionRemoteDataSource mSource;
+    private UpLoadSolutionRemoteDataSource mSource = new UpLoadSolutionRemoteDataSource();
     private List<UpLoadTurnSolution> mSolutions;
 
     @Override
@@ -66,7 +67,7 @@ public class UpLoadActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        mSource = new UpLoadSolutionRemoteDataSource();
+//        mSource = new UpLoadSolutionRemoteDataSource();
         mSource.loadSolutions(new UpLoadSolutionRemoteDataSource.LoadSolutionsCallback() {
             @Override
             public void onSolutionsLoaded(List<UpLoadTurnSolution> solutions) {
@@ -108,15 +109,29 @@ public class UpLoadActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_upload_cancel:
+                mSource.deleteSolution(mSolutions.get(mAdapter.getCurPosition()).getObjectId());
+                mSolutions.remove(mAdapter.getCurPosition());
+                mAdapter.notifyDataSetChanged();
                 Toast.makeText(UpLoadActivity.this, "取消共享", Toast.LENGTH_SHORT).show();
-
                 break;
             case R.id.menu_item_upload_download:
-                Toast.makeText(UpLoadActivity.this, "下载方案", Toast.LENGTH_SHORT).show();
-
+                new SolutionRemoteDataSource().addSolution(new TurnSolution(mSolutions.get(mAdapter.getCurPosition())));
+                Toast.makeText(UpLoadActivity.this, "已经下载,请到我的倒班页面查看!", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -179,7 +194,7 @@ public class UpLoadActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(@NonNull UpLoadAdapter.ViewHolder holder, int position) {
-            TurnSolution solution = mListData.get(position);
+            TurnSolution solution = new TurnSolution(mListData.get(position));
             holder.mTvNumber.setText(String.format(Locale.CHINA, "%d#", position + 1));
             holder.mTvName.setText(solution.getName());
             holder.mTvInfo.setText(String.format(Locale.CHINA, "天数:%d  班组:%d  %s", solution.getWorkdays().size(), solution.getWorkgroups().size(), solution.getDefaultWorkGroup()));
@@ -191,7 +206,7 @@ public class UpLoadActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mListData.size();
         }
 
         public class OnHolderClickListener implements View.OnClickListener {
@@ -231,6 +246,7 @@ public class UpLoadActivity extends BaseActivity {
 
 //                mIvDefault = itemView.findViewById(R.id.iv_default);
 //                mIvUpload = itemView.findViewById(R.id.iv_upload);
+                itemView.setOnCreateContextMenuListener(this);
             }
 
             @Override

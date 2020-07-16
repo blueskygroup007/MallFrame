@@ -1,6 +1,5 @@
 package com.bluesky.mallframe.data.source;
 
-import com.bluesky.mallframe.data.TurnSolution;
 import com.bluesky.mallframe.data.UpLoadTurnSolution;
 
 import java.util.List;
@@ -53,7 +52,6 @@ public interface UpLoadSolutionDataSource {
     void updateSolution(UpLoadTurnSolution solution);
 
 
-
     /**
      * 删除所有solution
      */
@@ -64,4 +62,8 @@ public interface UpLoadSolutionDataSource {
      */
     void deleteSolution(UpLoadTurnSolution solution);
 
+    /**
+     * 删除一个solution
+     */
+    void deleteSolution(String id);
 }
