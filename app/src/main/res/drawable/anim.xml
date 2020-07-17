@@ -1,8 +1,8 @@
 <!--<?xml version="1.0" encoding="utf-8"?>-->
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_cat">
+    android:drawable="@drawable/ic_owl">
     <target
-        android:name="cat"
-        android:animation="@anim/anim_splash" />
+        android:name="owl"
+        android:animation="@anim/anim_owl" />
 
 </animated-vector>

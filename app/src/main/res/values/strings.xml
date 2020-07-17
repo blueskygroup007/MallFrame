@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mall Frame</string>
+    <string name="app_name">倒班本</string>
 
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -55,4 +55,5 @@
     <string name="text_menu_item_solutions_upload">共享方案</string>
     <string name="text_menu_item_upload_cancel">取消共享</string>
     <string name="text_menu_item_upload_download">下载方案</string>
+    <string name="text_personal_default_desc">这个人很懒，什么也没有留下！这个人很懒，什么也没有留下！这个人很懒，什么也没有留下！</string>
 </resources>

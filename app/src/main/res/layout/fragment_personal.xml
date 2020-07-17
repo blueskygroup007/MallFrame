@@ -17,23 +17,54 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_margin="@dimen/card_margin"
-                android:background="@drawable/bg_button_round_large"
-                android:elevation="5dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:background="@drawable/bg_button_round_blank"
+                android:elevation="5dp">
 
-                <TextView
-                    android:id="@+id/tv_fragment_personal_title"
+                <ImageView
+                    android:id="@+id/iv_personal_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_owl" />
+
+                <ImageView
+                    android:id="@+id/iv_personal_sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    tools:text="头像,账号,签名,顶栏图" />
+                    android:layout_marginTop="20dp"
+                    android:baselineAlignBottom="true"
+                    android:layout_toRightOf="@id/iv_personal_photo"
+                    android:src="@drawable/ic_male"
 
-            </LinearLayout>
+                    />
+
+                <TextView
+                    android:id="@+id/tv_fragment_personal_username"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/iv_personal_sex"
+                    android:layout_toRightOf="@id/iv_personal_sex"
+                    android:textColor="@color/primary_text"
+                    android:textSize="32sp"
+                    android:text="15131521520"
+                    tools:text="15131521520" />
+
+                <TextView
+                    android:id="@+id/tv_personal_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/tv_fragment_personal_username"
+                    android:layout_toRightOf="@id/iv_personal_photo"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="20sp"
+                    tools:text="@string/text_personal_default_desc" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,6 +95,7 @@
                         android:drawableRight="@drawable/ic_chevron_right_black_24dp"
                         android:gravity="left|center_vertical"
                         android:text="我的共享" />
+
                     <Button
                         android:layout_rowWeight="0"
                         android:layout_columnWeight="1"

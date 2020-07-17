@@ -1,8 +1,7 @@
 package com.bluesky.mallframe.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
@@ -10,6 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
@@ -38,6 +41,11 @@ public class SplashActivity2 extends AppCompatActivity {
         } else {
             Log.d(TAG, "SDK版本不足以显示svg动画。。。");
         }
+
+        TextView tvTitle = findViewById(R.id.tv_splash_title);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.kuhei);
+        tvTitle.setTypeface(typeface);
+
     }
 
     public void onLogin(View view) {

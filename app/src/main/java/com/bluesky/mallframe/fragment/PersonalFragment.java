@@ -4,19 +4,22 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
 import com.bluesky.mallframe.activity.MySolutionsActivity;
 import com.bluesky.mallframe.activity.UpLoadActivity;
 import com.bluesky.mallframe.base.BaseFragment;
+import com.bluesky.mallframe.data.User;
 import com.haibin.calendarview.Calendar;
 
 import java.util.Map;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * @author BlueSky
@@ -24,7 +27,8 @@ import java.util.Map;
  * Description:
  */
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
-    private TextView mTvTitle;
+    private ImageView mIvPhoto, mIvSex;
+    private TextView mTvUsername, mTvDesc;
     private Button mBtnMySolutions;
     private Button mBtnUpLoad;
 
@@ -36,8 +40,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void initData() {
-        mTvTitle.setText("这是我的页面fragment!");
-        LogUtils.d("我的页面的fragment的数据被初始化了");
+        User currentUser = BmobUser.getCurrentUser(User.class);
+        mIvSex.setImageResource(currentUser.getGender() ? R.drawable.ic_male : R.drawable.ic_female);
+        mIvPhoto.setImageResource(R.drawable.ic_owl);
+        mTvUsername.setText(currentUser.getMobilePhoneNumber());
+        mTvDesc.setText(currentUser.getDesc());
     }
 
     @Override
@@ -66,7 +73,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
-        mTvTitle = view.findViewById(R.id.tv_fragment_personal_title);
+
+        mIvPhoto = view.findViewById(R.id.iv_personal_photo);
+        mIvSex = view.findViewById(R.id.iv_personal_sex);
+        mTvUsername = view.findViewById(R.id.tv_fragment_personal_username);
+        mTvDesc = view.findViewById(R.id.tv_personal_desc);
+
         mBtnMySolutions = view.findViewById(R.id.btn_personal_my_solution);
         mBtnUpLoad = view.findViewById(R.id.btn_personal_upload);
     }
