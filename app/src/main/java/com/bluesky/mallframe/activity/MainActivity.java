@@ -232,10 +232,11 @@ public class MainActivity extends BaseActivity {
         if (count > 250) {
             throw new Exception("the work day cann't above 250");
         }
-        int interval = 65535 * 255 / count - 1;
+        int interval = 256 * 256 * 256 / count;
         List<Integer> workDayColors = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            workDayColors.add(ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, i + (1.0f / count)));
+//            workDayColors.add(ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, i + (1.0f / count)));
+            workDayColors.add(i * interval);
         }
         LogUtils.d("颜色值为:" + workDayColors.toString());
         return workDayColors;
@@ -297,8 +298,11 @@ public class MainActivity extends BaseActivity {
                     //todo 3.生成每一个Scheme
                     try {
                         WorkDayKind workdaykind = mSolution.getWorkdaykinds().get(workdays.get(number).getWorkdaykindnumber());
-                        map.put(getSchemeCalendar(y, i, j, workDayColors.get(number), workdaykind.getName()).toString(),
-                                getSchemeCalendar(y, i, j, workDayColors.get(number), workdaykind.getName()));
+                        /*map.put(getSchemeCalendar(y, i, j, workDayColor[workdaykind.getNumber()], workdaykind.getName()).toString(),
+                                getSchemeCalendar(y, i, j, workDayColor[workdaykind.getNumber()], workdaykind.getName()));*/
+                        map.put(getSchemeCalendar(y, i, j, ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, workdaykind.getNumber() * 0.1f), workdaykind.getName()).toString(),
+                                getSchemeCalendar(y, i, j, ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, workdaykind.getNumber() * 0.1f), workdaykind.getName()));
+
                     } catch (Exception e) {
                         LogUtils.e(e.getMessage());
                         e.printStackTrace();
@@ -309,64 +313,6 @@ public class MainActivity extends BaseActivity {
         return map;
     }
 
-    /**
-     * 生成日历所需的map
-     *
-     * @param
-     */
-/*    private Map<String, Calendar> generateMapCurrentYear(TurnSolution solution) {
-        LogUtils.d("开始生成Map:-----当前年");
-
-        //获取周期list和天数
-        List<WorkDay> workdays = solution.getWorkdays();
-        final int termDays = workdays.size();
-        //获取默认班组和基准日期
-        final WorkGroup defaultWorkGroup = solution.getWorkgroups().get(solution.getDefaultWorkGroup());
-        java.util.Calendar baseDate = java.util.Calendar.getInstance();
-
-        try {
-            Date date = FORMAT_ONLY_DATE.parse(defaultWorkGroup.getBasedate());
-            baseDate.setTime(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        DateTime baseTime = new DateTime(baseDate);
-
-        LogUtils.d("baseTime=" + baseTime);
-        java.util.Calendar curCalendar = java.util.Calendar.getInstance();
-
-        int year = curCalendar.get(java.util.Calendar.YEAR);
-        int month = curCalendar.get(java.util.Calendar.MONTH);
-        LogUtils.d("当前year=" + year + "年" + month + "月");
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
-        DateTime everyDay;
-        Map<String, Calendar> map = new HashMap<>();
-
-        //1.遍历当前年的每一天
-        calendar.set(java.util.Calendar.YEAR, year);
-        for (int i = 1; i <= 12; i++) {
-            calendar.set(java.util.Calendar.MONTH, i - 1);
-            for (int j = 1; j <= calendar.getActualMaximum(java.util.Calendar.DAY_OF_MONTH); j++) {
-                calendar.set(java.util.Calendar.DAY_OF_MONTH, j);
-                everyDay = new DateTime(calendar);
-                //2.计算两个日期相差天数,可以为负值,所以用绝对值
-                int interval = Math.abs(daysBetween(everyDay, baseTime));
-//                LogUtils.d("everyDay=" + everyDay + "| interval=" + interval);
-                //取余
-                int number = interval % termDays;
-                //todo 3.生成每一个Scheme
-                try {
-                    WorkDayKind workdaykind = mSolution.getWorkdaykinds().get(workdays.get(number).getWorkdaykindnumber());
-                    map.put(getSchemeCalendar(year, i, j, workDayColor[number], workdaykind.getName()).toString(),
-                            getSchemeCalendar(year, i, j, workDayColor[number], workdaykind.getName()));
-                } catch (Exception e) {
-                    LogUtils.e(e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }
-        return map;
-    }*/
     private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
         Calendar calendar = new Calendar();
         calendar.setYear(year);

@@ -82,6 +82,8 @@ public class WorkDayKindSettingActivity extends BaseActivity {
                     mNumberPicker.setNumber(++number);
                     if (number > mWorkDayKinds.size()) {
                         WorkDayKind workDayKind = new WorkDayKind();
+                        //班次的number+1
+                        workDayKind.setNumber(mAdapter.getList().size());
                         mAdapter.getList().add(workDayKind);
                         mAdapter.notifyDataSetChanged();
                     }
@@ -308,7 +310,7 @@ public class WorkDayKindSettingActivity extends BaseActivity {
                 }
             };
             WorkDayKind workDayKind = mList.get(position);
-            holder.mTvNumber.setText(String.valueOf(position + 1));
+            holder.mTvNumber.setText(String.valueOf(workDayKind.getNumber() + 1));
             holder.mEtName.setText(workDayKind.getName());
             holder.mTvSetupTime.setText(String.format("%s至%s", workDayKind.getStarttime(), workDayKind.getEndtime()));
             /*设置上下班日期的点击事件*/

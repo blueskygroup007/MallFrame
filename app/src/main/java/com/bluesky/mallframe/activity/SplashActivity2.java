@@ -30,14 +30,11 @@ public class SplashActivity2 extends AppCompatActivity {
         LogUtils.d("SDK版本=" + android.os.Build.VERSION.SDK_INT);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            /*AnimatedVectorDrawable anim = (AnimatedVectorDrawable) getResource().getDrawable(R.drawable.anim);
-             *将getResource去掉，以消除警告
-             *has unresolved theme attributes! Consider using Resources.getDrawable(int, Theme) or Context.getDrawable(int)
-             */
-            AnimatedVectorDrawable anim = (AnimatedVectorDrawable) getDrawable(R.drawable.anim);
+            //把动画暂时注释掉,因为在5.0的Genymotion模拟器上报错.
+            /*AnimatedVectorDrawable anim = (AnimatedVectorDrawable) getDrawable(R.drawable.anim);
             ImageView img = findViewById(R.id.iv_logo);
             img.setImageDrawable(anim);
-            anim.start();
+            anim.start();*/
         } else {
             Log.d(TAG, "SDK版本不足以显示svg动画。。。");
         }
