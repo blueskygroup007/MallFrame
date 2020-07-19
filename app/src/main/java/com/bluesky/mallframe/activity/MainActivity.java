@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -193,10 +194,11 @@ public class MainActivity extends BaseActivity {
                 }
                 //2.根据solution来生成map
                 if (mSolution != null) {
-                    if (isAll) {
-                        mCalendarMap = generateMapManyYear(mSolution);
-                    } else {
-                        mCalendarMap = generateMapCurrentYear(mSolution);
+                    try {
+                        mCalendarMap = generateMapManyYear(mSolution, isAll);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        LogUtils.e(e.getMessage());
                     }
                     setMaptoFragment(mCalendarMap);
                 }
@@ -224,12 +226,27 @@ public class MainActivity extends BaseActivity {
 
     int[] workDayColor = new int[]{0xFF000000, 0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFF800000, 0xFFff8c00, 0xFF808000, 0xFF00ffff};
 
+    private List<Integer> generateWorkDayColor(TurnSolution solution) throws Exception {
+        List<WorkDayKind> workDayKinds = solution.getWorkdaykinds();
+        int count = workDayKinds.size();
+        if (count > 250) {
+            throw new Exception("the work day cann't above 250");
+        }
+        int interval = 65535 * 255 / count - 1;
+        List<Integer> workDayColors = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            workDayColors.add(ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, i + (1.0f / count)));
+        }
+        LogUtils.d("颜色值为:" + workDayColors.toString());
+        return workDayColors;
+    }
+
     /**
      * 生成日历所需的map
      *
      * @param solution
      */
-    private Map<String, Calendar> generateMapManyYear(TurnSolution solution) {
+    private Map<String, Calendar> generateMapManyYear(TurnSolution solution, boolean fullYear) throws Exception {
         LogUtils.d("开始生成Map:-----所有年");
 
         //获取周期list和天数
@@ -251,9 +268,21 @@ public class MainActivity extends BaseActivity {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         DateTime everyDay;
         Map<String, Calendar> map = new HashMap<>();
-
+        //设置Scheme的两个范围:当前年,所有年.
+        java.util.Calendar curCalendar = java.util.Calendar.getInstance();
+        int currentYear = curCalendar.get(java.util.Calendar.YEAR);
+        int startYear = currentYear;
+        int endYear = currentYear;
+        if (fullYear) {
+            startYear = currentYear - 50;
+            endYear = currentYear + 50;
+        } else {
+            startYear = currentYear;
+            endYear = currentYear;
+        }
+        List<Integer> workDayColors = generateWorkDayColor(solution);
         //1.遍历当前年的每一天
-        for (int y = 1950; y < 2050; y++) {
+        for (int y = startYear; y < endYear; y++) {
             calendar.set(java.util.Calendar.YEAR, y);
             for (int i = 1; i <= 12; i++) {
                 calendar.set(java.util.Calendar.MONTH, i - 1);
@@ -268,8 +297,8 @@ public class MainActivity extends BaseActivity {
                     //todo 3.生成每一个Scheme
                     try {
                         WorkDayKind workdaykind = mSolution.getWorkdaykinds().get(workdays.get(number).getWorkdaykindnumber());
-                        map.put(getSchemeCalendar(y, i, j, workDayColor[number], workdaykind.getName()).toString(),
-                                getSchemeCalendar(y, i, j, workDayColor[number], workdaykind.getName()));
+                        map.put(getSchemeCalendar(y, i, j, workDayColors.get(number), workdaykind.getName()).toString(),
+                                getSchemeCalendar(y, i, j, workDayColors.get(number), workdaykind.getName()));
                     } catch (Exception e) {
                         LogUtils.e(e.getMessage());
                         e.printStackTrace();
@@ -283,9 +312,9 @@ public class MainActivity extends BaseActivity {
     /**
      * 生成日历所需的map
      *
-     * @param solution
+     * @param
      */
-    private Map<String, Calendar> generateMapCurrentYear(TurnSolution solution) {
+/*    private Map<String, Calendar> generateMapCurrentYear(TurnSolution solution) {
         LogUtils.d("开始生成Map:-----当前年");
 
         //获取周期list和天数
@@ -337,8 +366,7 @@ public class MainActivity extends BaseActivity {
             }
         }
         return map;
-    }
-
+    }*/
     private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
         Calendar calendar = new Calendar();
         calendar.setYear(year);
