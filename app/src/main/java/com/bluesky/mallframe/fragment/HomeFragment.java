@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,11 @@ import com.bluesky.mallframe.data.source.SolutionDataSource;
 import com.bluesky.mallframe.data.source.remote.SolutionRemoteDataSource;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
+import com.heweather.plugin.view.HeContent;
+import com.heweather.plugin.view.HorizonView;
+import com.heweather.plugin.view.LeftLargeView;
+import com.heweather.plugin.view.RightLargeView;
+import com.heweather.plugin.view.VerticalView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +41,6 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import heweather.com.weathernetsdk.view.HeContent;
-import heweather.com.weathernetsdk.view.SuspendView;
-import heweather.com.weathernetsdk.view.SynopticNetworkCustomView;
 
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_TIME_NO_SECS;
@@ -243,32 +246,144 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         btnWeather.setOnClickListener(this);
 
         //天气控件
-        SynopticNetworkCustomView synopticNetworkCustomView = view.findViewById(R.id.synopticNetworkCustomView);
-        /**
-         * 设置控件的对齐方式 默认居中
-         * 详见viewGravity
-         */
-        synopticNetworkCustomView.setViewGravity(HeContent.GRAVITY_CENTER);
-        /**
-         * 设置控件的显示风格 默认横向
-         * 详见viewType
-         */
-        synopticNetworkCustomView.setViewType(HeContent.TYPE_HORIZONTAL);
-        /**
-         * 设置控件内边距 默认为0
-         * left 左边距
-         * top 上边距
-         * right 右边距
-         * bottom 下边距
-         */
-        synopticNetworkCustomView.setViewPadding(5, 5, 5, 5);
-        /**
-         * 设置控件文字颜色 默认为黑色
-         */
-        synopticNetworkCustomView.setViewTextColor(Color.BLACK);
+        initWeatherView(view);
 
-        //显示控件
-        synopticNetworkCustomView.show();
+    }
+
+    private void initWeatherView(View view) {
+
+//横向布局
+        HorizonView horizonView = view.findViewById(R.id.horizon_view);
+//取消默认背景
+        horizonView.setDefaultBack(false);
+//设置布局的背景圆角角度，颜色，边框宽度，边框颜色
+        horizonView.setStroke(5, Color.BLUE, 1, Color.BLUE);
+//添加地址文字描述，第一个参数为文字大小，单位：sp ，第二个参数为文字颜色，默认白色
+        horizonView.addLocation(14, Color.WHITE);
+//添加预警图标，参数为图标大小，单位：dp
+        horizonView.addAlarmIcon(14);
+//添加预警文字
+        horizonView.addAlarmTxt(14);
+//添加温度描述
+        horizonView.addTemp(14, Color.WHITE);
+//添加天气图标
+        horizonView.addWeatherIcon(14);
+//添加天气描述
+        horizonView.addCond(14, Color.WHITE);
+//添加风向图标
+        horizonView.addWindIcon(14);
+//添加风力描述
+        horizonView.addWind(14, Color.WHITE);
+//添加文字：AQI
+        horizonView.addAqiText(14, Color.WHITE);
+//添加空气质量描述
+        horizonView.addAqiQlty(14);
+//添加空气质量数值描述
+        horizonView.addAqiNum(14);
+//添加降雨图标
+        horizonView.addRainIcon(14);
+//添加降雨描述
+        horizonView.addRainDetail(14, Color.WHITE);
+//设置控件的对齐方式，默认居中
+        horizonView.setViewGravity(HeContent.GRAVITY_CENTER);
+//设置控件的内边距，默认为0
+        horizonView.setViewPadding(10, 10, 10, 10);
+//显示控件
+        horizonView.show();
+
+//左侧大布局右侧双布局控件
+        LeftLargeView llView = view.findViewById(R.id.ll_view);
+
+//获取左侧大布局
+        LinearLayout leftLayout = llView.getLeftLayout();
+//获取右上布局
+        LinearLayout rightTopLayout = llView.getRightTopLayout();
+//获取右下布局
+        LinearLayout rightBottomLayout = llView.getRightBottomLayout();
+
+//设置布局的背景圆角角度（单位：dp），颜色，边框宽度（单位：px），边框颜色
+        llView.setStroke(5, Color.parseColor("#313a44"), 1, Color.BLACK);
+
+//添加温度描述到左侧大布局
+//第一个参数为需要加入的布局
+//第二个参数为文字大小，单位：sp
+//第三个参数为文字颜色，默认白色
+        llView.addTemp(leftLayout, 40, Color.WHITE);
+//添加温度图标到右上布局，第二个参数为图标宽高（宽高1：1，单位：dp）
+        llView.addWeatherIcon(rightTopLayout, 14);
+//添加预警图标到右上布局
+        llView.addAlarmIcon(rightTopLayout, 14);
+//添加预警描述到右上布局
+        llView.addAlarmTxt(rightTopLayout, 14);
+//添加文字AQI到右上布局
+        llView.addAqiText(rightTopLayout, 14);
+//添加空气质量到右上布局
+        llView.addAqiQlty(rightTopLayout, 14);
+//添加空气质量数值到右上布局
+        llView.addAqiNum(rightTopLayout, 14);
+//添加地址信息到右上布局
+        llView.addLocation(rightTopLayout, 14, Color.WHITE);
+//添加天气描述到右下布局
+        llView.addCond(rightBottomLayout, 14, Color.WHITE);
+//添加风向图标到右下布局
+        llView.addWindIcon(rightBottomLayout, 14);
+//添加风力描述到右下布局
+        llView.addWind(rightBottomLayout, 14, Color.WHITE);
+//添加降雨图标到右下布局
+        llView.addRainIcon(rightBottomLayout, 14);
+//添加降雨描述到右下布局
+        llView.addRainDetail(rightBottomLayout, 14, Color.WHITE);
+//设置控件的对齐方式，默认居中
+        llView.setViewGravity(HeContent.GRAVITY_LEFT);
+//显示布局
+        llView.show();
+
+
+        RightLargeView rlView = view.findViewById(R.id.rl_view);
+//方法参数同（7）左侧大布局右侧双布局
+        LinearLayout rightLayout = rlView.getRightLayout();
+        LinearLayout leftTopLayout = rlView.getLeftTopLayout();
+        LinearLayout leftBottomLayout = rlView.getLeftBottomLayout();
+
+//取消默认背景
+        rlView.setDefaultBack(false);
+        rlView.setStroke(0, Color.GRAY, 1, Color.WHITE);
+        rlView.addLocation(leftTopLayout, 14, Color.WHITE);
+        rlView.addAqiText(leftTopLayout, 14);
+        rlView.addAqiQlty(leftTopLayout, 14);
+        rlView.addAqiNum(leftTopLayout, 14);
+        rlView.addAlarmIcon(leftTopLayout, 14);
+        rlView.addAlarmTxt(leftTopLayout, 14);
+        rlView.addWeatherIcon(leftTopLayout, 14);
+
+        rlView.addRainIcon(leftBottomLayout, 14);
+        rlView.addRainDetail(leftBottomLayout, 14, Color.WHITE);
+        rlView.addWindIcon(leftBottomLayout, 14);
+        rlView.addWind(leftBottomLayout, 14, Color.WHITE);
+        rlView.addCond(leftBottomLayout, 14, Color.WHITE);
+
+        rlView.addTemp(rightLayout, 40, Color.WHITE);
+        rlView.setViewGravity(HeContent.GRAVITY_RIGHT);
+        rlView.show();
+
+
+        VerticalView verticalView = view.findViewById(R.id.vertical_view);
+        verticalView.setDefaultBack(false);
+//方法参数同（6）横向布局
+        verticalView.addLocation(14, Color.WHITE);
+        verticalView.addTemp(14, Color.WHITE);
+        verticalView.addWeatherIcon(14);
+        verticalView.addCond(14, Color.WHITE);
+        verticalView.addWindIcon(14);
+        verticalView.addWind(14, Color.WHITE);
+        verticalView.addAqiText(14, Color.WHITE);
+        verticalView.addAqiQlty(14);
+        verticalView.addAqiNum(14);
+        verticalView.addAlarmIcon(14);
+        verticalView.addAlarmTxt(14);
+        verticalView.addRainIcon(14);
+        verticalView.addRainDetail(14, Color.WHITE);
+        verticalView.show();
 
     }
 
@@ -291,6 +406,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_weather:
+
                 break;
             case R.id.btn_add:
                 solution.setCompany("二炼铁" + Math.random());

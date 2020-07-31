@@ -19,9 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!--天气插件的H5页面-->
-        <activity android:name="heweather.com.weathernetsdk.view.SdkWebViewActivity" />
+        <!--<activity android:name="heweather.com.weathernetsdk.view.SdkWebViewActivity" />-->
+        <activity android:name="com.heweather.plugin.view.SdkWebViewActivity" />
 
-        <activity android:name=".activity.WorkDaySettingActivity"></activity>
+
+        <activity android:name=".activity.WorkDaySettingActivity" />
         <activity
             android:name=".activity.MySolutionsActivity"
             android:theme="@style/AppTheme" />

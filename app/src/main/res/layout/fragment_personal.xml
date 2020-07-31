@@ -21,14 +21,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_margin="@dimen/card_margin"
-                android:background="@drawable/bg_button_round_blank"
+                android:background="@drawable/bg_button_round_small_blank"
                 android:elevation="5dp">
 
                 <ImageView
                     android:id="@+id/iv_personal_photo"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:src="@drawable/ic_owl" />
 
                 <ImageView
@@ -36,8 +36,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_toEndOf="@id/iv_personal_photo"
                     android:baselineAlignBottom="true"
-                    android:layout_toRightOf="@id/iv_personal_photo"
                     android:src="@drawable/ic_male"
 
                     />
@@ -45,13 +45,13 @@
                 <TextView
                     android:id="@+id/tv_fragment_personal_username"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/iv_personal_sex"
-                    android:layout_toRightOf="@id/iv_personal_sex"
+                    android:layout_marginTop="20dp"
+                    android:layout_toEndOf="@id/iv_personal_sex"
+                    android:text="15131521520"
                     android:textColor="@color/primary_text"
                     android:textSize="32sp"
-                    android:text="15131521520"
                     tools:text="15131521520" />
 
                 <TextView
@@ -59,60 +59,58 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/tv_fragment_personal_username"
-                    android:layout_toRightOf="@id/iv_personal_photo"
+                    android:layout_toEndOf="@id/iv_personal_photo"
                     android:textColor="@color/secondary_text"
                     android:textSize="20sp"
                     tools:text="@string/text_personal_default_desc" />
 
             </RelativeLayout>
 
+
             <LinearLayout
+                android:id="@+id/gl_functions"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_margin="@dimen/card_margin">
+                android:layout_margin="@dimen/card_margin"
+                android:orientation="vertical">
 
-                <GridLayout
-                    android:id="@+id/gl_functions"
+                <Button
+                    android:id="@+id/btn_personal_my_solution"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:columnCount="1"
-                    android:rowCount="4">
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_format_list_bulleted_24"
+                    android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+                    android:gravity="start|center_vertical"
+                    android:text="我的倒班" />
 
-                    <Button
-                        android:id="@+id/btn_personal_my_solution"
-                        android:layout_rowWeight="0"
-                        android:layout_columnWeight="1"
-                        android:drawableLeft="@drawable/ic_baseline_format_list_bulleted_24"
-                        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
-                        android:gravity="left|center_vertical"
-                        android:text="我的倒班" />
+                <Button
+                    android:id="@+id/btn_personal_upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_cloud_upload_24"
+                    android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+                    android:gravity="start|center_vertical"
+                    android:text="我的共享" />
 
-                    <Button
-                        android:id="@+id/btn_personal_upload"
-                        android:layout_rowWeight="0"
-                        android:layout_columnWeight="1"
-                        android:drawableLeft="@drawable/ic_baseline_cloud_upload_24"
-                        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
-                        android:gravity="left|center_vertical"
-                        android:text="我的共享" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="0"
+                    android:layout_columnWeight="1"
+                    android:drawableStart="@drawable/ic_baseline_bar_chart_24"
+                    android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+                    android:gravity="start|center_vertical"
+                    android:text="统计数据" />
 
-                    <Button
-                        android:layout_rowWeight="0"
-                        android:layout_columnWeight="1"
-                        android:drawableLeft="@drawable/ic_baseline_bar_chart_24"
-                        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
-                        android:gravity="left|center_vertical"
-                        android:text="统计数据" />
-
-
-                    <Button
-                        android:layout_rowWeight="0"
-                        android:layout_columnWeight="1"
-                        android:drawableLeft="@drawable/ic_settings_black_24dp"
-                        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
-                        android:gravity="left|center_vertical"
-                        android:text="设置" />
-                </GridLayout>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="0"
+                    android:layout_columnWeight="1"
+                    android:drawableStart="@drawable/ic_settings_black_24dp"
+                    android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+                    android:gravity="start|center_vertical"
+                    android:text="设置" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

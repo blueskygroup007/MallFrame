@@ -5,13 +5,13 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
         maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
-        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
-        
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.3'
 
-        
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -20,15 +20,21 @@ buildscript {
 allprojects {
     repositories {
 
-        maven {url 'https://dl.bintray.com/chaozhouzhang/maven' }
+        maven { url 'https://dl.bintray.com/chaozhouzhang/maven' }
         maven { url 'https://plugins.gradle.org/m2/' }
         maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
-        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
-        
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }
+
     }
 }
 
+
+/* todo 知识点:task clean声明了一个任务，任务名叫clean（也可以改为其它），任务类型是Delete（也可以是Copy）
+    ，就是每当修改settings.gradle文件后点击同步，就会删除rootProject.buildDir下的文件
+    (实际上我看到的效果是清除了External Libraries里的包，然后又添加了一次)。*/
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+//gradle-wrapper.properties是配置文件，用于配置使用哪个版本的gradle等

@@ -207,10 +207,37 @@
 
     </LinearLayout>
 
-    <heweather.com.weathernetsdk.view.SynopticNetworkCustomView
-        android:id="@+id/synopticNetworkCustomView"
+
+
+
+    <!--横向布局-->
+    <com.heweather.plugin.view.HorizonView
+        android:id="@+id/horizon_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="60dp" />
+
+
+    <!--左侧大布局右侧上下双横向布局-->
+    <com.heweather.plugin.view.LeftLargeView
+        android:id="@+id/ll_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+
+
+    <!--右侧大布局左侧上下双横向布局-->
+    <com.heweather.plugin.view.RightLargeView
+        android:id="@+id/rl_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+
+
+    <!--竖向布局-->
+    <com.heweather.plugin.view.VerticalView
+        android:id="@+id/vertical_view"
+        android:layout_width="75dp"
+        android:layout_height="match_parent"/>
+
+
     <Button
         android:id="@+id/btn_weather"
         android:layout_width="wrap_content"

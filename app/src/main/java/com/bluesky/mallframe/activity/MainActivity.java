@@ -1,11 +1,11 @@
 package com.bluesky.mallframe.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -33,6 +33,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.bmob.v3.BmobUser;
 
 import static com.bluesky.mallframe.base.AppConstant.FORMAT_ONLY_DATE;
 
@@ -175,7 +177,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        BmobUser.logOut();
+        BmobUser.logOut();
     }
 
 
@@ -226,20 +228,33 @@ public class MainActivity extends BaseActivity {
 
     int[] workDayColor = new int[]{0xFF000000, 0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFF800000, 0xFFff8c00, 0xFF808000, 0xFF00ffff};
 
+    /**
+     * 生成每个班次对应的颜色
+     *
+     * @param solution
+     * @return
+     * @throws Exception
+     */
     private List<Integer> generateWorkDayColor(TurnSolution solution) throws Exception {
         List<WorkDayKind> workDayKinds = solution.getWorkdaykinds();
         int count = workDayKinds.size();
         if (count > 250) {
             throw new Exception("the work day cann't above 250");
         }
-        int interval = 256 * 256 * 256 / count;
-        List<Integer> workDayColors = new ArrayList<>();
+        List<Integer> HSVColors = new ArrayList<>();
+
         for (int i = 0; i < count; i++) {
-//            workDayColors.add(ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, i + (1.0f / count)));
-            workDayColors.add(i * interval);
+            if (0 == i) {
+                HSVColors.add(0xFF000000);
+            } else {
+                //todo 知识点：获取渐变色,均分color,适合用HSV.(H取值360,S取值0~1,V取值0~1)
+                HSVColors.add(Color.HSVToColor(new float[]{i * 360 / count, 1.0f, 1.0f}));
+            }
         }
-        LogUtils.d("颜色值为:" + workDayColors.toString());
-        return workDayColors;
+        LogUtils.d("颜色值为:" + HSVColors.toString());
+
+
+        return HSVColors;
     }
 
     /**
@@ -298,10 +313,8 @@ public class MainActivity extends BaseActivity {
                     //todo 3.生成每一个Scheme
                     try {
                         WorkDayKind workdaykind = mSolution.getWorkdaykinds().get(workdays.get(number).getWorkdaykindnumber());
-                        /*map.put(getSchemeCalendar(y, i, j, workDayColor[workdaykind.getNumber()], workdaykind.getName()).toString(),
-                                getSchemeCalendar(y, i, j, workDayColor[workdaykind.getNumber()], workdaykind.getName()));*/
-                        map.put(getSchemeCalendar(y, i, j, ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, workdaykind.getNumber() * 0.1f), workdaykind.getName()).toString(),
-                                getSchemeCalendar(y, i, j, ColorUtils.blendARGB(0X00000000, 0XFFFFFFFF, workdaykind.getNumber() * 0.1f), workdaykind.getName()));
+                        map.put(getSchemeCalendar(y, i, j, workDayColors.get(workdaykind.getNumber()), workdaykind.getName()).toString(),
+                                getSchemeCalendar(y, i, j, workDayColors.get(workdaykind.getNumber()), workdaykind.getName()));
 
                     } catch (Exception e) {
                         LogUtils.e(e.getMessage());

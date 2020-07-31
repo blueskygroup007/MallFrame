@@ -8,11 +8,11 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bluesky.mallframe.R;
+import com.heweather.plugin.view.HeWeatherConfig;
 
 import cn.bmob.v3.Bmob;
-import heweather.com.weathernetsdk.view.HeWeatherConfig;
 
-import static com.bluesky.mallframe.base.AppConstant.WEATHER_ID;
+import static com.bluesky.mallframe.base.AppConstant.HE_WEATHER_ID;
 
 /**
  * @author BlueSky
@@ -44,7 +44,7 @@ public class App extends Application {
  * @param key   用户的ID
  * @param location  地址详解，若不传或为空则调用Android源生定位
  */
-        HeWeatherConfig.init(WEATHER_ID, "唐山");
+        HeWeatherConfig.init(HE_WEATHER_ID, "唐山");
     }
 
     public static Context getContext() {
